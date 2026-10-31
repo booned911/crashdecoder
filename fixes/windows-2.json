@@ -1,0 +1,105 @@
+[
+  {
+    "slug": "bsod-0x116-video-tdr-failure",
+    "title": "Blue screen 0x116 VIDEO_TDR_FAILURE (nvlddmkm.sys / amdkmdag.sys) while gaming",
+    "games": ["Any game", "Windows"],
+    "errorCodes": ["0x116", "0x00000116", "VIDEO_TDR_FAILURE"],
+    "patterns": ["video_tdr_failure", "video tdr failure", "0x00000116", "nvlddmkm.sys", "amdkmdag.sys", "igdkmd64.sys"],
+    "side": "client",
+    "summary": "Your graphics card stopped responding, Windows tried to reset it, and the reset failed. The usual causes are a bad driver install, an overclock, heat, or power problems.",
+    "cause": "Windows gives the GPU about 2 seconds to respond. If it hangs longer, Windows resets the graphics driver. If that reset fails, or it happens over and over in a short time, you get this blue screen. The file named in the error tells you whose driver crashed: nvlddmkm.sys is NVIDIA, amdkmdag.sys is AMD, igdkmd64.sys is Intel. Microsoft lists outdated drivers, overclocking, memory settings, cooling, and power as the main causes.",
+    "steps": [
+      "Do a clean driver install: download the latest driver from NVIDIA or AMD, run DDU in Safe Mode to remove the old one, then install the new one. If the crashes started right after a driver update, install the previous version instead.",
+      "Remove all overclocks: reset your GPU in MSI Afterburner (or your tuning tool) to default, and turn off XMP/EXPO in the BIOS for testing.",
+      "Check temperatures: run your game with a monitoring tool like HWiNFO and watch the GPU temperature. Clean dust out of the case and fans if it's running hot.",
+      "Check power: make sure each GPU power connector is fully seated. If your card needs two 8-pin connectors, use two separate cables from the power supply, not one cable with a split end.",
+      "Close background programs and overlays while gaming, and install pending Windows updates."
+    ],
+    "ifStillBroken": "Run Windows Memory Diagnostic or MemTest86 to rule out RAM. If the crashes continue on a clean driver with everything at stock, the GPU or power supply may be failing. Book a session and we'll read your minidump together.",
+    "related": ["display-driver-stopped-responding-recovered", "dxgi-error-device-removed-hung", "xmp-expo-memory-instability-game-crashes"],
+    "affiliate": null
+  },
+  {
+    "slug": "display-driver-stopped-responding-recovered",
+    "title": "\"Display driver stopped responding and has recovered\" / screen goes black then comes back",
+    "games": ["Any game", "Windows"],
+    "errorCodes": ["Event ID 4101", "Event ID 153"],
+    "patterns": ["display driver stopped responding", "stopped responding and has successfully recovered", "event id 4101", "nvlddmkm"],
+    "side": "client",
+    "summary": "Your screen flashes black, the game freezes or crashes, and Windows says the display driver recovered. This is the milder cousin of the 0x116 blue screen, with the same causes: drivers, overclocks, heat, or power.",
+    "cause": "When the graphics card hangs for about 2 seconds, Windows resets the driver to rescue the system. If the reset works, you get this message instead of a blue screen. It keeps happening because whatever is making the GPU hang hasn't been fixed yet.",
+    "steps": [
+      "Do a clean driver install with DDU in Safe Mode, then install the latest driver from NVIDIA or AMD (or the previous version if this started after an update).",
+      "Reset any GPU overclock to default and close tuning tools before gaming. Factory-overclocked cards sometimes need a small underclock to be stable.",
+      "Watch your GPU temperature while gaming with HWiNFO, and clean dust from the card and case fans.",
+      "Check that the GPU power cables are fully seated, using separate cables for each connector if your card needs more than one.",
+      "Turn off overlays and close background programs, especially other GPU-heavy apps like browsers with video or recording software."
+    ],
+    "ifStillBroken": "Open Event Viewer > Windows Logs > System and look for errors around the time of the crash (Event ID 4101 or nvlddmkm entries). If it keeps happening at stock settings with a clean driver, the card or power supply may be failing.",
+    "related": ["bsod-0x116-video-tdr-failure", "dxgi-error-device-removed-hung"],
+    "affiliate": null
+  },
+  {
+    "slug": "dxgi-error-device-removed-hung",
+    "title": "Game crash: DXGI_ERROR_DEVICE_REMOVED / DXGI_ERROR_DEVICE_HUNG (0x887A0005)",
+    "games": ["Any game", "Windows"],
+    "errorCodes": ["DXGI_ERROR_DEVICE_REMOVED", "DXGI_ERROR_DEVICE_HUNG", "0x887A0005", "0x887A0006"],
+    "patterns": ["dxgi_error_device_removed", "dxgi_error_device_hung", "0x887a0005", "0x887a0006"],
+    "side": "client",
+    "summary": "The game lost contact with your graphics card and crashed. It doesn't mean the card was physically removed. It's usually an unstable overclock, a driver problem, or the GPU not getting enough power.",
+    "cause": "DirectX reports 'device removed' when the graphics card stops responding and Windows has to reset it. To the game, that looks like the card disappeared. The most common triggers are GPU or memory overclocks (including factory ones), driver bugs, overheating, and power delivery problems under heavy load.",
+    "steps": [
+      "Reset your GPU to stock clocks in MSI Afterburner (or your tuning tool), or close the tool completely, and test again.",
+      "Do a clean driver install with DDU in Safe Mode. If the crash started after a driver update, try the previous version.",
+      "Turn off XMP/EXPO in the BIOS for a test session to rule out memory instability.",
+      "Check that the GPU power cables are fully seated, using separate cables for each connector if your card needs more than one.",
+      "Watch your GPU temperature with HWiNFO while playing, and clean dust from the card and fans.",
+      "Turn off overlays (Steam, Discord, NVIDIA App) and verify the game files in your launcher."
+    ],
+    "ifStillBroken": "If it only happens in one game, check that game's known issues and try a different graphics API in its settings (DirectX 11, DirectX 12, or Vulkan). If it happens in every game at stock settings, test the GPU in another system or book a session with us.",
+    "related": ["bsod-0x116-video-tdr-failure", "display-driver-stopped-responding-recovered", "xmp-expo-memory-instability-game-crashes"],
+    "affiliate": null
+  },
+  {
+    "slug": "xmp-expo-memory-instability-game-crashes",
+    "title": "Random game crashes from an unstable XMP or EXPO memory profile",
+    "games": ["Any game", "Windows"],
+    "errorCodes": ["MEMORY_MANAGEMENT", "WHEA_UNCORRECTABLE_ERROR", "0x0000001A", "0x00000124"],
+    "patterns": ["memory_management", "whea_uncorrectable_error", "0x0000001a", "0x00000124"],
+    "side": "client",
+    "summary": "Your RAM's speed profile is pushing past what your system can handle. It can look like a graphics driver problem, a game bug, or random blue screens, but the RAM is the real cause.",
+    "cause": "XMP (Intel) and EXPO (AMD) are overclocking profiles that run your RAM faster than its default speed. They're usually fine, but they aren't guaranteed to be stable with every CPU, motherboard, and RAM combination. When they aren't, you get crashes that look like they're coming from somewhere else: driver timeouts, black screens, games closing, or blue screens. Mixed RAM sticks bought separately make this more likely.",
+    "steps": [
+      "Write down your current memory setting in the BIOS (the XMP/EXPO profile name and speed), then disable XMP/EXPO so the RAM runs at default speed.",
+      "Play the game that was crashing for a few sessions. If the crashes stop, the memory profile was the cause.",
+      "Re-enable the profile, but choose a slightly lower speed (for example, DDR5-5600 instead of DDR5-6000) and leave everything else on auto. Don't raise voltages manually for this test.",
+      "Run a memory test such as TestMem5, OCCT, or MemTest86 at the new setting. Any error means the setting still isn't stable.",
+      "Check that your exact RAM kit is on your motherboard's supported memory list, and update the BIOS if a newer version mentions memory compatibility fixes.",
+      "If you're running two separately bought kits, test with just one kit installed."
+    ],
+    "ifStillBroken": "If you still crash with XMP/EXPO fully off, the RAM isn't the cause. Look at your GPU driver, temperatures, and power instead. Or book a session and we'll go through your crash logs together.",
+    "related": ["bsod-0x139-kernel-security-check-failure", "bsod-0x116-video-tdr-failure"],
+    "affiliate": { "text": "Matched RAM kits run more stable than mixed sticks", "url": "https://www.amazon.com/s?k=ddr5+32gb+kit&tag=YOUR-AFFILIATE-TAG" }
+  },
+  {
+    "slug": "high-dpc-latency-stutter",
+    "title": "Game stutter and audio crackling from high DPC latency (LatencyMon)",
+    "games": ["Any game", "Windows"],
+    "errorCodes": ["High DPC latency"],
+    "patterns": ["dpc latency", "latencymon", "highest dpc routine execution time", "highest isr routine execution time", "your system appears to be having trouble handling real-time audio"],
+    "side": "client",
+    "summary": "Your game has good FPS but still stutters, hitches, or the audio crackles. A driver is hogging the CPU for short bursts. LatencyMon tells you which one.",
+    "cause": "Drivers have to handle hardware requests quickly and then hand the CPU back. When one takes too long (often a network, Wi-Fi, storage, audio, or GPU driver), everything else waits, including your game and audio. You don't see it as low FPS. You feel it as hitches and crackles.",
+    "steps": [
+      "Download LatencyMon (free, from Resplendence) and run it for 5 to 10 minutes while using your PC normally. Go to the Drivers tab and sort by 'Highest execution' to see which driver is at the top.",
+      "Network drivers (ndis.sys, or your Wi-Fi/Ethernet driver): update the network driver from your motherboard or adapter maker's site. As a test, unplug Ethernet or turn off Wi-Fi and run LatencyMon again.",
+      "GPU driver (nvlddmkm.sys or amdkmdag.sys): do a clean driver install with DDU.",
+      "Storage or ACPI drivers (storport.sys, ACPI.sys): update your chipset drivers from AMD or Intel and update your BIOS.",
+      "Set Windows Power Mode to Best performance (Settings > System > Power), and close RGB, monitoring, and tuning apps you don't need. These are common latency causes.",
+      "Update audio drivers, and try disabling audio devices you don't use (like a monitor's HDMI audio) in Device Manager."
+    ],
+    "ifStillBroken": "Disable devices one at a time in Device Manager while re-running LatencyMon to find the culprit, then re-enable them afterward. Or book a session and we'll read the LatencyMon report together.",
+    "related": ["display-driver-stopped-responding-recovered", "xmp-expo-memory-instability-game-crashes"],
+    "affiliate": null
+  }
+]
