@@ -1,0 +1,64 @@
+[
+  {
+    "slug": "fivem-server-requires-newer-game-version",
+    "title": "FiveM: \"Server requires a newer game version\" / game build mismatch",
+    "games": ["FiveM"],
+    "errorCodes": ["game build mismatch"],
+    "patterns": ["server requires a newer game version", "server is running an older game version", "requires a different game build", "could not find game executable"],
+    "side": "client",
+    "summary": "Your copy of GTA V (or FiveM itself) doesn't match the game version the server is set to. Usually fixed by letting FiveM and GTA V update. If the server is the one that's behind, only its owners can fix it.",
+    "cause": "Every FiveM server picks a specific GTA V game build to run. If your GTA V or FiveM files are older than that build, or your FiveM install is damaged, you can't join. If the message says the server is running an older version, the mismatch is on their side.",
+    "steps": [
+      "Fully close FiveM (check Task Manager for leftover FiveM processes), then reopen it so it can finish any update.",
+      "Open Steam, Epic, or the Rockstar Games Launcher and make sure GTA V is fully updated. Launch GTA V on its own once, let it reach the main menu, then close it.",
+      "Verify the GTA V game files in your launcher.",
+      "If FiveM still won't update, clear its cache: delete the 'cache', 'server-cache' and 'server-cache-priv' folders inside FiveM Application Data\\data, then reopen FiveM.",
+      "If you see 'Could not find game executable', reinstall FiveM from fivem.net. Your GTA V install is not touched."
+    ],
+    "ifStillBroken": "If the message says the server is running an older game version, or every other server works fine, tell that server's staff. They need to update their server's game build setting.",
+    "related": ["fivem-stuck-loading-add-on-data-files", "fivem-failed-to-connect-after-3-attempts"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-failed-to-connect-after-3-attempts",
+    "title": "FiveM: \"Failed to connect to server after 3 attempts\"",
+    "games": ["FiveM", "RedM"],
+    "errorCodes": ["Failed to connect after 3 attempts"],
+    "patterns": ["after 3 attempts", "failed to connect to server", "connection failed after", "failed to getinfo server"],
+    "side": "client",
+    "summary": "FiveM tried to reach the server three times and got no answer. Either the server is down or blocking you, or something on your PC or network is stopping the connection. Trying a second server tells you which.",
+    "cause": "When you click Connect, FiveM asks the server for its details before loading in. If the server is offline, restarting, or overloaded, or if your firewall, VPN, or DNS blocks the request, all three tries fail and you get this message.",
+    "steps": [
+      "Try joining a different, popular server. If other servers work, the problem is that one server. Wait a few minutes and try again, or check its Discord for restart or outage notices.",
+      "If no servers work: restart your PC and your router.",
+      "Turn off any VPN or proxy and try again.",
+      "Switch to a public DNS (for example 1.1.1.1 or 8.8.8.8) in your network adapter settings.",
+      "Make sure FiveM is allowed through Windows Firewall and your antivirus. Add your FiveM folder to the antivirus exclusions.",
+      "Clear the FiveM cache folders ('cache', 'server-cache', 'server-cache-priv') and reconnect."
+    ],
+    "ifStillBroken": "If only one server fails and it's online for other people, contact its staff with the time you tried. You may be blocked or rate-limited on their end.",
+    "related": ["fivem-curl-error-18", "fivem-server-requires-newer-game-version"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-error-generating-ros-entitlement-token",
+    "title": "FiveM / RedM: \"Error generating ROS entitlement token\"",
+    "games": ["FiveM", "RedM"],
+    "errorCodes": ["Error generating ROS entitlement token"],
+    "patterns": ["error generating ros entitlement token", "ros entitlement token", "could not resolve host: lambda.fivem.net", "lambda.fivem.net"],
+    "side": "client",
+    "summary": "FiveM couldn't confirm that you own GTA V (or RDR2 for RedM). The number in the error tells you why. A 500-range number usually means Cfx's servers are having trouble; other numbers usually mean a connection problem on your end.",
+    "cause": "Before it starts, FiveM checks your game ownership with Rockstar through Cfx's servers. The number after 'token:' is the reason it failed. A 500, 502, 504, or 530 means the check failed on their side. 'Could not resolve host' is a DNS problem, and 'connection refused' or an SSL error means something on your PC or network blocked the check.",
+    "steps": [
+      "Read the number after 'token:' in the error. If it's 500, 502, 504, or 530, the problem is usually on Cfx's side. Wait 15 to 30 minutes and try again, and check the FiveM Discord or status page for outage notices.",
+      "Make sure you're signed in to the Rockstar Games Launcher (and Steam or Epic, if that's where you own the game) with the account that owns GTA V or RDR2.",
+      "Launch FiveM as a normal user, not 'Run as administrator'. If you set the shortcut to always run as admin, untick that under Properties > Compatibility.",
+      "If the error says 'could not resolve host', switch to a public DNS (for example 1.1.1.1 or 8.8.8.8) in your network adapter settings.",
+      "If it mentions an SSL or certificate problem, check that your PC's date, time, and time zone are set automatically, then turn off any HTTPS or web-scanning feature in your antivirus and try again.",
+      "Turn off any VPN or proxy, then restart FiveM."
+    ],
+    "ifStillBroken": "If it keeps failing for hours with a 500-range number, post on the Cfx forum with the full error and report ID. For other numbers, try a different network (like a phone hotspot) to rule out your router or ISP.",
+    "related": ["fivem-failed-to-connect-after-3-attempts", "fivem-curl-error-18"],
+    "affiliate": null
+  }
+]

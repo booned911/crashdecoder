@@ -1,0 +1,64 @@
+[
+  {
+    "slug": "rdr2-err-gfx-state",
+    "title": "RDR2 / RedM crash: ERR_GFX_STATE",
+    "games": ["Red Dead Redemption 2", "RedM"],
+    "errorCodes": ["ERR_GFX_STATE"],
+    "patterns": ["err_gfx_state", "gfx_state"],
+    "side": "client",
+    "summary": "The game lost track of its graphics state and closed. Usually an outdated driver, the wrong graphics API for your card, an overclock, or a corrupt shader cache.",
+    "cause": "RDR2 keeps a lot of graphics data in flight at once. If the driver is old, a GPU or RAM overclock isn't fully stable, or the saved shader cache files get corrupted, that data goes out of sync and the game crashes with this error. Rockstar's own fix starts with drivers and switching to DirectX 12.",
+    "steps": [
+      "Update your graphics driver from NVIDIA or AMD's site. If the crashes started right after a driver update, clean install the previous version with DDU instead.",
+      "Switch the graphics API. In the game, go to Settings > Graphics, set Advanced Settings to Unlocked, then set Graphics API to DirectX 12 (Rockstar's recommendation). If you're already on DirectX 12, try Vulkan. Save, exit the game fully, and relaunch.",
+      "Remove any GPU or RAM overclock, including XMP/EXPO if crashes continue, and close tuning tools before launching.",
+      "Delete the shader cache: in Documents\\Rockstar Games\\Red Dead Redemption 2\\Settings, delete the files that start with sga_. The game rebuilds them on next launch. (Your Documents folder may be under OneDrive.)",
+      "Disable fullscreen optimization: in your launcher, open the game's install folder, right-click RDR2.exe > Properties > Compatibility, tick 'Disable fullscreen optimizations', and click OK.",
+      "Make sure your C: drive has free space, install pending Windows updates, then verify the game files in your launcher."
+    ],
+    "ifStillBroken": "Do a clean driver install with DDU in Safe Mode. If it still crashes on both APIs, run a GPU stress test to rule out hardware, or book a session and we'll go through it together.",
+    "related": ["rdr2-err-gfx-d3d-deferred-mem", "rdr2-vulkan-failed-to-allocate-memory"],
+    "affiliate": null
+  },
+  {
+    "slug": "rdr2-exited-unexpectedly",
+    "title": "\"Red Dead Redemption 2 exited unexpectedly\" / Rockstar Games Launcher exited unexpectedly",
+    "games": ["Red Dead Redemption 2", "RedM"],
+    "errorCodes": ["exited unexpectedly"],
+    "patterns": ["exited unexpectedly", "red dead redemption 2 exited unexpectedly", "rockstar games launcher exited unexpectedly"],
+    "side": "client",
+    "summary": "The game or launcher closed without saying why. The most common cause is an outdated graphics driver, followed by permissions and antivirus blocking the game.",
+    "cause": "This message only means the game stopped running. It doesn't name a cause. Rockstar points to out-of-date graphics drivers first. Missing permissions, Windows fullscreen optimizations, and antivirus blocking RDR2.exe are the other usual culprits.",
+    "steps": [
+      "Update your graphics driver from NVIDIA or AMD's site and restart your PC.",
+      "Run the game as administrator with fullscreen optimization off: in the Rockstar Games Launcher go to Settings > Red Dead Redemption 2 (under My Installed Games) > View installation folder > Open. Right-click RDR2.exe > Properties > Compatibility, tick 'Run this program as an administrator' and 'Disable fullscreen optimizations', then click OK. (On Steam: right-click the game > Manage > Browse local files.)",
+      "Add RDR2.exe and the Red Dead Redemption 2 install folder to your antivirus exclusions, and check its quarantine for any game files.",
+      "Close leftover Rockstar processes in Task Manager, then launch again from your launcher.",
+      "Verify the game files in your launcher."
+    ],
+    "ifStillBroken": "If the launcher itself won't stay open, do a clean reinstall of the Rockstar Games Launcher (see the related fix below).",
+    "related": ["rockstar-games-launcher-failed-to-initialize", "rdr2-unable-to-launch-verify-game-data"],
+    "affiliate": null
+  },
+  {
+    "slug": "rdr2-unable-to-launch-verify-game-data",
+    "title": "Rockstar Games Launcher: \"Unable to launch game, please verify your game data\"",
+    "games": ["Red Dead Redemption 2", "GTA V"],
+    "errorCodes": ["Unable to launch game, please verify your game data"],
+    "patterns": ["unable to launch game, please verify your game data", "unable to launch game", "please verify your game data"],
+    "side": "client",
+    "summary": "The launcher found something wrong with the game files, or couldn't access them. Verifying the files usually fixes it. If not, it's typically permissions, antivirus, or a broken settings folder.",
+    "cause": "Before starting a game, the Rockstar Games Launcher checks the game's files. A file damaged by an interrupted update, quarantined by antivirus, or locked by OneDrive or missing permissions makes that check fail.",
+    "steps": [
+      "Verify the game files. In the Rockstar Games Launcher: Settings > select the game under My Installed Games > Verify Integrity. On Steam or Epic, use their verify option instead.",
+      "Check your antivirus quarantine for game files, restore them, and add the game folder to your exclusions.",
+      "Make sure the game isn't installed inside a OneDrive-synced folder. If it is, move it to a normal folder like C:\\Games.",
+      "Close the launcher, right-click its shortcut, and choose 'Run as administrator', then try again.",
+      "Install pending Windows updates and update your graphics driver, then restart.",
+      "Reset the game's settings folder: in Documents\\Rockstar Games, rename the 'Red Dead Redemption 2' folder (or 'GTA V' / 'GTAV Enhanced') by adding '.old' to the end. Don't delete it. Your saves are in its Profiles folder, so you can copy them back into the new folder the game creates."
+    ],
+    "ifStillBroken": "Do a clean reinstall of the Rockstar Games Launcher, choosing to keep your game files when it asks. See the related fix below.",
+    "related": ["rockstar-games-launcher-failed-to-initialize", "rdr2-exited-unexpectedly"],
+    "affiliate": null
+  }
+]
