@@ -1,0 +1,105 @@
+[
+  {
+    "slug": "fivem-crash-on-joining-server",
+    "title": "FiveM crashes when joining a server (\"caused FiveM to stop working\")",
+    "games": ["FiveM"],
+    "errorCodes": [],
+    "patterns": ["caused fivem to stop working", "crash signature", "crashed when joining", "crashes when loading into server"],
+    "side": "client",
+    "summary": "FiveM crashes while loading into a server or right after you spawn. Usually a bad cache, a graphics or script mod conflicting with the server, or an outdated driver. If it only happens on one server, the server's content is the likely trigger.",
+    "cause": "Joining a server loads its custom cars, maps, and scripts on top of GTA V. If your cached copy of that content is corrupted, a client mod (graphics packs, ReShade, script hooks) clashes with it, or your PC runs out of memory loading it, FiveM crashes. The crash window usually names the file or error at fault, which is the best clue.",
+    "steps": [
+      "When the crash window appears, copy the error text (or click 'Save information' to keep the crash report). Paste it into the decoder on the home page. It may match a more specific fix.",
+      "Clear the cache: close FiveM, then delete the 'cache', 'server-cache' and 'server-cache-priv' folders in %localappdata%\\FiveM\\FiveM.app\\data. Leave 'game-storage' alone. Rejoin; the first load will be slower.",
+      "Test without client mods: move the 'mods' and 'plugins' folders out of %localappdata%\\FiveM\\FiveM.app to your desktop (this temporarily removes graphics packs and ReShade), then rejoin. If that fixes it, add them back one at a time.",
+      "Remove single-player mods from your GTA V install folder (ScriptHookV, dinput8.dll, .asi files, trainers), then verify GTA V's files in your launcher.",
+      "Update your graphics driver, and close background apps before joining. Servers with lots of custom content use a lot of RAM and VRAM.",
+      "Try a different server. If only one server crashes you, send its staff the crash report and where you were when it happened."
+    ],
+    "ifStillBroken": "If it crashes on every server with no mods installed and a clean cache, reinstall FiveM from fivem.net (your GTA V install isn't affected). Or book a session and we'll read the crash report together.",
+    "related": ["fivem-cmoveanimatedbuilding-pool-overflow", "fivem-corrupt-collision-ybn", "fivem-couldnt-load-resource"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-couldnt-load-resource",
+    "title": "FiveM / RedM: \"Couldn't load resource\" when joining a server",
+    "games": ["FiveM", "RedM"],
+    "errorCodes": ["Couldn't load resource"],
+    "patterns": ["couldn't load resource", "could not load resource", "failed to load resource", "couldnt load resource"],
+    "side": "server",
+    "summary": "A script or content pack on the server didn't download or load correctly. Usually it's the server's problem, but a corrupted cache on your end can cause it too, so clear that first.",
+    "cause": "Servers are built from 'resources' (scripts, maps, vehicles). The error names the resource that failed. If the server owner added or updated it incorrectly, everyone gets this error. If your downloaded copy is damaged, only you do.",
+    "steps": [
+      "Write down the resource name in the error message.",
+      "Clear your cache: close FiveM (or RedM) and delete the 'cache', 'server-cache' and 'server-cache-priv' folders inside its Application Data\\data folder (%localappdata%\\FiveM\\FiveM.app\\data or %localappdata%\\RedM\\RedM.app\\data).",
+      "Add the FiveM or RedM folder to your antivirus exclusions, so it can't block or quarantine downloaded files.",
+      "Reconnect. If you get the same error with the same resource name, it's on the server's side."
+    ],
+    "ifStillBroken": "Send the server's staff the exact error and resource name. They need to fix or remove that resource. Check their Discord, since others may already be reporting it.",
+    "related": ["fivem-crash-on-joining-server", "fivem-stuck-loading-add-on-data-files", "redm-infinite-loading-joining-server"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-connection-rejected-by-server",
+    "title": "FiveM: \"Connection rejected by server\" (allowlist, Discord, or ban)",
+    "games": ["FiveM", "RedM"],
+    "errorCodes": ["Connection rejected by server"],
+    "patterns": ["connection rejected by server", "connection rejected", "this server is using a allowlist", "discord not detected", "you are banned"],
+    "side": "server",
+    "summary": "The server refused to let you in on purpose. The text after 'Connection rejected by server' tells you why: you're not on the allowlist, Discord couldn't be detected, or you're banned. Your PC isn't broken.",
+    "cause": "Many roleplay servers only let in approved players. They check your Discord account, your FiveM account, or an application. If the server can't see your Discord, you haven't been approved yet, or you've been banned, it rejects the connection and shows its own message.",
+    "steps": [
+      "Read the full message after 'Connection rejected by server'. Servers write their own reason here, often with a Discord link.",
+      "Allowlist or application required: join the server's Discord and follow its application or verification steps. Approval can take time.",
+      "Discord not detected: open the Discord desktop app (not the browser version) and sign in to the same account you used in the server's Discord. Then fully close FiveM and reopen it, so it can see Discord.",
+      "If Discord is open but still not detected, make sure FiveM and Discord are both running as a normal user (not 'Run as administrator'), then restart both.",
+      "Make sure you've linked your FiveM (Cfx.re) account if the server asks for it, and that you're signed in to it in FiveM.",
+      "Banned: contact the server's staff through their Discord and follow their appeal process. Don't try to get around a ban; servers can ban your hardware or accounts permanently."
+    ],
+    "ifStillBroken": "If you're approved and Discord is detected but you're still rejected, send a screenshot of the full message to the server's staff. Only they can see why their system is turning you away.",
+    "related": ["fivem-failed-to-connect-after-3-attempts", "fivem-server-requires-newer-game-version"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-voice-chat-not-working",
+    "title": "FiveM voice chat not working (can't hear others or no one hears you)",
+    "games": ["FiveM"],
+    "errorCodes": [],
+    "patterns": ["voice chat not working", "pma-voice", "voip not working"],
+    "side": "client",
+    "summary": "Proximity voice isn't working on a FiveM server. If it's only you, it's almost always a Windows audio setting, a game voice setting, or the wrong mic or speaker selected. If everyone on the server has the problem, it's the server.",
+    "cause": "FiveM uses GTA V's voice chat settings and Windows' default audio devices. If Windows blocks mic access for desktop apps, the wrong device is set as default, voice chat is turned off in the game settings, or you're using a different push-to-talk key than the server expects, voice won't work. Busy servers can also have voice problems on their end.",
+    "steps": [
+      "Check if it's just you: ask others nearby in-game (or in the server's Discord) if voice is working for them. If no one's voice works, it's a server problem. Tell staff and wait.",
+      "Allow mic access: Windows Settings > Privacy & security > Microphone. Turn on 'Microphone access' and 'Let desktop apps access your microphone'.",
+      "Set your default devices: right-click the speaker icon in the taskbar > Sound settings. Set your headset as both the default Output and Input device, and talk into it to check the input meter moves.",
+      "In-game: press Esc > Settings > Voice Chat. Make sure Voice Chat and Microphone are enabled, the correct input and output devices are picked, and the voice volume isn't at zero.",
+      "Check the push-to-talk key: GTA's default is N, but some servers use a different key. Check the server's Discord or rules for their voice key, and check in-game keybinds.",
+      "Fully close FiveM (and Discord, if it's using your mic exclusively) and reopen it, then rejoin."
+    ],
+    "ifStillBroken": "Try another server to confirm. If voice works elsewhere, the problem is that server's voice setup, so report it to its staff. If it fails everywhere, clear the FiveM cache and turn off 'Allow applications to take exclusive control' for your mic (Sound settings > your microphone > Properties > Advanced).",
+    "related": ["fivem-connection-rejected-by-server", "fivem-crash-on-joining-server"],
+    "affiliate": null
+  },
+  {
+    "slug": "redm-infinite-loading-joining-server",
+    "title": "RedM stuck on the loading screen (music playing) when joining a server",
+    "games": ["RedM"],
+    "errorCodes": [],
+    "patterns": ["redm infinite loading", "redm stuck on loading screen", "loading screen music"],
+    "side": "client",
+    "summary": "RedM itself opens, but joining a server leaves you on the loading screen with music playing forever. Usually the server's content is still downloading, your cache is corrupted, or antivirus is blocking the download.",
+    "cause": "When you join a RedM server, it downloads that server's custom content in the background while the loading screen and music play. Big servers can take several minutes on the first join. If the download stalls, your cached copy is corrupted, or antivirus locks the files mid-download, you stay stuck.",
+    "steps": [
+      "On a first-time join, give it up to 10 minutes. Big servers download a lot of content the first time.",
+      "Clear RedM's cache: close RedM, open %localappdata%\\RedM\\RedM.app\\data and delete the 'cache', 'server-cache' and 'server-cache-priv' folders. Don't delete anything else.",
+      "Add your RedM folder and your Red Dead Redemption 2 install folder to your antivirus exclusions.",
+      "Make sure the drive with RedM has plenty of free space (at least 10 GB).",
+      "Close leftover Rockstar Games Launcher and RDR2 processes in Task Manager, then start RedM again.",
+      "Try a different server. If others load fine, the server you were joining is likely having trouble. Check its Discord."
+    ],
+    "ifStillBroken": "If no server loads and RedM itself hangs, follow the 'RedM won't load or hangs after RDR2 works fine' fix below, which covers OneDrive and launcher problems.",
+    "related": ["redm-stuck-loading-after-launch", "fivem-couldnt-load-resource", "rdr2-err-gfx-state"],
+    "affiliate": null
+  }
+]
