@@ -1,9 +1,9 @@
 {
-  "name": "CrashDecoder",
+  "name": "DecodeMyCrash",
   "tagline": "Paste your game crash. Get a plain-English fix.",
-  "url": "https://crashdecoder.pages.dev",
+  "url": "https://decodemycrash.com",
   "bookingUrl": "https://cal.com/doug-boone-chnzbu/30min",
   "bookingPrice": "$25",
-  "author": "Doug",
+  "author": "Doug, Old Wolf Development",
   "authorBlurb": "Former 911 dispatcher turned IT troubleshooter. Every fix here has been tested on a real gaming rig."
 }
