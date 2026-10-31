@@ -49,6 +49,7 @@ function layout({ title, description, canonical, body, jsonld = "", depth = 0 })
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0d1117">
 <link rel="icon" href="${up}favicon.ico" sizes="any">
+<link rel="icon" href="${up}icon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="${up}icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${up}apple-touch-icon.png">
 <link rel="stylesheet" href="${up}styles.css">
@@ -95,7 +96,7 @@ function write(rel, content) {
 // ---------- build ----------
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
-for (const f of ["styles.css", "extra.css", "app.js", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-512.png", "og-image.png"]) {
+for (const f of ["styles.css", "extra.css", "app.js", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "og-image.png"]) {
   fs.copyFileSync(path.join(ROOT, "src", f), path.join(OUT, f));
 }
 
