@@ -1,0 +1,107 @@
+[
+  {
+    "slug": "gtav-err-gfx-d3d-init",
+    "title": "GTA V crash: ERR_GFX_D3D_INIT \"Failed Initialization\"",
+    "games": ["GTA V", "FiveM"],
+    "errorCodes": ["ERR_GFX_D3D_INIT"],
+    "patterns": ["err_gfx_d3d_init", "gfx_d3d_init", "failed initialization. please reboot and restart the game"],
+    "side": "client",
+    "summary": "The game couldn't start up its graphics. Most often an outdated or broken graphics driver, an unstable GPU overclock, or an overlay app getting in the way.",
+    "cause": "GTA V hands its graphics setup to DirectX and your GPU driver when it launches. If the driver is old or half-updated, a GPU overclock isn't fully stable, or an overlay (Steam, Discord, NVIDIA, RivaTuner) hooks in at the wrong moment, that setup fails and the game closes with this error. Rockstar's own support points to outdated drivers, DirectX, or Windows first.",
+    "steps": [
+      "Restart your PC once. Rockstar's error message asks for this and it clears stuck graphics processes.",
+      "Update your graphics driver from NVIDIA or AMD's site. If the error started right after a driver update, do a clean install of the previous version instead (use the 'clean install' option, or DDU in Safe Mode).",
+      "Remove any GPU overclock. Use the Reset button in MSI Afterburner (or your tuning tool), or close the tool completely before launching.",
+      "Turn off overlays: Steam, Discord, and the NVIDIA App / GeForce Experience in-game overlay. Close RivaTuner and screen recorders too.",
+      "Run Windows Update and install anything pending, then restart.",
+      "Reset your graphics settings: go to Documents\\Rockstar Games, open the 'GTAV Enhanced' folder (or 'GTA V' if you play the Legacy version), and rename settings.xml to settings.old. If you can't find it, your Documents may be under OneDrive\\Documents. The game makes a fresh one with safe defaults on next launch.",
+      "Verify the game files in Steam, Epic, or the Rockstar Games Launcher."
+    ],
+    "ifStillBroken": "If it only crashes after a few minutes of play rather than at launch, run a GPU stress test to rule out the card or its power cables. Still stuck? Book a session and we'll go through it together.",
+    "related": ["gtav-crash-on-startup-no-error", "gtav-err-mem-embeddedalloc-alloc"],
+    "affiliate": null
+  },
+  {
+    "slug": "gtav-err-mem-embeddedalloc-alloc",
+    "title": "GTA V crash: ERR_MEM_EMBEDDEDALLOC_ALLOC \"Out of game memory\"",
+    "games": ["GTA V"],
+    "errorCodes": ["ERR_MEM_EMBEDDEDALLOC_ALLOC"],
+    "patterns": ["err_mem_embeddedalloc_alloc", "embeddedalloc", "out of game memory"],
+    "side": "client",
+    "summary": "Despite the wording, this usually isn't your PC running out of RAM. It's mods pushing past the game's built-in memory limit, a broken graphics driver, or odd page file settings.",
+    "cause": "GTA V reserves a fixed-size chunk of memory (the 'heap') when it starts. Mods that add cars, maps, or scripts can fill that chunk and crash the game. On unmodded games, the usual culprits are a corrupted graphics driver or a custom page file size the game doesn't like.",
+    "steps": [
+      "If you use mods: remove them all first (script files, .asi files, and the 'mods' folder in your game directory) and test the plain game. If it works, add mods back a few at a time.",
+      "If you want to keep a heavy single-player mod setup, a heap limit adjuster mod raises the game's memory limit. Single-player only. Never take mods into GTA Online.",
+      "Do a clean graphics driver install: run DDU in Safe Mode to remove the old driver, then install the latest from NVIDIA or AMD.",
+      "Set Windows virtual memory back to default: search 'Adjust the appearance and performance of Windows' > Advanced > Virtual memory > Change, tick 'Automatically manage paging file size', then restart.",
+      "On a laptop, make sure GTA V runs on the dedicated graphics card: Settings > System > Display > Graphics, pick GTA V, choose 'High performance'.",
+      "Verify the game files in Steam, Epic, or the Rockstar Games Launcher."
+    ],
+    "ifStillBroken": "Run 'sfc /scannow' in an admin Command Prompt to repair Windows system files. If you've never modded and it still happens, book a session and we'll dig into it together.",
+    "related": ["gtav-err-gfx-d3d-init", "gtav-crash-on-startup-no-error"],
+    "affiliate": null
+  },
+  {
+    "slug": "rockstar-games-launcher-failed-to-initialize",
+    "title": "\"Rockstar Games Launcher failed to initialize\" (GTA V / RDR2)",
+    "games": ["GTA V", "Red Dead Redemption 2"],
+    "errorCodes": ["Rockstar Games Launcher failed to initialize", "Error 15", "Error Code 1014"],
+    "patterns": ["rockstar games launcher failed to initialize", "launcher failed to initialize", "failed to load due to an incomplete installation", "a newer version of the rockstar games launcher is required", "rockstar games failed to initialize", "social club failed to initialize"],
+    "side": "client",
+    "summary": "The Rockstar Games Launcher itself is broken, so no Rockstar game can start. A clean reinstall of the launcher fixes this almost every time.",
+    "cause": "Every Rockstar PC game runs through the launcher, even if you bought it on Steam or Epic. If a launcher update fails partway, its files get corrupted, or antivirus blocks part of it, the launcher can't start and takes your game down with it.",
+    "steps": [
+      "Close every Rockstar game and the launcher. Check Task Manager for leftover Rockstar or Social Club processes and end them.",
+      "Uninstall the launcher: open C:\\Program Files\\Rockstar Games\\Launcher and run uninstall.exe. If it asks about removing game data, choose to keep it.",
+      "Delete the leftover launcher folders if they're still there: Documents\\Rockstar Games\\Launcher, Documents\\Rockstar Games\\Social Club, C:\\Program Files\\Rockstar Games\\Launcher, C:\\Program Files\\Rockstar Games\\Social Club, and C:\\Program Files (x86)\\Rockstar Games\\Social Club. Do not delete your game folders (like 'Grand Theft Auto V') or the GTA V / Red Dead Redemption 2 folders in Documents.",
+      "Restart your PC.",
+      "Download the launcher fresh from rockstargames.com and install it. When it asks to scan for installed games, say yes so it finds your existing install.",
+      "If it still won't start, add the Rockstar Games folder in Program Files to your antivirus exclusions and try again."
+    ],
+    "ifStillBroken": "Make sure Windows is fully updated, since older Windows builds can stop the launcher from starting. If it still fails, contact Rockstar Support with your launcher log, or book a session with us.",
+    "related": ["gtav-err-no-launcher", "redm-stuck-loading-after-launch"],
+    "affiliate": null
+  },
+  {
+    "slug": "gtav-err-no-launcher",
+    "title": "GTA V error: ERR_NO_LAUNCHER \"Please run Grand Theft Auto V using PlayGTAV.exe\"",
+    "games": ["GTA V"],
+    "errorCodes": ["ERR_NO_LAUNCHER"],
+    "patterns": ["err_no_launcher", "using playgtav.exe", "playgtav.exe"],
+    "side": "client",
+    "summary": "The game was started the wrong way, or it couldn't find the Rockstar Games Launcher it needs. Usually a shortcut pointing at the wrong file, or a missing launcher.",
+    "cause": "GTA V has to start through PlayGTAV.exe, which checks in with the Rockstar Games Launcher first. If you run GTA5.exe directly, use an old desktop shortcut, or the launcher is missing or quarantined by antivirus, the game refuses to start.",
+    "steps": [
+      "Start the game from Steam, Epic, or the Rockstar Games Launcher, not from a desktop shortcut.",
+      "If you use a shortcut, right-click it > Properties and check the Target. It should point to PlayGTAV.exe, not GTA5.exe.",
+      "Check that the Rockstar Games Launcher is installed and opens on its own. If it doesn't, follow the 'Rockstar Games Launcher failed to initialize' fix.",
+      "Check your antivirus quarantine for PlayGTAV.exe or launcher files. Restore them and add the GTA V folder to your exclusions.",
+      "Verify the game files in Steam, Epic, or the Rockstar Games Launcher to restore anything missing."
+    ],
+    "ifStillBroken": "Do a clean reinstall of the Rockstar Games Launcher (see the related fix below), then verify game files again.",
+    "related": ["rockstar-games-launcher-failed-to-initialize", "gtav-crash-on-startup-no-error"],
+    "affiliate": null
+  },
+  {
+    "slug": "gtav-crash-on-startup-no-error",
+    "title": "GTA V closes on startup with no error message (Enhanced & Legacy)",
+    "games": ["GTA V"],
+    "errorCodes": ["0x80000003"],
+    "patterns": ["game did not create a window", "fatal game exit", "0x80000003", "exited with code"],
+    "side": "client",
+    "summary": "You hit Play, the launcher opens, and then the game just disappears. Usually corrupt game files, broken saved settings, the wrong graphics card on laptops, or an overlay.",
+    "cause": "When GTA V dies before its window appears, it often can't show an error at all. The launcher log usually just says the game 'did not create a window'. The common causes are damaged game files after an update, a corrupted settings file, a laptop using its weaker built-in graphics, or software hooking into the game as it starts.",
+    "steps": [
+      "Verify the game files in Steam, Epic, or the Rockstar Games Launcher. This fixes a lot of these after big updates.",
+      "Reset your settings: go to Documents\\Rockstar Games (or OneDrive\\Documents\\Rockstar Games) and rename the 'GTAV Enhanced' folder (or 'GTA V' if you play the Legacy version) by adding '.old' to the end. Don't delete it. Your story mode saves are in its Profiles folder, so you can copy them back into the new folder the game creates.",
+      "On a laptop, make sure GTA V uses the dedicated graphics card: Settings > System > Display > Graphics, pick GTA V, choose 'High performance'.",
+      "Update your graphics driver, or do a clean install with DDU if you recently changed drivers.",
+      "Turn off overlays (Steam, Discord, NVIDIA App) and close RivaTuner, recording software, and any mod menus or script tools.",
+      "Make sure the game isn't set to run in compatibility mode: right-click PlayGTAV.exe > Properties > Compatibility, and untick 'Run this program in compatibility mode'."
+    ],
+    "ifStillBroken": "Open the launcher log (Documents\\Rockstar Games\\Launcher\\launcher.log) and paste it into the decoder on the home page, or book a session and we'll read it together.",
+    "related": ["gtav-err-gfx-d3d-init", "gtav-err-no-launcher", "rockstar-games-launcher-failed-to-initialize"],
+    "affiliate": null
+  }
+]
