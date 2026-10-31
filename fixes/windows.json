@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "bsod-0x139-kernel-security-check-failure",
+    "title": "Blue screen 0x139 KERNEL_SECURITY_CHECK_FAILURE while gaming",
+    "games": ["Any game", "Windows"],
+    "errorCodes": ["0x139", "0x00000139", "KERNEL_SECURITY_CHECK_FAILURE"],
+    "patterns": ["0x139", "0x00000139", "kernel_security_check_failure", "kernel security check failure"],
+    "side": "client",
+    "summary": "Windows detected corrupted data inside the kernel. The usual suspects are unstable RAM settings or a bad driver, especially after a hardware change.",
+    "cause": "This bugcheck fires when an internal Windows data structure is damaged. Memory overclocks (XMP/EXPO), mixed RAM kits, and faulty drivers are the most common causes. It often appears right after new hardware is installed.",
+    "steps": [
+      "If you just changed hardware, undo the most recent change first and see if the blue screens stop.",
+      "Disable XMP/EXPO in the BIOS (or lower the memory speed one step) and test for a day.",
+      "Run a memory test such as TestMem5 or MemTest86. Any error means a RAM or memory-setting problem.",
+      "Update chipset and GPU drivers from the manufacturers' sites.",
+      "Open an admin Command Prompt and run 'sfc /scannow', then 'DISM /Online /Cleanup-Image /RestoreHealth'."
+    ],
+    "ifStillBroken": "Open the minidump (C:\\Windows\\Minidump) with WinDbg or BlueScreenView to see which driver is named — or book a session and we'll read it together.",
+    "related": [],
+    "affiliate": { "text": "Matched RAM kits run more stable than mixed sticks", "url": "https://www.amazon.com/s?k=ddr5+32gb+kit&tag=YOUR-AFFILIATE-TAG" }
+  }
+]

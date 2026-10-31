@@ -1,0 +1,98 @@
+[
+  {
+    "slug": "fivem-stuck-loading-add-on-data-files",
+    "title": "FiveM stuck on \"Loading add-on data files\"",
+    "games": ["FiveM"],
+    "errorCodes": [],
+    "patterns": ["loading add-on data files", "add-on data files", "loading addon data"],
+    "side": "client",
+    "summary": "The loading bar freezes while FiveM loads server content. Almost always a corrupted cache or antivirus blocking the files.",
+    "cause": "FiveM downloads each server's content into a local cache. If a download was interrupted, or your antivirus scans and locks files while FiveM reads them, loading stalls.",
+    "steps": [
+      "Close FiveM completely.",
+      "Open FiveM Application Data (right-click the FiveM shortcut > Open file location).",
+      "Inside 'data', delete the 'cache', 'server-cache' and 'server-cache-priv' folders. Leave 'game-storage' alone if you want to avoid re-downloading the base game files.",
+      "Add your FiveM folder to your antivirus exclusions (Bitdefender, Norton, and Avast are common culprits).",
+      "Relaunch and reconnect. The first load will be slower while the cache rebuilds."
+    ],
+    "ifStillBroken": "Try a different server. If only one server hangs, the problem is likely on their end — report it to their staff.",
+    "related": ["fivem-window-watchdog-antivirus-hang", "fivem-curl-error-18"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-window-watchdog-antivirus-hang",
+    "title": "FiveM crash: Window Watchdog / game hangs then closes",
+    "games": ["FiveM"],
+    "errorCodes": ["Window Watchdog"],
+    "patterns": ["window watchdog", "watchdog", "game hung", "hang detected"],
+    "side": "client",
+    "summary": "FiveM's watchdog closed the game because it stopped responding. A frequent cause is antivirus software injecting into the game process.",
+    "cause": "Some antivirus suites load their own DLLs into running programs to monitor them. FiveM treats the resulting stall as a hang and shuts down. The crash report often lists an antivirus DLL near the top.",
+    "steps": [
+      "Open the crash report and look for DLL names from your antivirus (for example Bitdefender's 'atcuf' or 'bdhkm' modules).",
+      "Add exclusions for the FiveM folder and for the FiveM game process in your antivirus.",
+      "If your antivirus has an 'Advanced Threat Defense' or behavior-monitoring feature, add FiveM as an exception there too.",
+      "Close overlay tools that inject into games (old RivaTuner versions, screen recorders) and test again."
+    ],
+    "ifStillBroken": "Temporarily disable the antivirus for one session to confirm. If the crash stops, it's the antivirus — keep the exclusions and contact their support.",
+    "related": ["fivem-stuck-loading-add-on-data-files"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-curl-error-18",
+    "title": "FiveM: CURL error 18 when connecting",
+    "games": ["FiveM", "RedM"],
+    "errorCodes": ["CURL error 18"],
+    "patterns": ["curl error 18", "curl error: 18", "transferred a partial file", "curle_partial_file"],
+    "side": "client",
+    "summary": "A download from the server stopped partway through. Usually a corrupt cache file or a network hiccup.",
+    "cause": "Error 18 means the connection closed before the whole file arrived. Bad cache entries, DNS problems, or a VPN can all trigger it.",
+    "steps": [
+      "Clear the FiveM cache folders ('cache', 'server-cache', 'server-cache-priv').",
+      "Switch to a public DNS (for example 1.1.1.1 or 8.8.8.8) in your network adapter settings.",
+      "Turn off any VPN or proxy and reconnect.",
+      "If you're on Wi-Fi, try a wired connection to rule out drops."
+    ],
+    "ifStillBroken": "If it only happens on one server, their file host may be overloaded — try again later or tell their staff.",
+    "related": ["fivem-stuck-loading-add-on-data-files"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-cmoveanimatedbuilding-pool-overflow",
+    "title": "FiveM crash: CMoveAnimatedBuilding pool full",
+    "games": ["FiveM"],
+    "errorCodes": ["CMoveAnimatedBuilding"],
+    "patterns": ["cmoveanimatedbuilding", "pool full", "pool overflow", "animatedbuilding"],
+    "side": "server",
+    "summary": "This is a server problem, not your PC. The map has more animated objects (doors, gates, garage doors) than the game engine can track.",
+    "cause": "GTA V has a hard limit on animated building objects. Servers with heavy custom maps (MLOs) can exceed it in busy areas, crashing anyone who gets close.",
+    "steps": [
+      "Note where you were when it crashed (street, building, interior).",
+      "Send the crash report and location to the server's staff — only they can fix it by trimming map content.",
+      "As a workaround, avoid that area or approach it from a different direction so fewer objects load at once.",
+      "No changes to your graphics settings or files will fix this one."
+    ],
+    "ifStillBroken": "If it happens everywhere on every server, it isn't this issue — paste your full crash log into the decoder on the home page.",
+    "related": ["fivem-corrupt-collision-ybn"],
+    "affiliate": null
+  },
+  {
+    "slug": "fivem-corrupt-collision-ybn",
+    "title": "FiveM crash pointing to a .ybn collision file",
+    "games": ["FiveM"],
+    "errorCodes": [".ybn"],
+    "patterns": [".ybn", "col.ybn", "collision"],
+    "side": "server",
+    "summary": "A broken map collision file on the server crashes you near a specific location. Server-side issue.",
+    "cause": "Collision (.ybn) files define what you can walk and drive on. If a server ships a corrupt one, every player loading that area can crash.",
+    "steps": [
+      "Copy the .ybn file name and resource name from the crash report.",
+      "Send both to the server's staff so they can fix or remove that asset.",
+      "Clear your cache once in case your copy of the file was the corrupt one.",
+      "Avoid the area until it's patched."
+    ],
+    "ifStillBroken": "If the crash continues after clearing cache and staff confirm the file is fine, paste the full log for a deeper look.",
+    "related": ["fivem-cmoveanimatedbuilding-pool-overflow"],
+    "affiliate": null
+  }
+]

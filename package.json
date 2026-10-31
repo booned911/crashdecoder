@@ -1,0 +1,10 @@
+{
+  "name": "crashdecoder",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plain-English crash fixes for RDR2, RedM, FiveM and GTA V",
+  "scripts": {
+    "build": "node build.js",
+    "preview": "node build.js && npx --yes serve dist"
+  }
+}

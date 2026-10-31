@@ -1,0 +1,172 @@
+// CrashDecoder static site builder — no dependencies.
+// Usage: node build.js   → outputs the site into ./dist
+const fs = require("fs");
+const path = require("path");
+
+const ROOT = __dirname;
+const OUT = path.join(ROOT, "dist");
+const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, "site.config.json"), "utf8"));
+
+// ---------- load fixes ----------
+const fixes = [];
+for (const file of fs.readdirSync(path.join(ROOT, "fixes")).filter(f => f.endsWith(".json"))) {
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, "fixes", file), "utf8"));
+  for (const fix of Array.isArray(data) ? data : [data]) {
+    for (const key of ["slug", "title", "summary", "steps"]) {
+      if (!fix[key]) throw new Error(`${file}: fix "${fix.slug || "?"}" is missing "${key}"`);
+    }
+    if (fixes.some(f => f.slug === fix.slug)) throw new Error(`Duplicate slug: ${fix.slug}`);
+    fixes.push({ games: [], errorCodes: [], patterns: [], related: [], side: "client", ...fix });
+  }
+}
+fixes.sort((a, b) => a.title.localeCompare(b.title));
+const bySlug = Object.fromEntries(fixes.map(f => [f.slug, f]));
+
+// ---------- helpers ----------
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const sideBadge = side => side === "server"
+  ? `<span class="badge badge-server">Server-side — not your PC</span>`
+  : `<span class="badge badge-client">Fixable on your PC</span>`;
+
+function layout({ title, description, canonical, body, jsonld = "", depth = 0 }) {
+  const up = depth ? "../".repeat(depth) : "./";
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(description)}">
+<link rel="canonical" href="${esc(canonical)}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<link rel="stylesheet" href="${up}styles.css">
+${jsonld}
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="${up}"><span class="logo-mark">&gt;_</span> ${esc(cfg.name)}</a>
+  <nav><a href="${up}fixes/">All fixes</a><a href="${up}#book" class="nav-cta">Get help</a></nav>
+</header>
+<main>${body}</main>
+<footer class="site-footer">
+  <p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}</p>
+  <p class="fine">Not affiliated with Rockstar Games, Take-Two, or Cfx.re. Some links are affiliate links; they cost you nothing extra.</p>
+</footer>
+</body>
+</html>`;
+}
+
+function bookCard(id = "") {
+  return `<section class="book-card"${id ? ` id="${id}"` : ""}>
+  <div>
+    <h2>Still crashing?</h2>
+    <p>Book a ${esc(cfg.bookingPrice)} 30-minute screen-share and a real tech will fix it with you live.</p>
+  </div>
+  <a class="btn" href="${esc(cfg.bookingUrl)}" target="_blank" rel="noopener">Book a fix session</a>
+</section>`;
+}
+
+const fixCard = (f, depth) => `<a class="fix-card" href="${"../".repeat(depth)}fix/${f.slug}/">
+  <span class="fix-games">${esc(f.games.join(" · "))}</span>
+  <h3>${esc(f.title)}</h3>
+  <p>${esc(f.summary)}</p>
+  ${sideBadge(f.side)}
+</a>`;
+
+function write(rel, content) {
+  const p = path.join(OUT, rel);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, content);
+}
+
+// ---------- build ----------
+fs.rmSync(OUT, { recursive: true, force: true });
+fs.mkdirSync(OUT, { recursive: true });
+for (const f of ["styles.css", "app.js"]) fs.copyFileSync(path.join(ROOT, "src", f), path.join(OUT, f));
+
+// search index used by the paste-box matcher
+write("fixes.json", JSON.stringify(fixes.map(f => ({
+  slug: f.slug, title: f.title, games: f.games, errorCodes: f.errorCodes,
+  patterns: f.patterns, summary: f.summary, side: f.side
+}))));
+
+// home
+write("index.html", layout({
+  title: `${cfg.name} — ${cfg.tagline}`,
+  description: "Free crash fixes for RDR2, RedM, FiveM and GTA V. Paste your error and get step-by-step instructions in plain English.",
+  canonical: cfg.url + "/",
+  body: `
+<section class="hero">
+  <h1>${esc(cfg.tagline)}</h1>
+  <p class="lede">Free fixes for RDR2, RedM, FiveM and GTA V crashes — written by someone who has actually fixed them. Nothing to download. Your log never leaves your browser.</p>
+  <form id="decoder" class="decoder" autocomplete="off">
+    <label for="log" class="sr-only">Crash log or error message</label>
+    <textarea id="log" rows="7" placeholder="Paste your error message or crash log here…&#10;&#10;Example: ERR_GFX_D3D_DEFERRED_MEM"></textarea>
+    <div class="decoder-actions">
+      <button class="btn" type="submit">Decode my crash</button>
+      <button class="btn btn-ghost" type="button" id="clear">Clear</button>
+    </div>
+  </form>
+  <div id="results" aria-live="polite"></div>
+</section>
+<section class="section">
+  <h2>Common crashes</h2>
+  <div class="grid">${fixes.slice(0, 6).map(f => fixCard(f, 0)).join("")}</div>
+  <p><a href="fixes/">Browse all ${fixes.length} fixes →</a></p>
+</section>
+${bookCard("book")}
+<script>window.BOOKING_URL=${JSON.stringify(cfg.bookingUrl)};</script>
+<script src="app.js"></script>`
+}));
+
+// all fixes
+write("fixes/index.html", layout({
+  title: `All crash fixes — ${cfg.name}`,
+  description: `Every crash fix on ${cfg.name}, grouped by game.`,
+  canonical: cfg.url + "/fixes/",
+  depth: 1,
+  body: `<section class="section"><h1>All crash fixes</h1>
+  <div class="grid">${fixes.map(f => fixCard(f, 1)).join("")}</div></section>${bookCard()}`
+}));
+
+// one page per fix
+for (const f of fixes) {
+  const related = f.related.map(s => bySlug[s]).filter(Boolean);
+  const jsonld = `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org", "@type": "HowTo", name: f.title, description: f.summary,
+    step: f.steps.map((t, i) => ({ "@type": "HowToStep", position: i + 1, text: t }))
+  }).replace(/</g, "\\u003c")}</script>`;
+
+  write(`fix/${f.slug}/index.html`, layout({
+    title: `${f.title} — Fix | ${cfg.name}`,
+    description: f.summary,
+    canonical: `${cfg.url}/fix/${f.slug}/`,
+    depth: 2,
+    jsonld,
+    body: `
+<article class="fix">
+  <p class="crumbs"><a href="../../fixes/">All fixes</a> / ${esc(f.games.join(", "))}</p>
+  <h1>${esc(f.title)}</h1>
+  ${sideBadge(f.side)}
+  ${f.errorCodes.length ? `<p class="codes">${f.errorCodes.map(c => `<code>${esc(c)}</code>`).join(" ")}</p>` : ""}
+  <p class="lede">${esc(f.summary)}</p>
+  ${f.cause ? `<h2>Why it happens</h2><p>${esc(f.cause)}</p>` : ""}
+  <h2>How to fix it</h2>
+  <ol class="steps">${f.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
+  ${f.ifStillBroken ? `<h2>Still broken?</h2><p>${esc(f.ifStillBroken)}</p>` : ""}
+  ${f.affiliate ? `<aside class="affiliate"><p>${esc(f.affiliate.text)}</p><a href="${esc(f.affiliate.url)}" target="_blank" rel="sponsored noopener">See options →</a></aside>` : ""}
+  ${related.length ? `<h2>Related fixes</h2><div class="grid">${related.map(r => fixCard(r, 2)).join("")}</div>` : ""}
+</article>
+${bookCard()}`
+  }));
+}
+
+// SEO files
+write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${["/", "/fixes/", ...fixes.map(f => `/fix/${f.slug}/`)].map(u => `  <url><loc>${cfg.url}${u}</loc></url>`).join("\n")}
+</urlset>`);
+write("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${cfg.url}/sitemap.xml\n`);
+
+console.log(`Built ${fixes.length} fixes into ${path.relative(ROOT, OUT)}/`);

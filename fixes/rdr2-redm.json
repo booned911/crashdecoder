@@ -1,0 +1,61 @@
+[
+  {
+    "slug": "rdr2-err-gfx-d3d-deferred-mem",
+    "title": "RDR2 crash: ERR_GFX_D3D_DEFERRED_MEM (DirectX 12)",
+    "games": ["Red Dead Redemption 2", "RedM"],
+    "errorCodes": ["ERR_GFX_D3D_DEFERRED_MEM"],
+    "patterns": ["err_gfx_d3d_deferred_mem", "d3d_deferred_mem"],
+    "side": "client",
+    "summary": "The game ran out of graphics memory while starting up on DirectX 12. It usually isn't your VRAM size — it's a driver, overclock, or API problem.",
+    "cause": "DirectX 12 in RDR2 is sensitive to unstable GPU overclocks and fresh driver bugs. A new driver install or an overclock that is stable in other games can still trigger this error at launch.",
+    "steps": [
+      "Remove any GPU overclock. Reset to default in MSI Afterburner (or your tuning tool), or close the tool completely before launching.",
+      "Switch the graphics API to Vulkan. If you can't reach the menu, edit Documents\\Rockstar Games\\Red Dead Redemption 2\\Settings\\system.xml and change <API>kSettingAPI_DX12</API> to <API>kSettingAPI_Vulkan</API>.",
+      "If the error started right after a driver update, do a clean install of the previous driver version (use the 'clean install' option, or DDU in Safe Mode).",
+      "Make sure Windows virtual memory (page file) is set to 'System managed size' with free space on that drive.",
+      "Close background overlays (Afterburner/RivaTuner, recording tools) and test again."
+    ],
+    "ifStillBroken": "Verify game files in your launcher. If it still fails on both DX12 and Vulkan, see the Vulkan memory error fix below.",
+    "related": ["rdr2-vulkan-failed-to-allocate-memory", "redm-stuck-loading-after-launch"],
+    "affiliate": null
+  },
+  {
+    "slug": "rdr2-vulkan-failed-to-allocate-memory",
+    "title": "RDR2 crash: \"Failed to allocate memory for Vulkan\"",
+    "games": ["Red Dead Redemption 2", "RedM"],
+    "errorCodes": ["Vulkan memory allocation"],
+    "patterns": ["failed to allocate memory for vulkan", "vulkan memory", "vk_error_out_of_device_memory", "vk_error_out_of_host_memory"],
+    "side": "client",
+    "summary": "The Vulkan renderer couldn't reserve the memory it asked for. Most often caused by a driver issue, an unstable overclock, or leftover processes holding memory.",
+    "cause": "Vulkan reports memory failures more bluntly than DirectX. Corrupt shader caches, a just-released driver, or an overclock on the memory clock are the usual triggers — not a lack of VRAM.",
+    "steps": [
+      "Reset GPU core and memory overclocks to stock.",
+      "Restart the PC (not just the game) so nothing is holding GPU memory. Check Task Manager > Performance > GPU: dedicated memory should be low with the game closed.",
+      "Delete the shader cache: in Documents\\Rockstar Games\\Red Dead Redemption 2\\Settings, remove the sga_* files (the game rebuilds them).",
+      "Roll back to the previous graphics driver with a clean install if the error began after an update.",
+      "Lower Texture Quality one step to rule out genuine VRAM pressure."
+    ],
+    "ifStillBroken": "Try DirectX 12 instead. If both APIs fail, run a GPU memory stress test (e.g. OCCT VRAM test) to rule out hardware.",
+    "related": ["rdr2-err-gfx-d3d-deferred-mem"],
+    "affiliate": null
+  },
+  {
+    "slug": "redm-stuck-loading-after-launch",
+    "title": "RedM won't load or hangs after RDR2 works fine",
+    "games": ["RedM"],
+    "errorCodes": [],
+    "patterns": ["redm", "redm.exe", "citizenfx", "redm application data"],
+    "side": "client",
+    "summary": "Single-player RDR2 runs, but RedM crashes or hangs. Usually leftover launcher processes, a cloud-synced install folder, or a corrupt cache.",
+    "cause": "RedM needs the Rockstar launcher in a clean state and its own cache intact. OneDrive syncing the game or RedM folder can lock files mid-load.",
+    "steps": [
+      "Fully close RDR2, the Rockstar Games Launcher, and any leftover Rockstar/Social Club processes in Task Manager.",
+      "Make sure RedM and RDR2 are not installed inside a OneDrive-synced folder (Documents/Desktop can be synced). Move them to a normal folder like C:\\Games.",
+      "Clear RedM's cache: open the RedM Application Data folder and delete the 'data\\cache', 'data\\server-cache' and 'data\\server-cache-priv' folders. Do not delete citizen or the main data files.",
+      "Launch RDR2 single-player once to confirm it loads, close it, then start RedM."
+    ],
+    "ifStillBroken": "Add your antivirus exclusions for the RedM and RDR2 folders, then try again.",
+    "related": ["fivem-stuck-loading-add-on-data-files"],
+    "affiliate": null
+  }
+]
