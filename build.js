@@ -38,14 +38,26 @@ function layout({ title, description, canonical, body, jsonld = "", depth = 0 })
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="${esc(cfg.name)}">
+<meta property="og:url" content="${esc(canonical)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
+<meta property="og:image" content="${esc(cfg.url)}/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d1117">
+<link rel="icon" href="${up}favicon.ico" sizes="any">
+<link rel="icon" href="${up}icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="${up}apple-touch-icon.png">
 <link rel="stylesheet" href="${up}styles.css">
+<link rel="stylesheet" href="${up}extra.css">
 ${jsonld}
 </head>
 <body>
 <header class="site-header">
-  <a class="logo" href="${up}"><span class="logo-mark">&gt;_</span> ${esc(cfg.name)}</a>
+  <a class="logo" href="${up}"><img src="${up}logo.svg" alt="${esc(cfg.name)}" width="352" height="64"></a>
   <nav><a href="${up}fixes/">All fixes</a><a href="${up}#book" class="nav-cta">Get help</a></nav>
 </header>
 <main>${body}</main>
@@ -83,7 +95,9 @@ function write(rel, content) {
 // ---------- build ----------
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
-for (const f of ["styles.css", "app.js"]) fs.copyFileSync(path.join(ROOT, "src", f), path.join(OUT, f));
+for (const f of ["styles.css", "extra.css", "app.js", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-512.png", "og-image.png"]) {
+  fs.copyFileSync(path.join(ROOT, "src", f), path.join(OUT, f));
+}
 
 // search index used by the paste-box matcher
 write("fixes.json", JSON.stringify(fixes.map(f => ({
@@ -99,7 +113,7 @@ write("index.html", layout({
   body: `
 <section class="hero">
   <h1>${esc(cfg.tagline)}</h1>
-  <p class="lede">Free fixes for RDR2, RedM, FiveM and GTA V crashes — written by someone who has actually fixed them. Nothing to download. Your log never leaves your browser.</p>
+  <p class="lede">Free fixes for RDR2, RedM, FiveM and GTA V crashes — written by someone who has actually fixed them. Nothing to download. Your log never leaves your browser unless you choose to send it.</p>
   <form id="decoder" class="decoder" autocomplete="off">
     <label for="log" class="sr-only">Crash log or error message</label>
     <textarea id="log" rows="7" placeholder="Paste your error message or crash log here…&#10;&#10;Example: ERR_GFX_D3D_DEFERRED_MEM"></textarea>
@@ -116,7 +130,7 @@ write("index.html", layout({
   <p><a href="fixes/">Browse all ${fixes.length} fixes →</a></p>
 </section>
 ${bookCard("book")}
-<script>window.BOOKING_URL=${JSON.stringify(cfg.bookingUrl)};</script>
+<script>window.BOOKING_URL=${JSON.stringify(cfg.bookingUrl)};window.FORM_KEY=${JSON.stringify(cfg.web3formsKey || "")};</script>
 <script src="app.js"></script>`
 }));
 
