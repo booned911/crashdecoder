@@ -91,8 +91,8 @@
     "summary": "Your game has good FPS but still stutters, hitches, or the audio crackles. A driver is hogging the CPU for short bursts. LatencyMon tells you which one.",
     "cause": "Drivers have to handle hardware requests quickly and then hand the CPU back. When one takes too long (often a network, Wi-Fi, storage, audio, or GPU driver), everything else waits, including your game and audio. You don't see it as low FPS. You feel it as hitches and crackles.",
     "steps": [
-      "Download LatencyMon (free, from Resplendence) and run it for 5 to 10 minutes while using your PC normally. Go to the Drivers tab and sort by 'Highest execution' to see which driver is at the top.",
-      "Network drivers (ndis.sys, or your Wi-Fi/Ethernet driver): update the network driver from your motherboard or adapter maker's site. As a test, unplug Ethernet or turn off Wi-Fi and run LatencyMon again.",
+      "Download LatencyMon (free, from Resplendence) and run it for 5 to 10 minutes while using your PC normally. Go to the Drivers tab and click the 'Highest execution (ms)' column to sort it and see which driver is at the top. If the top number is under about 1 ms, DPC latency isn't your problem and you can stop here.",
+      "Network drivers (tcpip.sys, ndis.sys, or your Wi-Fi/Ethernet driver): update the network driver from your motherboard or adapter maker's site. As a test, unplug Ethernet or turn off Wi-Fi and run LatencyMon again.",
       "GPU driver (nvlddmkm.sys or amdkmdag.sys): do a clean driver install with DDU.",
       "Storage or ACPI drivers (storport.sys, ACPI.sys): update your chipset drivers from AMD or Intel and update your BIOS.",
       "Set Windows Power Mode to Best performance (Settings > System > Power > Power Mode). If the dropdown is greyed out with a note about the high performance power plan, you're already set and can skip this. Then close RGB, monitoring, and tuning apps you don't need. These are common latency causes.",
