@@ -1,0 +1,36 @@
+/* Additions for the logo and the "no fix found" panel. Loaded after styles.css. */
+
+.logo { display: inline-flex; align-items: center; }
+.logo img { display: block; height: 34px; width: auto; }
+
+.result-empty .nomatch-search,
+.result-empty .nomatch-send,
+.result-empty .nomatch-book {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(139, 148, 158, 0.25);
+}
+.result-empty h4 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.nomatch-label code { word-break: break-word; }
+.nomatch-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.6rem; }
+
+.nomatch-form { margin-top: 0.75rem; }
+.nomatch-form input[type="email"] {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  color: inherit;
+  background: rgba(13, 17, 23, 0.6);
+  border: 1px solid rgba(139, 148, 158, 0.35);
+  border-radius: 8px;
+}
+.nomatch-form input[type="email"]:focus { outline: 2px solid #3ddc97; outline-offset: 1px; }
+.nomatch-form textarea:disabled,
+.nomatch-form input:disabled,
+.nomatch-form button:disabled { opacity: 0.6; cursor: default; }
+.send-status { min-height: 1.2em; margin: 0.6rem 0 0; color: #3ddc97; }
+
+/* honeypot: hidden from people, visible to spam bots */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
