@@ -95,7 +95,7 @@
       "Network drivers (ndis.sys, or your Wi-Fi/Ethernet driver): update the network driver from your motherboard or adapter maker's site. As a test, unplug Ethernet or turn off Wi-Fi and run LatencyMon again.",
       "GPU driver (nvlddmkm.sys or amdkmdag.sys): do a clean driver install with DDU.",
       "Storage or ACPI drivers (storport.sys, ACPI.sys): update your chipset drivers from AMD or Intel and update your BIOS.",
-      "Set Windows Power Mode to Best performance (Settings > System > Power), and close RGB, monitoring, and tuning apps you don't need. These are common latency causes.",
+      "Set Windows Power Mode to Best performance (Settings > System > Power > Power Mode). If the dropdown is greyed out with a note about the high performance power plan, you're already set and can skip this. Then close RGB, monitoring, and tuning apps you don't need. These are common latency causes.",
       "Update audio drivers, and try disabling audio devices you don't use (like a monitor's HDMI audio) in Device Manager."
     ],
     "ifStillBroken": "Disable devices one at a time in Device Manager while re-running LatencyMon to find the culprit, then re-enable them afterward. Or book a session and we'll read the LatencyMon report together.",
