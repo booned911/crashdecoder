@@ -84,3 +84,8 @@
 }
 .pay-step p { margin: 0 0 0.75rem; }
 .pay-note { margin: 0.75rem 0 0 !important; font-size: 0.85rem; color: #8b949e; }
+
+/* ---- Old Wolf maker's mark in the footer ---- */
+.maker { display: flex; align-items: center; gap: 0.85rem; }
+.maker img { flex: 0 0 auto; width: 48px; height: 48px; filter: drop-shadow(0 0 6px rgba(240, 168, 48, 0.25)); }
+.maker p { margin: 0; }
