@@ -220,19 +220,27 @@
 
   function sendForm(raw) {
     if (!window.FORM_KEY) return "";
-    return `<div class="nomatch-send">
+    const paid = !!window.REVIEW_URL;
+    const price = window.REVIEW_PRICE || "$10";
+    const time = window.REVIEW_TIME || "48 hours";
+    return `<div class="nomatch-send" id="review-panel">
       <h4>Send it to OldWolfDev</h4>
-      <p>I'll review it, and if you leave your email I'll reply with what I find. Only what's in the box below and your email are sent. Personal details we could spot are already removed; check for anything else you'd rather not share.</p>
+      ${paid ? `<p><strong>Personal review, ${esc(price)}:</strong> I'll research your error and email you a fix within ${esc(time)}. If I can't find one, you get a full refund.</p>
+      <p><strong>Free report:</strong> just let me know this error is missing, so I can add a fix to the site. No reply promised.</p>` :
+      `<p>Let me know this error is missing so I can add a fix to the site.</p>`}
+      <p class="send-privacy">Only what's in the box below and your email are sent. Personal details we could spot are already removed; check for anything else you'd rather not share.</p>
       <form id="send-error" class="decoder nomatch-form" autocomplete="off">
         <label for="send-text" class="sr-only">Error to send</label>
         <textarea id="send-text" rows="6" maxlength="5000">${esc(redact(raw).slice(0, 5000))}</textarea>
-        <label for="send-email" class="sr-only">Your email (optional)</label>
-        <input id="send-email" type="email" placeholder="Your email (optional, for a reply)" maxlength="200">
+        <label for="send-email" class="sr-only">Your email</label>
+        <input id="send-email" type="email" placeholder="${paid ? "Your email (needed for a review reply)" : "Your email (optional)"}" maxlength="200" autocomplete="email">
         <input type="checkbox" id="send-botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="decoder-actions">
-          <button class="btn" type="submit" id="send-btn">Send to OldWolfDev</button>
+          ${paid ? `<button class="btn" type="submit" id="review-btn" data-kind="review">Get a personal review · ${esc(price)}</button>` : ""}
+          <button class="btn${paid ? " btn-ghost" : ""}" type="submit" id="send-btn" data-kind="report">${paid ? "Just report it (free)" : "Send to OldWolfDev"}</button>
         </div>
         <p class="send-status" id="send-status" role="status"></p>
+        <div id="pay-step"></div>
       </form>
     </div>`;
   }
@@ -245,11 +253,7 @@
           `<a class="btn btn-ghost" href="${esc(l.href)}" target="_blank" rel="noopener nofollow">${esc(l.label)}</a>`).join("")}
         </div>
       </div>
-      ${sendForm(raw)}
-      <div class="nomatch-book">
-        <p>Want it fixed now? Book a session and we'll solve it together. Then it gets added to the site so the next person doesn't get stuck.</p>
-        <a class="btn" href="${esc(window.BOOKING_URL)}" target="_blank" rel="noopener">Book a fix session</a>
-      </div>`;
+      ${sendForm(raw)}`;
   }
 
   function render(matches, dec, raw, slugs) {
@@ -327,7 +331,7 @@
         aiOut.innerHTML = `<div class="ai-answer">
           <p class="ai-label">AI suggestion · not tested by OldWolfDev</p>
           ${formatAI(data.answer)}
-          <p class="ai-foot">Didn't help? Send it to OldWolfDev${window.FORM_KEY ? " below" : ""}, or book a session.</p>
+          <p class="ai-foot">${window.FORM_KEY ? "Didn't help? Send it to OldWolfDev below." : ""}</p>
         </div>`;
         btn.style.display = "none";
         return;
@@ -350,23 +354,34 @@
 
   // ---------- send to OldWolfDev ----------
 
+  const newRef = () => "DMC-" + Array.from(crypto.getRandomValues(new Uint8Array(4)), n => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[n % 32]).join("");
+
   async function sendError(e, raw, dec) {
     e.preventDefault();
+    const kind = (e.submitter && e.submitter.dataset && e.submitter.dataset.kind) || "report";
+    const isReview = kind === "review" && !!window.REVIEW_URL;
     const status = document.getElementById("send-status");
-    const btn = document.getElementById("send-btn");
     const text = document.getElementById("send-text").value.trim();
-    const email = document.getElementById("send-email").value.trim();
+    const emailEl = document.getElementById("send-email");
+    const email = emailEl.value.trim();
     if (document.getElementById("send-botcheck").checked) return;
     if (!text) { status.textContent = "There's nothing to send. Paste the error in the box first."; return; }
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.textContent = "That email doesn't look right. Fix it or leave it blank."; return; }
+    if (isReview && !email) { status.textContent = "Please add your email so I can send you the review."; emailEl.focus(); return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.textContent = "That email doesn't look right. Please check it."; emailEl.focus(); return; }
 
-    btn.disabled = true;
+    const buttons = document.getElementById("send-error").querySelectorAll("button");
+    buttons.forEach(b => (b.disabled = true));
     status.textContent = "Sending…";
     const game = gameHint(raw);
+    const ref = newRef();
     const payload = {
       access_key: window.FORM_KEY,
-      subject: `Unmatched error${game ? ` (${game})` : ""} — DecodeMyCrash`,
+      subject: isReview
+        ? `REVIEW ${ref}: awaiting ${window.REVIEW_PRICE || "$10"} payment — DecodeMyCrash`
+        : `Free report${game ? ` (${game})` : ""} — DecodeMyCrash`,
       from_name: "DecodeMyCrash",
+      type: isReview ? `Paid review request (only review once the Stripe payment from ${email} arrives)` : "Free report, no reply promised",
+      reference: ref,
       error: text,
       game: game || "none detected",
       decoded: dec.found.map(f => `${f.code ? f.code + " " : ""}${f.name}`).join("; ") || "nothing decoded",
@@ -383,17 +398,23 @@
         body: JSON.stringify(payload)
       });
       const data = await res.json().catch(() => ({}));
-      if (res.ok && data.success !== false) {
-        status.textContent = email
-          ? "Sent. Thanks! I'll take a look and reply to your email."
-          : "Sent. Thanks! I'll take a look and may add a fix for it.";
-        document.getElementById("send-error").querySelectorAll("textarea, input, button").forEach(el => (el.disabled = true));
+      if (!(res.ok && data.success !== false)) throw new Error(data.message || "send failed");
+
+      document.getElementById("send-error").querySelectorAll("textarea, input").forEach(el => (el.disabled = true));
+      if (isReview) {
+        const url = `${window.REVIEW_URL}${window.REVIEW_URL.includes("?") ? "&" : "?"}prefilled_email=${encodeURIComponent(email)}&client_reference_id=${ref}`;
+        status.textContent = "";
+        document.getElementById("pay-step").innerHTML = `<div class="pay-step">
+          <p><strong>Almost done.</strong> Your error is saved as <code>${ref}</code>. Complete the ${esc(window.REVIEW_PRICE || "$10")} payment to send it for review. I'll reply to <strong>${esc(email)}</strong> within ${esc(window.REVIEW_TIME || "48 hours")}.</p>
+          <a class="btn" href="${esc(url)}" target="_blank" rel="noopener">Pay ${esc(window.REVIEW_PRICE || "$10")} securely with Stripe</a>
+          <p class="pay-note">Unpaid requests aren't reviewed. If I can't find a fix, you'll get a full refund.</p>
+        </div>`;
       } else {
-        throw new Error(data.message || "send failed");
+        status.textContent = "Sent. Thanks! This helps me add a fix for it.";
       }
     } catch (err) {
-      btn.disabled = false;
-      status.textContent = "Couldn't send right now. Please try again in a minute, or book a session instead.";
+      buttons.forEach(b => (b.disabled = false));
+      status.textContent = "Couldn't send right now. Please try again in a minute.";
     }
   }
 
