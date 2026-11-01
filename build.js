@@ -1,4 +1,4 @@
-// CrashDecoder static site builder — no dependencies.
+// DecodeMyCrash static site builder — no dependencies.
 // Usage: node build.js   → outputs the site into ./dist
 const fs = require("fs");
 const path = require("path");
@@ -64,7 +64,7 @@ ${jsonld}
 <main>${body}</main>
 <footer class="site-footer">
   <p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}</p>
-  <p class="fine">Not affiliated with Rockstar Games, Take-Two, or Cfx.re. Some links are affiliate links; they cost you nothing extra.</p>
+  <p class="fine">Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested; written fixes are. Some links are affiliate links; they cost you nothing extra.</p>
 </footer>
 </body>
 </html>`;
@@ -96,7 +96,7 @@ function write(rel, content) {
 // ---------- build ----------
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
-for (const f of ["styles.css", "extra.css", "app.js", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "og-image.png"]) {
+for (const f of ["styles.css", "extra.css", "app.js", "codes.json", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "og-image.png"]) {
   fs.copyFileSync(path.join(ROOT, "src", f), path.join(OUT, f));
 }
 
@@ -109,15 +109,15 @@ write("fixes.json", JSON.stringify(fixes.map(f => ({
 // home
 write("index.html", layout({
   title: `${cfg.name} — ${cfg.tagline}`,
-  description: "Free crash fixes for RDR2, RedM, FiveM and GTA V. Paste your error and get step-by-step instructions in plain English.",
+  description: "Free fixes for Windows, app and game crashes. Paste a blue screen code, error message or crash log and get plain-English steps to fix it.",
   canonical: cfg.url + "/",
   body: `
 <section class="hero">
   <h1>${esc(cfg.tagline)}</h1>
-  <p class="lede">Free fixes for RDR2, RedM, FiveM and GTA V crashes — written by someone who has actually fixed them. Nothing to download. Your log never leaves your browser unless you choose to send it.</p>
+  <p class="lede">Free fixes for Windows, app and game crashes: blue screens, missing DLLs, update errors, and games like FiveM, RedM, RDR2 and GTA V. Nothing to download. Your log never leaves your browser unless you choose to send it.</p>
   <form id="decoder" class="decoder" autocomplete="off">
     <label for="log" class="sr-only">Crash log or error message</label>
-    <textarea id="log" rows="7" placeholder="Paste your error message or crash log here…&#10;&#10;Example: ERR_GFX_D3D_DEFERRED_MEM"></textarea>
+    <textarea id="log" rows="7" placeholder="Paste your error message, blue screen code or crash log here…&#10;&#10;Examples: 0x0000007E · VCRUNTIME140.dll was not found · 0xc0000005 · ERR_GFX_D3D_DEFERRED_MEM"></textarea>
     <div class="decoder-actions">
       <button class="btn" type="submit">Decode my crash</button>
       <button class="btn btn-ghost" type="button" id="clear">Clear</button>
@@ -126,7 +126,7 @@ write("index.html", layout({
   <div id="results" aria-live="polite"></div>
 </section>
 <section class="section">
-  <h2>Common crashes</h2>
+  <h2>Common fixes</h2>
   <div class="grid">${fixes.slice(0, 6).map(f => fixCard(f, 0)).join("")}</div>
   <p><a href="fixes/">Browse all ${fixes.length} fixes →</a></p>
 </section>
