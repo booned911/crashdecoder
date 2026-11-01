@@ -1,18 +1,33 @@
-// Paste-box matcher. Matching runs entirely in the browser — logs are never uploaded.
-// The only thing that ever leaves the browser is an error the visitor chooses to send
-// with the "Send to OldWolfDev" form, which appears when no fix matches.
+// DecodeMyCrash paste box.
+// 1) Matches pasted text against the written fix library.
+// 2) Decodes known Windows error formats (stop codes, crash codes, update codes,
+//    missing DLLs, faulting modules) using codes.json.
+// 3) Offers opt-in AI suggestions (sent to /api/ai) and a "Send to OldWolfDev" form.
+// Matching and decoding run entirely in the browser. Text only leaves the browser
+// if the visitor clicks the AI button or sends the form, and personal details are
+// stripped first.
 (function () {
   const form = document.getElementById("decoder");
   const box = document.getElementById("log");
   const out = document.getElementById("results");
-  let index = null;
+  let fixesIndex = null;
+  let codes = null;
 
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   async function load() {
-    if (!index) index = await (await fetch("fixes.json")).json();
-    return index;
+    if (!fixesIndex || !codes) {
+      const [f, c] = await Promise.all([
+        fetch("fixes.json").then(r => r.json()),
+        fetch("codes.json").then(r => r.json()).catch(() => ({}))
+      ]);
+      fixesIndex = f;
+      codes = c || {};
+    }
+    return { fixes: fixesIndex, codes };
   }
+
+  // ---------- 1. fix library ----------
 
   // Score = sum of matched pattern lengths, with error codes weighted higher.
   function score(fix, text) {
@@ -29,9 +44,107 @@
     return { s, hits };
   }
 
+  // ---------- 2. error code decoder ----------
+
+  const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const hasWord = (text, word) => new RegExp(`(^|[^a-z0-9_])${reEsc(word)}($|[^a-z0-9_])`).test(text);
+  const hexVal = s => parseInt(String(s).replace(/^0x/i, ""), 16);
+
+  function decode(raw) {
+    const C = codes || {};
+    const text = raw.toLowerCase();
+    const found = [];
+    const seen = new Set();
+    const add = (kind, label, e, extra = {}) => {
+      const key = `${kind}:${e.code || e.name}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      found.push({ kind, label, code: e.code || "", name: e.name, meaning: e.meaning, steps: e.steps || [], fix: e.fix || "", ...extra });
+    };
+
+    // every hex value in the text: 0x-prefixed, and bare 8-digit hex (Event Viewer style)
+    const hexes = new Set();
+    for (const m of text.matchAll(/\b0x([0-9a-f]{1,8})\b/g)) hexes.add(parseInt(m[1], 16));
+    for (const m of text.matchAll(/\b([0-9a-f]{8})\b/g)) hexes.add(parseInt(m[1], 16));
+    const padded = new Set([...text.matchAll(/\b0x(0{4,}[0-9a-f]{1,4})\b/g)].map(m => parseInt(m[1], 16)));
+    const bsodContext = /bug ?check|stop code|blue ?screen|bsod|minidump|ran into a problem/.test(text);
+
+    // blue screen stop codes: by name, by 0x0000XXXX form, or short form near BSOD words
+    const stopHits = [];
+    for (const e of C.stopCodes || []) {
+      const n = e.name.toLowerCase();
+      const v = hexVal(e.code);
+      if (hasWord(text, n) || hasWord(text, n.replace(/_/g, " ")) || padded.has(v) || (bsodContext && hexes.has(v))) stopHits.push(e);
+    }
+    // drop a shorter name contained in a longer matched one (IRQL_NOT_LESS_OR_EQUAL vs DRIVER_IRQL_...)
+    for (const e of stopHits) {
+      if (stopHits.some(o => o !== e && o.name.includes(e.name) && hasWord(text, o.name.toLowerCase()))) continue;
+      add("stop", "Blue screen stop code", e);
+    }
+
+    // app/game crash codes and Windows Update codes: by exact value (or DXGI-style names)
+    for (const e of C.exceptionCodes || []) {
+      if (hexes.has(hexVal(e.code)) || (e.name.includes("_") && hasWord(text, e.name.toLowerCase()))) add("exception", "Crash code", e);
+    }
+    for (const e of C.updateCodes || []) {
+      if (hexes.has(hexVal(e.code))) add("update", "Windows error code", e);
+    }
+
+    // Device Manager "Code 43" style
+    if (/device/.test(text)) {
+      for (const m of text.matchAll(/\bcode\s*:?\s*(\d{1,2})\b/g)) {
+        const e = (C.deviceCodes || []).find(d => d.code === m[1]);
+        if (e) add("device", "Device Manager code", { ...e, code: `Code ${e.code}` });
+      }
+    }
+
+    // missing DLLs (only when the text says something is missing or failed to load)
+    const missingContext = /not found|was not found|missing|cannot (be )?found|could not (be )?(found|loaded|load)|can't find|cannot find|unable to (load|find|locate)|failed to load|code execution cannot proceed|cannot proceed/.test(text);
+    if (missingContext) {
+      for (const e of C.dlls || []) {
+        const file = e.files.find(f => hasWord(text, f));
+        if (file) add("dll", "Missing file", { ...e, code: file });
+      }
+    }
+
+    // faulting modules: the one named after "Faulting module name" first, then others mentioned
+    const fm = text.match(/faulting module name:\s*([^\s,]+)/);
+    const primary = fm ? fm[1] : "";
+    const mods = [];
+    for (const e of C.modules || []) {
+      const file = e.files.find(f => hasWord(text, f));
+      if (file) mods.push({ e, file, primary: primary && e.files.includes(primary) });
+    }
+    mods.sort((a, b) => b.primary - a.primary);
+    for (const m of mods.slice(0, 3)) {
+      add("module", m.primary ? "Crashed in" : "Mentioned in your log", { ...m.e, code: m.file });
+    }
+
+    // known messages
+    for (const e of C.phrases || []) {
+      if (e.match.some(p => text.includes(p))) add("phrase", "Message", e);
+    }
+
+    const app = (raw.match(/faulting application name:\s*([^\s,]+)/i) || [])[1] || "";
+    return { found: found.slice(0, 6), app };
+  }
+
+  // ---------- privacy: strip personal details before anything is sent ----------
+
+  function redact(s) {
+    return String(s)
+      .replace(/([a-z]:[\\/]+users[\\/]+)[^\\/\r\n"']+/gi, "$1<user>")
+      .replace(/(\/(?:users|home)\/)[^/\r\n"']+/gi, "$1<user>")
+      .replace(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi, "<email>")
+      .replace(/\b(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\b/g, (m, a, b, c, d) =>
+        [a, b, c, d].every(n => Number(n) <= 255) ? "<ip>" : m)
+      .replace(/\b(computer|user|user name|username|machine name)(\s*[:=]\s*)\S+/gi, "$1$2<removed>")
+      .replace(/\bdesktop-[a-z0-9]{5,}\b/gi, "<pc-name>")
+      .replace(/\blaptop-[a-z0-9]{5,}\b/gi, "<pc-name>");
+  }
+
   // ---------- no-match helpers ----------
 
-  // Which game the log seems to be from, used to sharpen web searches.
   function gameHint(text) {
     if (/redm|rdr3|citizenfx.*rdr/i.test(text)) return "RedM";
     if (/fivem|citizenfx|cfx\.re|gta5_b\d+/i.test(text)) return "FiveM";
@@ -40,21 +153,21 @@
     return "";
   }
 
-  // Pull the most useful line out of a long log to search for.
   function keyLine(raw) {
     const errCode = raw.match(/\bERR_[A-Z0-9_]{3,}\b/i);
     if (errCode) return errCode[0];
     const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
     const priorities = [
       /\b0x[0-9a-f]{5,}\b/i,
+      /\b[a-z0-9_]+\.dll\b/i,
       /caused .{1,40} to stop working/i,
       /\b(error|exception|failed|couldn't|could not|crash(ed)?)\b/i
     ];
     for (const p of priorities) {
       const line = lines.find(l => p.test(l));
-      if (line) return line.slice(0, 140);
+      if (line) return redact(line).slice(0, 140);
     }
-    return (lines[0] || "").slice(0, 140);
+    return redact(lines[0] || "").slice(0, 140);
   }
 
   function searchLinks(raw) {
@@ -62,74 +175,201 @@
     const game = gameHint(raw);
     const q = encodeURIComponent(line);
     const qGame = encodeURIComponent(game && !line.toLowerCase().includes(game.toLowerCase()) ? `${game} ${line}` : line);
-    return {
-      line,
-      links: [
-        { label: "Search the Cfx.re forum", href: `https://forum.cfx.re/search?q=${q}` },
-        { label: "Search Google", href: `https://www.google.com/search?q=${qGame}` },
-        { label: "Search Reddit", href: `https://www.reddit.com/search/?q=${qGame}` }
-      ]
-    };
+    const links = [
+      { label: "Search Google", href: `https://www.google.com/search?q=${qGame}` },
+      { label: "Search Reddit", href: `https://www.reddit.com/search/?q=${qGame}` }
+    ];
+    if (game === "FiveM" || game === "RedM") links.unshift({ label: "Search the Cfx.re forum", href: `https://forum.cfx.re/search?q=${q}` });
+    else links.push({ label: "Search Microsoft Q&A", href: `https://learn.microsoft.com/en-us/search/?terms=${q}&category=QnA` });
+    return { line, links };
   }
 
-  function renderNoMatch(raw) {
-    const { line, links } = searchLinks(raw);
-    const formKey = window.FORM_KEY || "";
-    const sendForm = formKey ? `
-      <div class="nomatch-send">
-        <h4>Send it to OldWolfDev</h4>
-        <p>I'll review it, and if you leave your email I'll reply with what I find. Only what's in the box below and your email are sent. Remove anything personal first, like your Windows username or server IPs.</p>
-        <form id="send-error" class="decoder nomatch-form" autocomplete="off">
-          <label for="send-text" class="sr-only">Error to send</label>
-          <textarea id="send-text" rows="6" maxlength="5000">${esc(raw.slice(0, 5000))}</textarea>
-          <label for="send-email" class="sr-only">Your email (optional)</label>
-          <input id="send-email" type="email" placeholder="Your email (optional, for a reply)" maxlength="200">
-          <input type="checkbox" id="send-botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <div class="decoder-actions">
-            <button class="btn" type="submit" id="send-btn">Send to OldWolfDev</button>
-          </div>
-          <p class="send-status" id="send-status" role="status"></p>
-        </form>
-      </div>` : "";
+  // ---------- rendering ----------
 
-    out.innerHTML = `<div class="result-empty">
-      <h3>No fix found yet</h3>
-      <p>This one isn't in the library yet. Here's how to get unstuck:</p>
-      <div class="nomatch-search">
+  function fixCards(matches) {
+    return `<h2 class="results-title">Most likely fix${matches.length > 1 ? "es" : ""}</h2>` +
+      matches.map((m, i) => `<a class="fix-card result${i === 0 ? " top" : ""}" href="fix/${m.fix.slug}/">
+        <span class="fix-games">${esc(m.fix.games.join(" · "))}${i === 0 ? " · best match" : ""}</span>
+        <h3>${esc(m.fix.title)}</h3>
+        <p>${esc(m.fix.summary)}</p>
+        <span class="matched">Matched: ${m.hits.map(h => `<code>${esc(h)}</code>`).join(" ")}</span>
+      </a>`).join("");
+  }
+
+  function decodedCards(dec, slugs) {
+    if (!dec.found.length) return "";
+    return `<h2 class="results-title">What your error means</h2>
+      ${dec.app ? `<p class="decoded-app">Program that crashed: <code>${esc(dec.app)}</code></p>` : ""}
+      ${dec.found.map(f => `<div class="decoded-card">
+        <span class="fix-games">${esc(f.label)}</span>
+        <h3>${f.code ? `<code>${esc(f.code)}</code> ` : ""}${esc(f.name)}</h3>
+        <p>${esc(f.meaning)}</p>
+        ${f.steps.length ? `<ol class="decoded-steps">${f.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>` : ""}
+        ${f.fix && slugs.has(f.fix) ? `<a class="decoded-more" href="fix/${esc(f.fix)}/">Full step-by-step fix →</a>` : ""}
+      </div>`).join("")}`;
+  }
+
+  function aiBox(compact) {
+    return `<div class="ai-box${compact ? " ai-compact" : ""}" id="ai-box">
+      <h4>${compact ? "Not quite it? Ask AI for more ideas" : "Get AI suggestions"}</h4>
+      <p class="ai-note">Sends the text in the box to Cloudflare's AI service to suggest likely causes and steps. Your Windows username, PC name, email and IP addresses are removed first, and DecodeMyCrash doesn't save it. AI answers aren't tested by OldWolfDev, so double-check before changing system settings.</p>
+      <button class="btn${compact ? " btn-ghost" : ""}" type="button" id="ai-btn">Get AI suggestions</button>
+      <div id="ai-out" aria-live="polite"></div>
+    </div>`;
+  }
+
+  function sendForm(raw) {
+    if (!window.FORM_KEY) return "";
+    return `<div class="nomatch-send">
+      <h4>Send it to OldWolfDev</h4>
+      <p>I'll review it, and if you leave your email I'll reply with what I find. Only what's in the box below and your email are sent. Personal details we could spot are already removed; check for anything else you'd rather not share.</p>
+      <form id="send-error" class="decoder nomatch-form" autocomplete="off">
+        <label for="send-text" class="sr-only">Error to send</label>
+        <textarea id="send-text" rows="6" maxlength="5000">${esc(redact(raw).slice(0, 5000))}</textarea>
+        <label for="send-email" class="sr-only">Your email (optional)</label>
+        <input id="send-email" type="email" placeholder="Your email (optional, for a reply)" maxlength="200">
+        <input type="checkbox" id="send-botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="decoder-actions">
+          <button class="btn" type="submit" id="send-btn">Send to OldWolfDev</button>
+        </div>
+        <p class="send-status" id="send-status" role="status"></p>
+      </form>
+    </div>`;
+  }
+
+  function extras(raw) {
+    const { line, links } = searchLinks(raw);
+    return `<div class="nomatch-search">
         <p class="nomatch-label">Search the web for <code>${esc(line)}</code></p>
         <div class="nomatch-links">${links.map(l =>
           `<a class="btn btn-ghost" href="${esc(l.href)}" target="_blank" rel="noopener nofollow">${esc(l.label)}</a>`).join("")}
         </div>
       </div>
-      ${sendForm}
+      ${sendForm(raw)}
       <div class="nomatch-book">
         <p>Want it fixed now? Book a session and we'll solve it together. Then it gets added to the site so the next person doesn't get stuck.</p>
         <a class="btn" href="${esc(window.BOOKING_URL)}" target="_blank" rel="noopener">Book a fix session</a>
-      </div>
-    </div>`;
-
-    const sf = document.getElementById("send-error");
-    if (sf) sf.addEventListener("submit", e => sendError(e, raw));
+      </div>`;
   }
 
-  async function sendError(e, raw) {
+  function render(matches, dec, raw, slugs) {
+    let html = "";
+    if (matches.length) {
+      html = fixCards(matches) + decodedCards(dec, slugs) + aiBox(true);
+    } else if (dec.found.length) {
+      html = decodedCards(dec, slugs) + `<div class="result-empty">
+        <h3>No full fix page for this one yet</h3>
+        <p>The steps above are a good start. If they don't solve it:</p>
+        ${aiBox(false)}
+        ${extras(raw)}
+      </div>`;
+    } else {
+      html = `<div class="result-empty">
+        <h3>No fix found yet</h3>
+        <p>This one isn't in the library yet. Here's how to get unstuck:</p>
+        ${aiBox(false)}
+        ${extras(raw)}
+      </div>`;
+    }
+    out.innerHTML = html;
+
+    const sf = document.getElementById("send-error");
+    if (sf) sf.addEventListener("submit", e => sendError(e, raw, dec));
+    const ab = document.getElementById("ai-btn");
+    if (ab) ab.addEventListener("click", () => askAI(raw, dec));
+  }
+
+  // ---------- AI suggestions ----------
+
+  function formatAI(text) {
+    const heads = {
+      "what it means": "What it means",
+      "likely causes": "Likely causes",
+      "try these steps": "Try these steps",
+      "get help if": "Get more help if",
+      "before you start": "Before you start"
+    };
+    const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/`([^`]+)`/g, "<code>$1</code>");
+    let html = "", list = "";
+    const close = () => { if (list) { html += `</${list}>`; list = ""; } };
+    for (const rawLine of String(text).split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line) { close(); continue; }
+      const h = line.replace(/^#+\s*/, "").replace(/\*\*/g, "").replace(/:$/, "").toLowerCase();
+      if (heads[h]) { close(); html += `<h5>${heads[h]}</h5>`; continue; }
+      let m;
+      if ((m = line.match(/^[-*•]\s+(.*)/))) { if (list !== "ul") { close(); html += "<ul>"; list = "ul"; } html += `<li>${inline(m[1])}</li>`; continue; }
+      if ((m = line.match(/^\d+[.)]\s+(.*)/))) { if (list !== "ol") { close(); html += "<ol>"; list = "ol"; } html += `<li>${inline(m[1])}</li>`; continue; }
+      close();
+      html += `<p>${inline(line)}</p>`;
+    }
+    close();
+    return html;
+  }
+
+  async function askAI(raw, dec) {
+    const btn = document.getElementById("ai-btn");
+    const aiOut = document.getElementById("ai-out");
+    btn.disabled = true;
+    aiOut.innerHTML = `<p class="ai-status">Thinking… this can take up to 30 seconds.</p>`;
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          log: redact(raw).slice(0, 6000),
+          known: dec.found.map(f => `${f.code ? f.code + " " : ""}${f.name}`)
+        })
+      });
+      let data = {};
+      try { data = await res.json(); } catch (_) { /* blocked by rate limit returns a page, not JSON */ }
+      if (res.ok && data.answer) {
+        aiOut.innerHTML = `<div class="ai-answer">
+          <p class="ai-label">AI suggestion · not tested by OldWolfDev</p>
+          ${formatAI(data.answer)}
+          <p class="ai-foot">Didn't help? Send it to OldWolfDev${window.FORM_KEY ? " below" : ""}, or book a session.</p>
+        </div>`;
+        btn.style.display = "none";
+        return;
+      }
+      const msg = {
+        busy: "AI help has reached its limit for today. Try again tomorrow, or send it to OldWolfDev.",
+        not_configured: "AI help isn't switched on yet. Send it to OldWolfDev instead.",
+        too_short: "Paste a bit more of the error or log so the AI has something to work with.",
+        not_allowed: "AI help only works on decodemycrash.com."
+      }[data.error] || (res.status === 429 || !data.error
+        ? "Too many requests. Wait a few seconds and try again."
+        : "AI help couldn't answer right now. Try again in a minute.");
+      aiOut.innerHTML = `<p class="ai-status">${esc(msg)}</p>`;
+      btn.disabled = false;
+    } catch (err) {
+      aiOut.innerHTML = `<p class="ai-status">AI help couldn't be reached. Check your connection and try again.</p>`;
+      btn.disabled = false;
+    }
+  }
+
+  // ---------- send to OldWolfDev ----------
+
+  async function sendError(e, raw, dec) {
     e.preventDefault();
     const status = document.getElementById("send-status");
     const btn = document.getElementById("send-btn");
     const text = document.getElementById("send-text").value.trim();
     const email = document.getElementById("send-email").value.trim();
-    if (document.getElementById("send-botcheck").checked) return; // bot filled the hidden box
+    if (document.getElementById("send-botcheck").checked) return;
     if (!text) { status.textContent = "There's nothing to send. Paste the error in the box first."; return; }
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.textContent = "That email doesn't look right. Fix it or leave it blank."; return; }
 
     btn.disabled = true;
     status.textContent = "Sending…";
+    const game = gameHint(raw);
     const payload = {
       access_key: window.FORM_KEY,
-      subject: `Unmatched error${gameHint(raw) ? ` (${gameHint(raw)})` : ""} — DecodeMyCrash`,
+      subject: `Unmatched error${game ? ` (${game})` : ""} — DecodeMyCrash`,
       from_name: "DecodeMyCrash",
       error: text,
-      game: gameHint(raw) || "unknown",
+      game: game || "none detected",
+      decoded: dec.found.map(f => `${f.code ? f.code + " " : ""}${f.name}`).join("; ") || "nothing decoded",
       search_line: keyLine(raw),
       page: location.href,
       botcheck: false
@@ -157,32 +397,25 @@
     }
   }
 
-  // ---------- results ----------
-
-  function render(matches, raw) {
-    if (!matches.length) { renderNoMatch(raw); return; }
-    out.innerHTML = `<h2 class="results-title">Most likely cause${matches.length > 1 ? "s" : ""}</h2>` +
-      matches.map((m, i) => `<a class="fix-card result${i === 0 ? " top" : ""}" href="fix/${m.fix.slug}/">
-        <span class="fix-games">${esc(m.fix.games.join(" · "))}${i === 0 ? " · best match" : ""}</span>
-        <h3>${esc(m.fix.title)}</h3>
-        <p>${esc(m.fix.summary)}</p>
-        <span class="matched">Matched: ${m.hits.map(h => `<code>${esc(h)}</code>`).join(" ")}</span>
-      </a>`).join("");
-  }
+  // ---------- wire up ----------
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
     const raw = box.value.trim();
     const text = raw.toLowerCase();
     if (!text) { box.focus(); return; }
-    const fixes = await load();
+    const { fixes } = await load();
     const matches = fixes.map(fix => ({ fix, ...score(fix, text) }))
       .filter(m => m.s > 0).sort((a, b) => b.s - a.s).slice(0, 3);
-    render(matches, raw);
+    const dec = decode(raw);
+    render(matches, dec, raw, new Set(fixes.map(f => f.slug)));
     out.scrollIntoView({ behavior: "smooth", block: "nearest" });
   });
 
   document.getElementById("clear").addEventListener("click", () => {
     box.value = ""; out.innerHTML = ""; box.focus();
   });
+
+  // exposed for testing only
+  window.__dmc = { decode, redact, keyLine, formatAI, load };
 })();

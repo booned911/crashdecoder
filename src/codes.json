@@ -1,0 +1,1152 @@
+{
+ "_about": "Error-code decoder data. Each entry explains a code in plain English. 'fix' (optional) links to a full fix page slug. Add entries any time; keep 'steps' short and safe.",
+ "stopCodes": [
+  {
+   "code": "0x0000000A",
+   "name": "IRQL_NOT_LESS_OR_EQUAL",
+   "meaning": "A driver tried to use memory it wasn't allowed to touch. Usually a faulty or outdated driver, sometimes unstable RAM.",
+   "steps": [
+    "Update or roll back any driver you installed recently (graphics, network, audio).",
+    "Turn off XMP/EXPO or any overclock and test.",
+    "Run Windows Memory Diagnostic to check your RAM."
+   ]
+  },
+  {
+   "code": "0x00000019",
+   "name": "BAD_POOL_HEADER",
+   "meaning": "Windows found damaged data in its shared memory. Often a bad driver, antivirus, or RAM problem.",
+   "steps": [
+    "Remove or update drivers and security software installed just before this started.",
+    "Run Windows Memory Diagnostic.",
+    "Run 'sfc /scannow' in an admin Command Prompt."
+   ]
+  },
+  {
+   "code": "0x0000001A",
+   "name": "MEMORY_MANAGEMENT",
+   "meaning": "Windows hit a serious memory error. Most often unstable RAM settings (XMP/EXPO) or a failing RAM stick.",
+   "steps": [
+    "Turn off XMP/EXPO in the BIOS and test.",
+    "Run a memory test such as Windows Memory Diagnostic or MemTest86.",
+    "Update your chipset and graphics drivers."
+   ],
+   "fix": "xmp-expo-memory-instability-game-crashes"
+  },
+  {
+   "code": "0x0000001E",
+   "name": "KMODE_EXCEPTION_NOT_HANDLED",
+   "meaning": "A driver crashed and Windows couldn't recover. The driver named on the blue screen (if any) is the main suspect.",
+   "steps": [
+    "Note any .sys file named on the blue screen and update or remove that driver.",
+    "Undo recent hardware or driver changes.",
+    "Run 'sfc /scannow' in an admin Command Prompt."
+   ]
+  },
+  {
+   "code": "0x00000024",
+   "name": "NTFS_FILE_SYSTEM",
+   "meaning": "Windows had a problem reading the drive's file system. Can mean disk errors or a failing drive.",
+   "steps": [
+    "Back up important files now.",
+    "Run 'chkdsk C: /f' in an admin Command Prompt and restart.",
+    "Check the drive's health with a tool like CrystalDiskInfo."
+   ]
+  },
+  {
+   "code": "0x0000003B",
+   "name": "SYSTEM_SERVICE_EXCEPTION",
+   "meaning": "A system-level program or driver crashed. Graphics drivers, antivirus, and other low-level software are common causes.",
+   "steps": [
+    "Do a clean graphics driver install.",
+    "Update or remove recently installed security, RGB, or tuning software.",
+    "Run 'sfc /scannow' and then 'DISM /Online /Cleanup-Image /RestoreHealth'."
+   ]
+  },
+  {
+   "code": "0x0000004E",
+   "name": "PFN_LIST_CORRUPT",
+   "meaning": "Windows' list of memory pages got corrupted. Usually a bad driver or faulty RAM.",
+   "steps": [
+    "Run Windows Memory Diagnostic or MemTest86.",
+    "Turn off XMP/EXPO and any overclock.",
+    "Update your drivers, starting with chipset and storage."
+   ]
+  },
+  {
+   "code": "0x00000050",
+   "name": "PAGE_FAULT_IN_NONPAGED_AREA",
+   "meaning": "Windows tried to read memory that wasn't there. Common causes are faulty RAM, a bad driver, or antivirus.",
+   "steps": [
+    "Run a memory test.",
+    "Turn off XMP/EXPO and test.",
+    "Update or remove drivers and security software installed right before this started."
+   ]
+  },
+  {
+   "code": "0x00000077",
+   "name": "KERNEL_STACK_INPAGE_ERROR",
+   "meaning": "Windows couldn't read data it needed from the page file on your drive. Points to disk, cable, or RAM problems.",
+   "steps": [
+    "Back up important files.",
+    "Run 'chkdsk C: /f /r' in an admin Command Prompt.",
+    "Check drive health with CrystalDiskInfo and reseat SATA cables if you have them."
+   ]
+  },
+  {
+   "code": "0x0000007A",
+   "name": "KERNEL_DATA_INPAGE_ERROR",
+   "meaning": "Windows couldn't read needed data from your drive. Often a failing drive, loose cable, or RAM issue.",
+   "steps": [
+    "Back up important files now.",
+    "Check drive health with CrystalDiskInfo.",
+    "Run 'chkdsk C: /f /r' and a memory test."
+   ]
+  },
+  {
+   "code": "0x0000007B",
+   "name": "INACCESSIBLE_BOOT_DEVICE",
+   "meaning": "Windows lost access to the drive it boots from. Often after a BIOS change (like switching storage mode), a storage driver problem, or a failing drive.",
+   "steps": [
+    "Undo recent BIOS changes, especially the SATA mode (AHCI/RAID).",
+    "Use Startup Repair from the Windows recovery screen.",
+    "Check the drive's health and connections."
+   ]
+  },
+  {
+   "code": "0x0000007E",
+   "name": "SYSTEM_THREAD_EXCEPTION_NOT_HANDLED",
+   "meaning": "A Windows system process crashed, usually because of a driver. The .sys file named on the blue screen is the best clue.",
+   "steps": [
+    "Update or roll back the driver named on the blue screen.",
+    "Do a clean graphics driver install if no driver is named.",
+    "Boot into Safe Mode if you can't start Windows normally."
+   ]
+  },
+  {
+   "code": "0x0000007F",
+   "name": "UNEXPECTED_KERNEL_MODE_TRAP",
+   "meaning": "The processor hit an error Windows couldn't handle. Often unstable overclocks, overheating, or faulty RAM.",
+   "steps": [
+    "Remove all CPU, GPU, and RAM overclocks.",
+    "Check temperatures with HWiNFO.",
+    "Run a memory test."
+   ]
+  },
+  {
+   "code": "0x0000009F",
+   "name": "DRIVER_POWER_STATE_FAILURE",
+   "meaning": "A driver didn't respond when Windows changed power states, such as sleeping, waking, or shutting down.",
+   "steps": [
+    "Update graphics, network, and chipset drivers.",
+    "Turn off Fast Startup in Control Panel > Power Options > Choose what the power buttons do.",
+    "Undo recent hardware or driver changes."
+   ]
+  },
+  {
+   "code": "0x000000BE",
+   "name": "ATTEMPTED_WRITE_TO_READONLY_MEMORY",
+   "meaning": "A driver tried to write to protected memory. Almost always a buggy driver.",
+   "steps": [
+    "Update or remove the driver named on the blue screen, or the most recently installed one.",
+    "Run 'sfc /scannow'.",
+    "Run a memory test if it keeps happening."
+   ]
+  },
+  {
+   "code": "0x000000C2",
+   "name": "BAD_POOL_CALLER",
+   "meaning": "A driver made a bad memory request. Usually a buggy driver or security software.",
+   "steps": [
+    "Update or remove recently installed drivers and antivirus.",
+    "Run 'sfc /scannow'.",
+    "Run a memory test."
+   ]
+  },
+  {
+   "code": "0x000000C5",
+   "name": "DRIVER_CORRUPTED_EXPOOL",
+   "meaning": "A driver damaged Windows' shared memory. Usually a buggy driver.",
+   "steps": [
+    "Update or remove the most recently installed drivers.",
+    "Run a memory test.",
+    "Run 'sfc /scannow'."
+   ]
+  },
+  {
+   "code": "0x000000D1",
+   "name": "DRIVER_IRQL_NOT_LESS_OR_EQUAL",
+   "meaning": "A driver accessed memory it shouldn't have. Network, Wi-Fi, and graphics drivers are frequent culprits. Check the .sys file named on the blue screen.",
+   "steps": [
+    "Update the driver named on the blue screen (for example, a network driver).",
+    "Do a clean graphics driver install.",
+    "Turn off XMP/EXPO if it keeps happening."
+   ]
+  },
+  {
+   "code": "0x000000ED",
+   "name": "UNMOUNTABLE_BOOT_VOLUME",
+   "meaning": "Windows couldn't open the drive it starts from. Could be file system damage or a failing drive.",
+   "steps": [
+    "From the recovery screen, open Command Prompt and run 'chkdsk C: /f /r'.",
+    "Try Startup Repair.",
+    "Back up data and check drive health as soon as you can."
+   ]
+  },
+  {
+   "code": "0x000000EF",
+   "name": "CRITICAL_PROCESS_DIED",
+   "meaning": "A process Windows can't run without stopped unexpectedly. Often damaged system files, a bad driver, or a failing drive.",
+   "steps": [
+    "Run 'sfc /scannow' and then 'DISM /Online /Cleanup-Image /RestoreHealth' in an admin Command Prompt.",
+    "Undo recent updates or driver changes, or use System Restore.",
+    "Check your drive's health."
+   ]
+  },
+  {
+   "code": "0x000000F4",
+   "name": "CRITICAL_OBJECT_TERMINATION",
+   "meaning": "An essential Windows process ended unexpectedly, frequently because the drive stopped responding.",
+   "steps": [
+    "Back up important files.",
+    "Check drive health and update your storage (SSD/NVMe) firmware.",
+    "Run 'chkdsk C: /f' and 'sfc /scannow'."
+   ]
+  },
+  {
+   "code": "0x000000FC",
+   "name": "ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY",
+   "meaning": "A driver tried to run code from memory marked as data-only. Usually a buggy driver.",
+   "steps": [
+    "Update or remove recently installed drivers.",
+    "Run a memory test.",
+    "Run 'sfc /scannow'."
+   ]
+  },
+  {
+   "code": "0x00000101",
+   "name": "CLOCK_WATCHDOG_TIMEOUT",
+   "meaning": "One of your CPU cores stopped responding. Often an unstable CPU overclock or undervolt, overheating, or a BIOS issue.",
+   "steps": [
+    "Reset CPU overclocks and undervolts to default in the BIOS.",
+    "Check CPU temperatures with HWiNFO.",
+    "Update your BIOS and chipset drivers."
+   ]
+  },
+  {
+   "code": "0x00000109",
+   "name": "CRITICAL_STRUCTURE_CORRUPTION",
+   "meaning": "Windows detected that its core code or data was changed. Usually a driver, cheat/anti-cheat software, or faulty RAM.",
+   "steps": [
+    "Uninstall recently added drivers, tools, or software that hooks into Windows.",
+    "Run a memory test.",
+    "Run 'sfc /scannow'."
+   ]
+  },
+  {
+   "code": "0x00000116",
+   "name": "VIDEO_TDR_FAILURE",
+   "meaning": "Your graphics card stopped responding and Windows couldn't reset it.",
+   "steps": [
+    "Do a clean graphics driver install with DDU.",
+    "Remove GPU overclocks.",
+    "Check GPU temperatures and power cables."
+   ],
+   "fix": "bsod-0x116-video-tdr-failure"
+  },
+  {
+   "code": "0x00000117",
+   "name": "VIDEO_TDR_TIMEOUT_DETECTED",
+   "meaning": "Your graphics card stopped responding for a moment and Windows reset the driver.",
+   "steps": [
+    "Do a clean graphics driver install.",
+    "Remove GPU overclocks.",
+    "Check GPU temperatures and power cables."
+   ],
+   "fix": "display-driver-stopped-responding-recovered"
+  },
+  {
+   "code": "0x00000124",
+   "name": "WHEA_UNCORRECTABLE_ERROR",
+   "meaning": "Your hardware reported an error it couldn't fix. Common causes are unstable overclocks (including XMP/EXPO), overheating, or failing hardware.",
+   "steps": [
+    "Reset all overclocks and turn off XMP/EXPO.",
+    "Check temperatures with HWiNFO.",
+    "Update your BIOS and chipset drivers."
+   ],
+   "fix": "xmp-expo-memory-instability-game-crashes"
+  },
+  {
+   "code": "0x00000133",
+   "name": "DPC_WATCHDOG_VIOLATION",
+   "meaning": "A driver took too long to respond. Storage (SSD/NVMe) drivers and firmware are frequent causes.",
+   "steps": [
+    "Update your SSD/NVMe firmware and storage drivers.",
+    "Update chipset drivers from AMD or Intel.",
+    "Undo recent driver changes."
+   ]
+  },
+  {
+   "code": "0x00000139",
+   "name": "KERNEL_SECURITY_CHECK_FAILURE",
+   "meaning": "Windows detected corrupted data inside the kernel. Usually unstable RAM settings or a bad driver.",
+   "steps": [
+    "Turn off XMP/EXPO and test.",
+    "Run a memory test.",
+    "Update chipset and GPU drivers."
+   ],
+   "fix": "bsod-0x139-kernel-security-check-failure"
+  },
+  {
+   "code": "0x0000013A",
+   "name": "KERNEL_MODE_HEAP_CORRUPTION",
+   "meaning": "A driver corrupted Windows' memory. Often a graphics or other recently updated driver.",
+   "steps": [
+    "Do a clean graphics driver install, or roll back to the previous version.",
+    "Update or remove recently installed drivers.",
+    "Run a memory test."
+   ]
+  },
+  {
+   "code": "0x00000154",
+   "name": "UNEXPECTED_STORE_EXCEPTION",
+   "meaning": "Windows' memory compression store hit an error. Often a drive, storage driver, or RAM problem.",
+   "steps": [
+    "Check drive health and update SSD firmware.",
+    "Run 'chkdsk C: /f' and 'sfc /scannow'.",
+    "Run a memory test."
+   ]
+  }
+ ],
+ "exceptionCodes": [
+  {
+   "code": "0xC0000005",
+   "name": "Access violation",
+   "meaning": "The program tried to use memory it wasn't allowed to. This is the most common app and game crash code. The cause is usually something loaded into the program: a mod, overlay, antivirus, or a graphics driver.",
+   "steps": [
+    "Check which module crashed (look for 'Faulting module' in Event Viewer) — this tells you whose code failed.",
+    "Turn off overlays (Steam, Discord, NVIDIA, RivaTuner) and remove mods.",
+    "Update or clean-install your graphics driver, then verify or reinstall the program."
+   ]
+  },
+  {
+   "code": "0xC0000006",
+   "name": "In-page error",
+   "meaning": "The program couldn't read part of itself from the drive. Often a drive problem, or the program is on a disconnected or sleeping drive.",
+   "steps": [
+    "Make sure the drive with the program is connected and healthy.",
+    "Run 'chkdsk' on that drive.",
+    "Reinstall the program."
+   ]
+  },
+  {
+   "code": "0xC0000017",
+   "name": "Out of memory",
+   "meaning": "Windows couldn't give the program the memory it asked for.",
+   "steps": [
+    "Close other programs.",
+    "Set virtual memory (page file) back to 'Automatically manage'.",
+    "Make sure your drive has free space."
+   ]
+  },
+  {
+   "code": "0xC000001D",
+   "name": "Illegal instruction",
+   "meaning": "The program used a processor instruction your CPU doesn't support, or the CPU is unstable.",
+   "steps": [
+    "Check that your CPU meets the program's requirements.",
+    "Remove any CPU overclock or undervolt.",
+    "Update the program to its latest version."
+   ]
+  },
+  {
+   "code": "0xC0000022",
+   "name": "Access denied",
+   "meaning": "Windows blocked the program from a file or resource. Often permissions or antivirus.",
+   "steps": [
+    "Check your antivirus quarantine and add the program's folder to exclusions.",
+    "Make sure the program isn't installed in a protected or synced folder.",
+    "Repair or reinstall the program."
+   ]
+  },
+  {
+   "code": "0xC000007B",
+   "name": "Invalid image format",
+   "meaning": "The program found a file built for the wrong system type (for example, a 32-bit file where a 64-bit one was needed). Almost always broken or mismatched Visual C++, DirectX, or program files.",
+   "steps": [
+    "Install both the x64 and x86 versions of the latest Visual C++ Redistributable from Microsoft.",
+    "Install the DirectX End-User Runtime from Microsoft.",
+    "Verify or reinstall the program. Don't copy DLLs from other PCs or DLL websites."
+   ]
+  },
+  {
+   "code": "0xC0000135",
+   "name": "DLL not found",
+   "meaning": "A file the program needs is missing. Often a missing runtime such as Visual C++ or .NET.",
+   "steps": [
+    "Install the latest Visual C++ Redistributable (x64 and x86) from Microsoft.",
+    "Install the .NET runtime the program asks for from Microsoft.",
+    "Repair or reinstall the program."
+   ]
+  },
+  {
+   "code": "0xC0000142",
+   "name": "DLL initialization failed",
+   "meaning": "The program failed while starting up its supporting files. Can be damaged runtimes, security software, or system file problems.",
+   "steps": [
+    "Restart your PC.",
+    "Repair the Visual C++ Redistributables in Apps > Installed apps.",
+    "Run 'sfc /scannow' and check your antivirus quarantine."
+   ]
+  },
+  {
+   "code": "0xC00000FD",
+   "name": "Stack overflow",
+   "meaning": "The program got stuck in a loop and ran out of a type of memory. This is usually a bug in the program or a mod.",
+   "steps": [
+    "Update the program.",
+    "Remove mods or plugins.",
+    "Report it to the program's developer if it keeps happening."
+   ]
+  },
+  {
+   "code": "0xC0000374",
+   "name": "Heap corruption",
+   "meaning": "The program damaged its own memory. Often a bug, a mod, an overlay, or unstable RAM.",
+   "steps": [
+    "Remove mods and turn off overlays.",
+    "Update the program and your graphics driver.",
+    "Turn off XMP/EXPO and run a memory test if many programs crash this way."
+   ]
+  },
+  {
+   "code": "0xC0000409",
+   "name": "Stack buffer overrun",
+   "meaning": "The program stopped itself after detecting a serious internal error. Often an outdated program, a bad mod, overlay, or damaged files.",
+   "steps": [
+    "Update the program and verify its files.",
+    "Turn off overlays and remove mods.",
+    "Update your graphics driver."
+   ]
+  },
+  {
+   "code": "0xC000041D",
+   "name": "Fatal user callback exception",
+   "meaning": "The program crashed while Windows was handing it a message. Often overlays, hooks, or compatibility settings.",
+   "steps": [
+    "Turn off overlays and screen recorders.",
+    "Turn off compatibility mode in the program's Properties > Compatibility.",
+    "Update the program."
+   ]
+  },
+  {
+   "code": "0x40000015",
+   "name": "Fatal app exit",
+   "meaning": "The program closed itself after an error it couldn't handle. Often missing or damaged files.",
+   "steps": [
+    "Verify or reinstall the program.",
+    "Repair the Visual C++ Redistributables.",
+    "Check antivirus quarantine."
+   ]
+  },
+  {
+   "code": "0x80000003",
+   "name": "Breakpoint",
+   "meaning": "The program hit a deliberate stop point, usually a built-in crash check. The real cause is often damaged files, settings, or the graphics setup.",
+   "steps": [
+    "Verify the program's files.",
+    "Reset its settings (rename its settings folder in Documents or AppData).",
+    "Update your graphics driver."
+   ]
+  },
+  {
+   "code": "0xE06D7363",
+   "name": "C++ exception",
+   "meaning": "The program threw an internal error it didn't handle. The cause depends on the program; it's often a missing file, bad setting, or bug.",
+   "steps": [
+    "Update and verify the program.",
+    "Reset its settings.",
+    "Check the program's own log files for a more specific message."
+   ]
+  },
+  {
+   "code": "0x887A0005",
+   "name": "DXGI_ERROR_DEVICE_REMOVED",
+   "meaning": "The program lost contact with your graphics card.",
+   "steps": [
+    "Remove GPU overclocks.",
+    "Do a clean graphics driver install.",
+    "Check GPU power cables and temperatures."
+   ],
+   "fix": "dxgi-error-device-removed-hung"
+  },
+  {
+   "code": "0x887A0006",
+   "name": "DXGI_ERROR_DEVICE_HUNG",
+   "meaning": "Your graphics card stopped responding to the program.",
+   "steps": [
+    "Remove GPU overclocks.",
+    "Do a clean graphics driver install.",
+    "Check GPU temperatures."
+   ],
+   "fix": "dxgi-error-device-removed-hung"
+  },
+  {
+   "code": "0x887A0007",
+   "name": "DXGI_ERROR_DEVICE_RESET",
+   "meaning": "The graphics card was reset, often after bad commands or a driver problem.",
+   "steps": [
+    "Do a clean graphics driver install.",
+    "Remove GPU overclocks.",
+    "Update the program."
+   ],
+   "fix": "dxgi-error-device-removed-hung"
+  }
+ ],
+ "updateCodes": [
+  {
+   "code": "0x80070002",
+   "name": "File not found",
+   "meaning": "Windows Update couldn't find files it needed, often after an interrupted download.",
+   "steps": [
+    "Run the Windows Update troubleshooter (Settings > System > Troubleshoot > Other troubleshooters).",
+    "Restart and try the update again.",
+    "Run 'DISM /Online /Cleanup-Image /RestoreHealth' then 'sfc /scannow'."
+   ]
+  },
+  {
+   "code": "0x80070005",
+   "name": "Access denied",
+   "meaning": "Windows or an installer didn't have permission to change something. Often security software or permissions.",
+   "steps": [
+    "Make sure you're signed in as an administrator.",
+    "Temporarily pause third-party antivirus, update, then turn it back on.",
+    "Run the Windows Update troubleshooter."
+   ]
+  },
+  {
+   "code": "0x80070070",
+   "name": "Not enough disk space",
+   "meaning": "There isn't enough free space to install the update.",
+   "steps": [
+    "Free up space with Settings > System > Storage > Temporary files.",
+    "Uninstall programs you don't use.",
+    "Try again once you have at least 20 GB free."
+   ]
+  },
+  {
+   "code": "0x8007000D",
+   "name": "Invalid data",
+   "meaning": "Update files were damaged or unreadable.",
+   "steps": [
+    "Run the Windows Update troubleshooter.",
+    "Run 'DISM /Online /Cleanup-Image /RestoreHealth' then 'sfc /scannow'.",
+    "Try the update again."
+   ]
+  },
+  {
+   "code": "0x80070422",
+   "name": "Update service disabled",
+   "meaning": "The Windows Update service is turned off, often by a 'debloat' or tweaking tool.",
+   "steps": [
+    "Press Windows+R, type 'services.msc', and set 'Windows Update' to Manual or Automatic, then Start it.",
+    "Undo changes made by tweaking or debloat tools.",
+    "Try the update again."
+   ]
+  },
+  {
+   "code": "0x80070643",
+   "name": "Install failed",
+   "meaning": "A component failed to install. On recent Windows versions this sometimes relates to a security update for the recovery partition.",
+   "steps": [
+    "Restart and try again.",
+    "Run the Windows Update troubleshooter.",
+    "Search Microsoft's support site for the update's KB number for specific guidance."
+   ]
+  },
+  {
+   "code": "0x800705B4",
+   "name": "Timed out",
+   "meaning": "The update or operation took too long and gave up.",
+   "steps": [
+    "Check your internet connection and restart your router.",
+    "Restart your PC and try again.",
+    "Run the Windows Update troubleshooter."
+   ]
+  },
+  {
+   "code": "0x80073712",
+   "name": "Component store damaged",
+   "meaning": "Files Windows uses to install updates are damaged.",
+   "steps": [
+    "Run 'DISM /Online /Cleanup-Image /RestoreHealth' in an admin Command Prompt.",
+    "Run 'sfc /scannow'.",
+    "Restart and try the update again."
+   ]
+  },
+  {
+   "code": "0x800F081F",
+   "name": "Source files not found",
+   "meaning": "Windows couldn't find files needed to install a feature or update, often .NET Framework 3.5.",
+   "steps": [
+    "Run 'DISM /Online /Cleanup-Image /RestoreHealth'.",
+    "Make sure Windows Update isn't blocked by policy or tools.",
+    "Install the feature through Settings > System > Optional features or Windows Features."
+   ]
+  },
+  {
+   "code": "0x800F0922",
+   "name": "Couldn't finish installing",
+   "meaning": "The update failed to complete, often due to connection problems, a VPN, or a full system partition.",
+   "steps": [
+    "Disconnect from any VPN and try again.",
+    "Check your internet connection.",
+    "Run the Windows Update troubleshooter."
+   ]
+  },
+  {
+   "code": "0x8024402C",
+   "name": "Can't reach update servers",
+   "meaning": "Windows couldn't connect to Microsoft's update servers. Often proxy, DNS, or firewall settings.",
+   "steps": [
+    "Turn off any proxy or VPN.",
+    "Switch to a public DNS (1.1.1.1 or 8.8.8.8).",
+    "Run the Windows Update troubleshooter."
+   ]
+  },
+  {
+   "code": "0x80240034",
+   "name": "Download failed",
+   "meaning": "The update didn't download correctly.",
+   "steps": [
+    "Restart and try again.",
+    "Run the Windows Update troubleshooter.",
+    "Free up disk space and check your connection."
+   ]
+  },
+  {
+   "code": "0xC1900101",
+   "name": "Upgrade rolled back (driver)",
+   "meaning": "A Windows feature upgrade failed and rolled back, usually because of a driver or connected device.",
+   "steps": [
+    "Unplug extra USB devices (drives, adapters, controllers).",
+    "Update all drivers, especially storage, graphics, and network.",
+    "Uninstall third-party antivirus during the upgrade."
+   ]
+  },
+  {
+   "code": "0x80004005",
+   "name": "Unspecified error",
+   "meaning": "A general error with no specific reason. The surrounding message usually says more.",
+   "steps": [
+    "Restart and try again.",
+    "Run the Windows Update troubleshooter if it's an update.",
+    "Look for a more specific error message or code nearby."
+   ]
+  },
+  {
+   "code": "0x8007045D",
+   "name": "I/O device error",
+   "meaning": "Windows had trouble reading or writing to a drive or device.",
+   "steps": [
+    "Back up important files.",
+    "Check the drive's connection and health.",
+    "Run 'chkdsk' on the affected drive."
+   ]
+  }
+ ],
+ "deviceCodes": [
+  {
+   "code": "10",
+   "name": "Device cannot start",
+   "meaning": "Windows couldn't start this device, usually a driver problem.",
+   "steps": [
+    "Update or reinstall the device's driver from the manufacturer's site.",
+    "Unplug and reconnect the device, or try another port.",
+    "Restart your PC."
+   ]
+  },
+  {
+   "code": "28",
+   "name": "Drivers not installed",
+   "meaning": "No driver is installed for this device.",
+   "steps": [
+    "Download the driver from the device or motherboard maker's site.",
+    "Run Windows Update, including Optional updates.",
+    "Restart after installing."
+   ]
+  },
+  {
+   "code": "31",
+   "name": "Device not working properly",
+   "meaning": "Windows couldn't load the driver for this device.",
+   "steps": [
+    "Uninstall the device in Device Manager and restart.",
+    "Install the latest driver from the manufacturer.",
+    "Check for Windows updates."
+   ]
+  },
+  {
+   "code": "39",
+   "name": "Driver missing or corrupted",
+   "meaning": "Windows can't load the device's driver; it may be damaged or missing.",
+   "steps": [
+    "Reinstall the driver from the manufacturer's site.",
+    "Uninstall the device in Device Manager and restart.",
+    "Run 'sfc /scannow'."
+   ]
+  },
+  {
+   "code": "43",
+   "name": "Device reported problems",
+   "meaning": "Windows stopped the device because it reported a problem. For graphics cards and USB devices this can be a driver, power, or hardware issue.",
+   "steps": [
+    "Do a clean install of the device's driver (DDU for graphics cards).",
+    "Reseat the device or try another port and cable.",
+    "Test it in another PC if possible to rule out hardware failure."
+   ]
+  },
+  {
+   "code": "45",
+   "name": "Device not connected",
+   "meaning": "The device was connected before but isn't now.",
+   "steps": [
+    "Reconnect the device.",
+    "Try a different port or cable.",
+    "Ignore it if you removed the device on purpose."
+   ]
+  },
+  {
+   "code": "52",
+   "name": "Driver signature problem",
+   "meaning": "Windows can't verify the driver's signature, so it won't load it.",
+   "steps": [
+    "Download the official driver from the manufacturer.",
+    "Run Windows Update.",
+    "Avoid drivers from unofficial download sites."
+   ]
+  }
+ ],
+ "dlls": [
+  {
+   "files": [
+    "vcruntime140.dll",
+    "vcruntime140_1.dll",
+    "msvcp140.dll",
+    "msvcp140_1.dll",
+    "msvcp140_2.dll",
+    "concrt140.dll",
+    "vccorlib140.dll",
+    "api-ms-win-crt-runtime-l1-1-0.dll",
+    "ucrtbase.dll"
+   ],
+   "name": "Visual C++ 2015–2022 Redistributable",
+   "meaning": "This file comes with Microsoft's Visual C++ Redistributable, which many programs and games need.",
+   "steps": [
+    "Download the latest Visual C++ Redistributable from Microsoft's website.",
+    "Install both the x64 and the x86 versions, then restart.",
+    "Still missing? Repair it in Apps > Installed apps, and check your antivirus quarantine."
+   ]
+  },
+  {
+   "files": [
+    "msvcr120.dll",
+    "msvcp120.dll"
+   ],
+   "name": "Visual C++ 2013 Redistributable",
+   "meaning": "This file comes with the older Visual C++ 2013 Redistributable.",
+   "steps": [
+    "Download the Visual C++ 2013 Redistributable from Microsoft's website.",
+    "Install both the x64 and x86 versions, then restart."
+   ]
+  },
+  {
+   "files": [
+    "msvcr110.dll",
+    "msvcp110.dll"
+   ],
+   "name": "Visual C++ 2012 Redistributable",
+   "meaning": "This file comes with the older Visual C++ 2012 Redistributable.",
+   "steps": [
+    "Download the Visual C++ 2012 Redistributable from Microsoft's website.",
+    "Install both the x64 and x86 versions, then restart."
+   ]
+  },
+  {
+   "files": [
+    "msvcr100.dll",
+    "msvcp100.dll"
+   ],
+   "name": "Visual C++ 2010 Redistributable",
+   "meaning": "This file comes with the older Visual C++ 2010 Redistributable.",
+   "steps": [
+    "Download the Visual C++ 2010 Redistributable from Microsoft's website.",
+    "Install both the x64 and x86 versions, then restart."
+   ]
+  },
+  {
+   "files": [
+    "d3dx9_43.dll",
+    "d3dx9_42.dll",
+    "d3dx9_41.dll",
+    "d3dx10_43.dll",
+    "d3dx11_43.dll",
+    "d3dcompiler_43.dll",
+    "xinput1_3.dll",
+    "x3daudio1_7.dll",
+    "xaudio2_7.dll",
+    "xapofx1_5.dll"
+   ],
+   "name": "DirectX End-User Runtime",
+   "meaning": "Older games need extra DirectX files that Windows doesn't include by default.",
+   "steps": [
+    "Download the 'DirectX End-User Runtime Web Installer' from Microsoft's website and run it.",
+    "Restart and launch the game again."
+   ]
+  },
+  {
+   "files": [
+    "steam_api.dll",
+    "steam_api64.dll"
+   ],
+   "name": "Steam game file",
+   "meaning": "This file belongs to the game itself. If it's missing, your antivirus probably quarantined it or the install is damaged.",
+   "steps": [
+    "Check your antivirus quarantine and restore the file.",
+    "Add the game folder to your antivirus exclusions.",
+    "Verify the game files in Steam."
+   ]
+  },
+  {
+   "files": [
+    "mfplat.dll",
+    "mf.dll",
+    "mfreadwrite.dll"
+   ],
+   "name": "Windows Media Feature Pack",
+   "meaning": "Windows 'N' editions don't include media features some games and apps need.",
+   "steps": [
+    "Go to Settings > System > Optional features > Add a feature.",
+    "Install 'Media Feature Pack' and restart."
+   ]
+  },
+  {
+   "files": [
+    "xlive.dll"
+   ],
+   "name": "Games for Windows Live",
+   "meaning": "This game uses Microsoft's discontinued Games for Windows Live service.",
+   "steps": [
+    "Check the store page or community guides for a patched version of the game.",
+    "Don't download xlive.dll from DLL websites."
+   ]
+  }
+ ],
+ "modules": [
+  {
+   "files": [
+    "nvwgf2umx.dll",
+    "nvwgf2um.dll",
+    "nvd3dumx.dll",
+    "nvd3dum.dll",
+    "nvoglv64.dll",
+    "nvoglv32.dll",
+    "nvlddmkm.sys",
+    "nvapi64.dll",
+    "nvgpucomp64.dll",
+    "nvwgf2umx_cfg.dll"
+   ],
+   "name": "NVIDIA graphics driver",
+   "meaning": "The crash happened inside NVIDIA's graphics driver.",
+   "steps": [
+    "Do a clean install of the latest NVIDIA driver (or the previous version if this started after an update).",
+    "Remove any GPU overclock.",
+    "Turn off overlays such as the NVIDIA App overlay."
+   ],
+   "fix": "dxgi-error-device-removed-hung"
+  },
+  {
+   "files": [
+    "atidxx64.dll",
+    "atidxx32.dll",
+    "amdxx64.dll",
+    "amdxc64.dll",
+    "atig6pxx.dll",
+    "aticfx64.dll",
+    "atio6axx.dll",
+    "amdkmdag.sys",
+    "amdvlk64.dll"
+   ],
+   "name": "AMD graphics driver",
+   "meaning": "The crash happened inside AMD's graphics driver.",
+   "steps": [
+    "Do a clean install of the latest AMD driver with AMD's Cleanup Utility or DDU.",
+    "Remove any GPU overclock or undervolt in AMD Software.",
+    "Turn off AMD overlays and features like Radeon Anti-Lag for a test."
+   ],
+   "fix": "dxgi-error-device-removed-hung"
+  },
+  {
+   "files": [
+    "igd10iumd64.dll",
+    "igd12umd64.dll",
+    "igdumdim64.dll",
+    "igdkmd64.sys",
+    "igc64.dll",
+    "igxelpicd64.dll"
+   ],
+   "name": "Intel graphics driver",
+   "meaning": "The crash happened inside Intel's graphics driver.",
+   "steps": [
+    "Update your Intel graphics driver from Intel's website or your PC maker's site.",
+    "On a laptop with a second graphics card, make sure the program runs on the dedicated card (Settings > System > Display > Graphics)."
+   ]
+  },
+  {
+   "files": [
+    "ntdll.dll"
+   ],
+   "name": "Windows core (ntdll.dll)",
+   "meaning": "ntdll.dll is a core Windows file that's involved in almost every crash, so it's rarely the real cause. Something else, such as a mod, overlay, damaged file, or unstable RAM, usually broke the program first.",
+   "steps": [
+    "Look for other module or file names in the crash report.",
+    "Turn off overlays and remove mods.",
+    "Verify or reinstall the program, and run a memory test if many programs crash."
+   ]
+  },
+  {
+   "files": [
+    "kernelbase.dll"
+   ],
+   "name": "Windows error handler (KERNELBASE.dll)",
+   "meaning": "KERNELBASE.dll is where Windows reports a program's own internal error. The program itself hit a problem, often missing files, bad settings, or a bug.",
+   "steps": [
+    "Update and verify the program.",
+    "Reset its settings.",
+    "Repair the Visual C++ Redistributables and .NET runtime."
+   ]
+  },
+  {
+   "files": [
+    "clr.dll",
+    "coreclr.dll"
+   ],
+   "name": ".NET runtime",
+   "meaning": "The crash happened in Microsoft's .NET runtime, which the program is built on.",
+   "steps": [
+    "Install the latest .NET runtime the program requires from Microsoft.",
+    "Repair or reinstall the program.",
+    "Run Windows Update."
+   ]
+  },
+  {
+   "files": [
+    "d3d11.dll",
+    "d3d12.dll",
+    "dxgi.dll",
+    "d3d9.dll"
+   ],
+   "name": "DirectX",
+   "meaning": "The crash happened in DirectX, the graphics layer between the game and your GPU driver. If this file is inside the game's own folder, it's probably a mod like ReShade, not the real DirectX.",
+   "steps": [
+    "Check the game's folder for a dxgi.dll, d3d11.dll or d3d9.dll file. If you have one, it's a mod (often ReShade); remove it to test.",
+    "Update your graphics driver.",
+    "Turn off overlays."
+   ]
+  },
+  {
+   "files": [
+    "vulkan-1.dll"
+   ],
+   "name": "Vulkan",
+   "meaning": "The crash happened in the Vulkan graphics layer.",
+   "steps": [
+    "Update your graphics driver.",
+    "Turn off overlays, which often hook into Vulkan.",
+    "Try the game's DirectX mode instead."
+   ]
+  },
+  {
+   "files": [
+    "rtsshooks64.dll",
+    "rtsshooks.dll"
+   ],
+   "name": "RivaTuner overlay",
+   "meaning": "RivaTuner (often installed with MSI Afterburner) was hooked into the program when it crashed.",
+   "steps": [
+    "Close RivaTuner/Afterburner and test.",
+    "Update RivaTuner, or add the program to its exclusions."
+   ]
+  },
+  {
+   "files": [
+    "gameoverlayrenderer64.dll",
+    "gameoverlayrenderer.dll"
+   ],
+   "name": "Steam overlay",
+   "meaning": "The Steam overlay was hooked into the program when it crashed.",
+   "steps": [
+    "Turn off the Steam overlay for this game (right-click the game > Properties > General).",
+    "Test again."
+   ]
+  },
+  {
+   "files": [
+    "discordhook64.dll",
+    "discordhook.dll"
+   ],
+   "name": "Discord overlay",
+   "meaning": "Discord's in-game overlay was hooked into the program when it crashed.",
+   "steps": [
+    "Turn off Discord's in-game overlay (User Settings > Game Overlay).",
+    "Test again."
+   ]
+  },
+  {
+   "files": [
+    "graphics-hook64.dll",
+    "graphics-hook32.dll"
+   ],
+   "name": "OBS game capture",
+   "meaning": "OBS's game capture hook was inside the program when it crashed.",
+   "steps": [
+    "Switch OBS to Window Capture or Display Capture for this game.",
+    "Update OBS."
+   ]
+  },
+  {
+   "files": [
+    "nvspcap64.dll",
+    "nvspcap.dll"
+   ],
+   "name": "NVIDIA overlay / recording",
+   "meaning": "NVIDIA's overlay or recording feature was hooked into the program when it crashed.",
+   "steps": [
+    "Turn off the NVIDIA App overlay.",
+    "Test again, then update the NVIDIA App."
+   ]
+  },
+  {
+   "files": [
+    "reshade64.dll",
+    "reshade32.dll"
+   ],
+   "name": "ReShade",
+   "meaning": "The ReShade graphics mod was loaded when the program crashed.",
+   "steps": [
+    "Remove or update ReShade.",
+    "Turn off heavy shaders and test again."
+   ]
+  },
+  {
+   "files": [
+    "atcuf64.dll",
+    "atcuf32.dll",
+    "bdhkm64.dll",
+    "bdhkm32.dll"
+   ],
+   "name": "Bitdefender",
+   "meaning": "Bitdefender's monitoring was hooked into the program when it crashed.",
+   "steps": [
+    "Add the program's folder to Bitdefender's exceptions, including Advanced Threat Defense.",
+    "Test again."
+   ],
+   "fix": "fivem-window-watchdog-antivirus-hang"
+  },
+  {
+   "files": [
+    "aswhook.dll",
+    "aswhooka.dll",
+    "aswhookx.dll"
+   ],
+   "name": "Avast / AVG",
+   "meaning": "Avast or AVG antivirus was hooked into the program when it crashed.",
+   "steps": [
+    "Add the program's folder to the antivirus exceptions.",
+    "Test again."
+   ]
+  }
+ ],
+ "phrases": [
+  {
+   "match": [
+    "kernel-power",
+    "event id 41"
+   ],
+   "need": 1,
+   "name": "Kernel-Power Event 41",
+   "meaning": "Windows restarted without shutting down properly. It doesn't say why; common causes are power problems, overheating, unstable overclocks, or a blue screen that didn't get saved.",
+   "steps": [
+    "Check for a blue screen code in Event Viewer around the same time (look for 'BugCheck').",
+    "Remove overclocks and check temperatures.",
+    "Check power: the power supply, cables, and power strip."
+   ]
+  },
+  {
+   "match": [
+    "livekernelevent"
+   ],
+   "need": 1,
+   "name": "LiveKernelEvent",
+   "meaning": "Windows recorded a hardware or driver problem it recovered from. Codes 141 and 117 usually mean the graphics card stopped responding.",
+   "steps": [
+    "Do a clean graphics driver install.",
+    "Remove GPU overclocks.",
+    "Check GPU temperatures and power cables."
+   ],
+   "fix": "display-driver-stopped-responding-recovered"
+  },
+  {
+   "match": [
+    "your pc ran into a problem",
+    "your device ran into a problem"
+   ],
+   "need": 1,
+   "name": "Blue screen",
+   "meaning": "Windows had to stop to protect itself. The stop code on the screen tells you why.",
+   "steps": [
+    "Find the stop code: it's on the blue screen, or in Event Viewer > Windows Logs > System (look for 'BugCheck').",
+    "Paste that stop code here to decode it."
+   ]
+  },
+  {
+   "match": [
+    "is not a valid win32 application",
+    "this app can't run on your pc"
+   ],
+   "need": 1,
+   "name": "Incompatible program",
+   "meaning": "The program wasn't built for your version or type of Windows, or the file is damaged.",
+   "steps": [
+    "Download the correct version for your Windows (64-bit, 32-bit, or ARM).",
+    "Re-download the installer in case the file is damaged.",
+    "Check the program's system requirements."
+   ]
+  },
+  {
+   "match": [
+    "application hang",
+    "stopped interacting with windows"
+   ],
+   "need": 1,
+   "name": "Application hang",
+   "meaning": "The program froze and Windows closed it.",
+   "steps": [
+    "Update the program and your graphics driver.",
+    "Turn off overlays and close background programs.",
+    "Check that your drive and antivirus aren't slowing it down."
+   ]
+  },
+  {
+   "match": [
+    "the system has recovered from a serious error"
+   ],
+   "need": 1,
+   "name": "Recovered from a blue screen",
+   "meaning": "Windows restarted after a blue screen.",
+   "steps": [
+    "Look for the 'BugCheck' entry in Event Viewer > Windows Logs > System, or check C:\\Windows\\Minidump.",
+    "Paste the stop code here to decode it."
+   ]
+  }
+ ]
+}

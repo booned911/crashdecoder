@@ -34,3 +34,41 @@
 
 /* honeypot: hidden from people, visible to spam bots */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+/* ---- decoder results ---- */
+.decoded-app { margin: 0 0 0.75rem; }
+.decoded-card {
+  margin: 0 0 1rem;
+  padding: 1.1rem 1.25rem;
+  background: #161b22;
+  border: 1px solid rgba(139, 148, 158, 0.3);
+  border-left: 3px solid #f0a830;
+  border-radius: 10px;
+}
+.decoded-card h3 { margin: 0.3rem 0 0.4rem; font-size: 1.1rem; }
+.decoded-card h3 code { font-size: 0.95em; }
+.decoded-card p { margin: 0 0 0.6rem; }
+.decoded-steps { margin: 0 0 0.4rem; padding-left: 1.3rem; }
+.decoded-steps li { margin: 0.25rem 0; }
+.decoded-more { display: inline-block; margin-top: 0.3rem; color: #3ddc97; font-weight: 600; text-decoration: none; }
+.decoded-more:hover { text-decoration: underline; }
+
+/* ---- AI suggestions ---- */
+.ai-box {
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(61, 220, 151, 0.35);
+  border-radius: 10px;
+  background: rgba(61, 220, 151, 0.05);
+}
+.result-empty .ai-box { margin-top: 1rem; }
+.ai-box h4 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.ai-note { margin: 0 0 0.8rem; font-size: 0.9rem; color: #8b949e; }
+.ai-compact { background: transparent; }
+.ai-status { margin: 0.75rem 0 0; color: #8b949e; }
+.ai-answer { margin-top: 1rem; }
+.ai-answer h5 { margin: 1rem 0 0.35rem; font-size: 0.95rem; color: #3ddc97; text-transform: uppercase; letter-spacing: 0.03em; }
+.ai-answer p, .ai-answer li { line-height: 1.55; }
+.ai-answer ul, .ai-answer ol { margin: 0 0 0.5rem; padding-left: 1.3rem; }
+.ai-label { display: inline-block; margin: 0; padding: 0.15rem 0.55rem; font-size: 0.8rem; color: #f0a830; border: 1px solid rgba(240, 168, 48, 0.5); border-radius: 999px; }
+.ai-foot { margin-top: 0.9rem; font-size: 0.9rem; color: #8b949e; }
