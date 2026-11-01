@@ -17,7 +17,7 @@
       "Reset your graphics settings: go to Documents\\Rockstar Games, open the 'GTAV Enhanced' folder (or 'GTA V' if you play the Legacy version), and rename settings.xml to settings.old. If you can't find it, your Documents may be under OneDrive\\Documents. The game makes a fresh one with safe defaults on next launch.",
       "Verify the game files in Steam, Epic, or the Rockstar Games Launcher."
     ],
-    "ifStillBroken": "If it only crashes after a few minutes of play rather than at launch, run a GPU stress test to rule out the card or its power cables. Still stuck? Book a session and we'll go through it together.",
+    "ifStillBroken": "If it only crashes after a few minutes of play rather than at launch, run a GPU stress test to rule out the card or its power cables. Still stuck? Send your error to OldWolfDev for a personal review.",
     "related": ["gtav-crash-on-startup-no-error", "gtav-err-mem-embeddedalloc-alloc"],
     "affiliate": null
   },
@@ -38,7 +38,7 @@
       "On a laptop, make sure GTA V runs on the dedicated graphics card: Settings > System > Display > Graphics, pick GTA V, choose 'High performance'.",
       "Verify the game files in Steam, Epic, or the Rockstar Games Launcher."
     ],
-    "ifStillBroken": "Run 'sfc /scannow' in an admin Command Prompt to repair Windows system files. If you've never modded and it still happens, book a session and we'll dig into it together.",
+    "ifStillBroken": "Run 'sfc /scannow' in an admin Command Prompt to repair Windows system files. If you've never modded and it still happens, send your error to OldWolfDev for a personal review.",
     "related": ["gtav-err-gfx-d3d-init", "gtav-crash-on-startup-no-error"],
     "affiliate": null
   },
@@ -59,7 +59,7 @@
       "Download the launcher fresh from rockstargames.com and install it. When it asks to scan for installed games, say yes so it finds your existing install.",
       "If it still won't start, add the Rockstar Games folder in Program Files to your antivirus exclusions and try again."
     ],
-    "ifStillBroken": "Make sure Windows is fully updated, since older Windows builds can stop the launcher from starting. If it still fails, contact Rockstar Support with your launcher log, or book a session with us.",
+    "ifStillBroken": "Make sure Windows is fully updated, since older Windows builds can stop the launcher from starting. If it still fails, contact Rockstar Support with your launcher log, or send your error to OldWolfDev for a personal review.",
     "related": ["gtav-err-no-launcher", "redm-stuck-loading-after-launch"],
     "affiliate": null
   },
@@ -100,7 +100,7 @@
       "Turn off overlays (Steam, Discord, NVIDIA App) and close RivaTuner, recording software, and any mod menus or script tools.",
       "Make sure the game isn't set to run in compatibility mode: right-click PlayGTAV.exe > Properties > Compatibility, and untick 'Run this program in compatibility mode'."
     ],
-    "ifStillBroken": "Open the launcher log (Documents\\Rockstar Games\\Launcher\\launcher.log) and paste it into the decoder on the home page, or book a session and we'll read it together.",
+    "ifStillBroken": "Open the launcher log (Documents\\Rockstar Games\\Launcher\\launcher.log) and paste it into the decoder on the home page, or send it to OldWolfDev for a personal review.",
     "related": ["gtav-err-gfx-d3d-init", "gtav-err-no-launcher", "rockstar-games-launcher-failed-to-initialize"],
     "affiliate": null
   }

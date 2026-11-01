@@ -16,7 +16,7 @@
       "Update your graphics driver, and close background apps before joining. Servers with lots of custom content use a lot of RAM and VRAM.",
       "Try a different server. If only one server crashes you, send its staff the crash report and where you were when it happened."
     ],
-    "ifStillBroken": "If it crashes on every server with no mods installed and a clean cache, reinstall FiveM from fivem.net (your GTA V install isn't affected). Or book a session and we'll read the crash report together.",
+    "ifStillBroken": "If it crashes on every server with no mods installed and a clean cache, reinstall FiveM from fivem.net (your GTA V install isn't affected). Or send the crash report to OldWolfDev for a personal review.",
     "related": ["fivem-cmoveanimatedbuilding-pool-overflow", "fivem-corrupt-collision-ybn", "fivem-couldnt-load-resource"],
     "affiliate": null
   },

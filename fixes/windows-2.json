@@ -15,7 +15,7 @@
       "Check power: make sure each GPU power connector is fully seated. If your card needs two 8-pin connectors, use two separate cables from the power supply, not one cable with a split end.",
       "Close background programs and overlays while gaming, and install pending Windows updates."
     ],
-    "ifStillBroken": "Run Windows Memory Diagnostic or MemTest86 to rule out RAM. If the crashes continue on a clean driver with everything at stock, the GPU or power supply may be failing. Book a session and we'll read your minidump together.",
+    "ifStillBroken": "Run Windows Memory Diagnostic or MemTest86 to rule out RAM. If the crashes continue on a clean driver with everything at stock, the GPU or power supply may be failing. Or send your minidump details to OldWolfDev for a personal review.",
     "related": ["display-driver-stopped-responding-recovered", "dxgi-error-device-removed-hung", "xmp-expo-memory-instability-game-crashes"],
     "affiliate": null
   },
@@ -56,7 +56,7 @@
       "Watch your GPU temperature with HWiNFO while playing, and clean dust from the card and fans.",
       "Turn off overlays (Steam, Discord, NVIDIA App) and verify the game files in your launcher."
     ],
-    "ifStillBroken": "If it only happens in one game, check that game's known issues and try a different graphics API in its settings (DirectX 11, DirectX 12, or Vulkan). If it happens in every game at stock settings, test the GPU in another system or book a session with us.",
+    "ifStillBroken": "If it only happens in one game, check that game's known issues and try a different graphics API in its settings (DirectX 11, DirectX 12, or Vulkan). If it happens in every game at stock settings, test the GPU in another system, or send your error to OldWolfDev for a personal review.",
     "related": ["bsod-0x116-video-tdr-failure", "display-driver-stopped-responding-recovered", "xmp-expo-memory-instability-game-crashes"],
     "affiliate": null
   },
@@ -77,7 +77,7 @@
       "Check that your exact RAM kit is on your motherboard's supported memory list, and update the BIOS if a newer version mentions memory compatibility fixes.",
       "If you're running two separately bought kits, test with just one kit installed."
     ],
-    "ifStillBroken": "If you still crash with XMP/EXPO fully off, the RAM isn't the cause. Look at your GPU driver, temperatures, and power instead. Or book a session and we'll go through your crash logs together.",
+    "ifStillBroken": "If you still crash with XMP/EXPO fully off, the RAM isn't the cause. Look at your GPU driver, temperatures, and power instead. Or send your crash details to OldWolfDev for a personal review.",
     "related": ["bsod-0x139-kernel-security-check-failure", "bsod-0x116-video-tdr-failure"],
     "affiliate": { "text": "Matched RAM kits run more stable than mixed sticks", "url": "https://www.amazon.com/s?k=ddr5+32gb+kit&tag=YOUR-AFFILIATE-TAG" }
   },
@@ -98,7 +98,7 @@
       "Set Windows Power Mode to Best performance (Settings > System > Power > Power Mode). If the dropdown is greyed out with a note about the high performance power plan, you're already set and can skip this. Then close RGB, monitoring, and tuning apps you don't need. These are common latency causes.",
       "Update audio drivers, and try disabling audio devices you don't use (like a monitor's HDMI audio) in Device Manager."
     ],
-    "ifStillBroken": "Disable devices one at a time in Device Manager while re-running LatencyMon to find the culprit, then re-enable them afterward. Or book a session and we'll read the LatencyMon report together.",
+    "ifStillBroken": "Disable devices one at a time in Device Manager while re-running LatencyMon to find the culprit, then re-enable them afterward. Or send your LatencyMon results to OldWolfDev for a personal review.",
     "related": ["display-driver-stopped-responding-recovered", "xmp-expo-memory-instability-game-crashes"],
     "affiliate": null
   }

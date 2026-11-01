@@ -15,7 +15,7 @@
       "Update chipset and GPU drivers from the manufacturers' sites.",
       "Open an admin Command Prompt and run 'sfc /scannow', then 'DISM /Online /Cleanup-Image /RestoreHealth'."
     ],
-    "ifStillBroken": "Open the minidump (C:\\Windows\\Minidump) with WinDbg or BlueScreenView to see which driver is named — or book a session and we'll read it together.",
+           "ifStillBroken": "Open the minidump (C:\\Windows\\Minidump) with WinDbg or BlueScreenView to see which driver is named, or send it to OldWolfDev for a personal review.",
     "related": [],
     "affiliate": { "text": "Matched RAM kits run more stable than mixed sticks", "url": "https://www.amazon.com/s?k=ddr5+32gb+kit&tag=YOUR-AFFILIATE-TAG" }
   }

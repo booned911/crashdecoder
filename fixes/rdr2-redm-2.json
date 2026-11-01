@@ -16,7 +16,7 @@
       "Disable fullscreen optimization: in your launcher, open the game's install folder, right-click RDR2.exe > Properties > Compatibility, tick 'Disable fullscreen optimizations', and click OK.",
       "Make sure your C: drive has free space, install pending Windows updates, then verify the game files in your launcher."
     ],
-    "ifStillBroken": "Do a clean driver install with DDU in Safe Mode. If it still crashes on both APIs, run a GPU stress test to rule out hardware, or book a session and we'll go through it together.",
+    "ifStillBroken": "Do a clean driver install with DDU in Safe Mode. If it still crashes on both APIs, run a GPU stress test to rule out hardware, or send your error to OldWolfDev for a personal review.",
     "related": ["rdr2-err-gfx-d3d-deferred-mem", "rdr2-vulkan-failed-to-allocate-memory"],
     "affiliate": null
   },
