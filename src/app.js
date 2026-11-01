@@ -215,34 +215,43 @@
       <p class="ai-note">Sends the text in the box to Cloudflare's AI service to suggest likely causes and steps. Your Windows username, PC name, email and IP addresses are removed first, and DecodeMyCrash doesn't save it. AI answers aren't tested by OldWolfDev, so double-check before changing system settings.</p>
       <button class="btn${compact ? " btn-ghost" : ""}" type="button" id="ai-btn">Get AI suggestions</button>
       <div id="ai-out" aria-live="polite"></div>
-    </div>`;
+    </div>
+    <div id="review-slot"></div>`;
   }
 
-  function sendForm(raw) {
-    if (!window.FORM_KEY) return "";
-    const paid = !!window.REVIEW_URL;
+  function reviewForm(raw) {
+    if (!window.FORM_KEY || !window.REVIEW_URL) return "";
     const price = window.REVIEW_PRICE || "$10";
     const time = window.REVIEW_TIME || "48 hours";
     return `<div class="nomatch-send" id="review-panel">
-      <h4>Send it to OldWolfDev</h4>
-      ${paid ? `<p><strong>Personal review, ${esc(price)}:</strong> I'll research your error and email you a fix within ${esc(time)}. If I can't find one, you get a full refund.</p>
-      <p><strong>Free report:</strong> just let me know this error is missing, so I can add a fix to the site. No reply promised.</p>` :
-      `<p>Let me know this error is missing so I can add a fix to the site.</p>`}
+      <h4>Didn't solve it? Get a personal review</h4>
+      <p>For ${esc(price)}, OldWolfDev will research your error and email you a fix within ${esc(time)}. If I can't find one, you get a full refund.</p>
       <p class="send-privacy">Only what's in the box below and your email are sent. Personal details we could spot are already removed; check for anything else you'd rather not share.</p>
       <form id="send-error" class="decoder nomatch-form" autocomplete="off">
         <label for="send-text" class="sr-only">Error to send</label>
         <textarea id="send-text" rows="6" maxlength="5000">${esc(redact(raw).slice(0, 5000))}</textarea>
         <label for="send-email" class="sr-only">Your email</label>
-        <input id="send-email" type="email" placeholder="${paid ? "Your email (needed for a review reply)" : "Your email (optional)"}" maxlength="200" autocomplete="email">
+        <input id="send-email" type="email" placeholder="Your email (where I'll send the fix)" maxlength="200" required autocomplete="email">
         <input type="checkbox" id="send-botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="decoder-actions">
-          ${paid ? `<button class="btn" type="submit" id="review-btn" data-kind="review">Get a personal review · ${esc(price)}</button>` : ""}
-          <button class="btn${paid ? " btn-ghost" : ""}" type="submit" id="send-btn" data-kind="report">${paid ? "Just report it (free)" : "Send to OldWolfDev"}</button>
+          <button class="btn" type="submit" id="send-btn">Get a personal review · ${esc(price)}</button>
         </div>
         <p class="send-status" id="send-status" role="status"></p>
         <div id="pay-step"></div>
       </form>
     </div>`;
+  }
+
+  // The review offer only appears after the AI has had a go.
+  function revealReview(raw, dec) {
+    const slot = document.getElementById("review-slot");
+    if (!slot || slot.dataset.shown) return;
+    const html = reviewForm(raw);
+    if (!html) return;
+    slot.dataset.shown = "1";
+    slot.innerHTML = html;
+    const sf = document.getElementById("send-error");
+    if (sf) sf.addEventListener("submit", e => sendError(e, raw, dec));
   }
 
   function extras(raw) {
@@ -252,8 +261,7 @@
         <div class="nomatch-links">${links.map(l =>
           `<a class="btn btn-ghost" href="${esc(l.href)}" target="_blank" rel="noopener nofollow">${esc(l.label)}</a>`).join("")}
         </div>
-      </div>
-      ${sendForm(raw)}`;
+      </div>`;
   }
 
   function render(matches, dec, raw, slugs) {
@@ -277,8 +285,6 @@
     }
     out.innerHTML = html;
 
-    const sf = document.getElementById("send-error");
-    if (sf) sf.addEventListener("submit", e => sendError(e, raw, dec));
     const ab = document.getElementById("ai-btn");
     if (ab) ab.addEventListener("click", () => askAI(raw, dec));
   }
@@ -331,14 +337,15 @@
         aiOut.innerHTML = `<div class="ai-answer">
           <p class="ai-label">AI suggestion · not tested by OldWolfDev</p>
           ${formatAI(data.answer)}
-          <p class="ai-foot">${window.FORM_KEY ? "Didn't help? Send it to OldWolfDev below." : ""}</p>
+          <p class="ai-foot">${window.REVIEW_URL ? "Didn't solve it? You can get a personal review below." : ""}</p>
         </div>`;
         btn.style.display = "none";
+        revealReview(raw, dec);
         return;
       }
       const msg = {
-        busy: "AI help has reached its limit for today. Try again tomorrow, or send it to OldWolfDev.",
-        not_configured: "AI help isn't switched on yet. Send it to OldWolfDev instead.",
+        busy: "AI help has reached its limit for today. Try again tomorrow, or get a personal review below.",
+        not_configured: "AI help isn't available right now. You can get a personal review below.",
         too_short: "Paste a bit more of the error or log so the AI has something to work with.",
         not_allowed: "AI help only works on decodemycrash.com."
       }[data.error] || (res.status === 429 || !data.error
@@ -346,9 +353,11 @@
         : "AI help couldn't answer right now. Try again in a minute.");
       aiOut.innerHTML = `<p class="ai-status">${esc(msg)}</p>`;
       btn.disabled = false;
+      if (data.error === "busy" || data.error === "not_configured" || data.error === "ai_failed") revealReview(raw, dec);
     } catch (err) {
       aiOut.innerHTML = `<p class="ai-status">AI help couldn't be reached. Check your connection and try again.</p>`;
       btn.disabled = false;
+      revealReview(raw, dec);
     }
   }
 
@@ -358,15 +367,13 @@
 
   async function sendError(e, raw, dec) {
     e.preventDefault();
-    const kind = (e.submitter && e.submitter.dataset && e.submitter.dataset.kind) || "report";
-    const isReview = kind === "review" && !!window.REVIEW_URL;
     const status = document.getElementById("send-status");
     const text = document.getElementById("send-text").value.trim();
     const emailEl = document.getElementById("send-email");
     const email = emailEl.value.trim();
     if (document.getElementById("send-botcheck").checked) return;
     if (!text) { status.textContent = "There's nothing to send. Paste the error in the box first."; return; }
-    if (isReview && !email) { status.textContent = "Please add your email so I can send you the review."; emailEl.focus(); return; }
+    if (!email) { status.textContent = "Please add your email so I can send you the review."; emailEl.focus(); return; }
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.textContent = "That email doesn't look right. Please check it."; emailEl.focus(); return; }
 
     const buttons = document.getElementById("send-error").querySelectorAll("button");
@@ -376,11 +383,9 @@
     const ref = newRef();
     const payload = {
       access_key: window.FORM_KEY,
-      subject: isReview
-        ? `REVIEW ${ref}: awaiting ${window.REVIEW_PRICE || "$10"} payment — DecodeMyCrash`
-        : `Free report${game ? ` (${game})` : ""} — DecodeMyCrash`,
+      subject: `REVIEW ${ref}: awaiting ${window.REVIEW_PRICE || "$10"} payment — DecodeMyCrash`,
       from_name: "DecodeMyCrash",
-      type: isReview ? `Paid review request (only review once the Stripe payment from ${email} arrives)` : "Free report, no reply promised",
+      type: `Paid review request (only review once the Stripe payment from ${email} arrives)`,
       reference: ref,
       error: text,
       game: game || "none detected",
@@ -389,7 +394,7 @@
       page: location.href,
       botcheck: false
     };
-    if (email) { payload.email = email; payload.replyto = email; }
+    payload.email = email; payload.replyto = email;
 
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
@@ -401,7 +406,7 @@
       if (!(res.ok && data.success !== false)) throw new Error(data.message || "send failed");
 
       document.getElementById("send-error").querySelectorAll("textarea, input").forEach(el => (el.disabled = true));
-      if (isReview) {
+      {
         const url = `${window.REVIEW_URL}${window.REVIEW_URL.includes("?") ? "&" : "?"}prefilled_email=${encodeURIComponent(email)}&client_reference_id=${ref}`;
         status.textContent = "";
         document.getElementById("pay-step").innerHTML = `<div class="pay-step">
@@ -409,8 +414,6 @@
           <a class="btn" href="${esc(url)}" target="_blank" rel="noopener">Pay ${esc(window.REVIEW_PRICE || "$10")} securely with Stripe</a>
           <p class="pay-note">Unpaid requests aren't reviewed. If I can't find a fix, you'll get a full refund.</p>
         </div>`;
-      } else {
-        status.textContent = "Sent. Thanks! This helps me add a fix for it.";
       }
     } catch (err) {
       buttons.forEach(b => (b.disabled = false));
