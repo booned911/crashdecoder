@@ -5,7 +5,7 @@ const path = require("path");
 
 const ROOT = __dirname;
 const OUT = path.join(ROOT, "dist");
-const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, "site.config.json"), "utf8"));
+const cfg = { reviewPrice: "$10", reviewTime: "48 hours", ...JSON.parse(fs.readFileSync(path.join(ROOT, "site.config.json"), "utf8")) };
 
 // ---------- load fixes ----------
 const fixes = [];
@@ -59,7 +59,7 @@ ${jsonld}
 <body>
 <header class="site-header">
   <a class="logo" href="${up}"><img src="${up}logo.svg" alt="${esc(cfg.name)}" width="352" height="64"></a>
-  <nav><a href="${up}fixes/">All fixes</a><a href="${up}#book" class="nav-cta">Get help</a></nav>
+  <nav><a href="${up}fixes/">All fixes</a><a href="${up}#review" class="nav-cta">Get help</a></nav>
 </header>
 <main>${body}</main>
 <footer class="site-footer">
@@ -70,13 +70,14 @@ ${jsonld}
 </html>`;
 }
 
-function bookCard(id = "") {
+function reviewCard(id = "", depth = 0) {
+  const up = depth ? "../".repeat(depth) : "./";
   return `<section class="book-card"${id ? ` id="${id}"` : ""}>
   <div>
-    <h2>Still crashing?</h2>
-    <p>Book a ${esc(cfg.bookingPrice)} 30-minute screen-share and a real tech will fix it with you live.</p>
+    <h2>Still stuck?</h2>
+    <p>Paste your error on the home page. If nothing there solves it, send it to OldWolfDev for a ${esc(cfg.reviewPrice)} personal review, answered by email within ${esc(cfg.reviewTime)}. If I can't find a fix, you get a refund.</p>
   </div>
-  <a class="btn" href="${esc(cfg.bookingUrl)}" target="_blank" rel="noopener">Book a fix session</a>
+  <a class="btn" href="${up}#decoder">Decode my crash</a>
 </section>`;
 }
 
@@ -130,8 +131,8 @@ write("index.html", layout({
   <div class="grid">${fixes.slice(0, 6).map(f => fixCard(f, 0)).join("")}</div>
   <p><a href="fixes/">Browse all ${fixes.length} fixes →</a></p>
 </section>
-${bookCard("book")}
-<script>window.BOOKING_URL=${JSON.stringify(cfg.bookingUrl)};window.FORM_KEY=${JSON.stringify(cfg.web3formsKey || "")};</script>
+${reviewCard("review")}
+<script>window.FORM_KEY=${JSON.stringify(cfg.web3formsKey || "")};window.REVIEW_URL=${JSON.stringify(cfg.reviewUrl || "")};window.REVIEW_PRICE=${JSON.stringify(cfg.reviewPrice || "")};window.REVIEW_TIME=${JSON.stringify(cfg.reviewTime || "")};</script>
 <script src="app.js"></script>`
 }));
 
@@ -142,7 +143,7 @@ write("fixes/index.html", layout({
   canonical: cfg.url + "/fixes/",
   depth: 1,
   body: `<section class="section"><h1>All crash fixes</h1>
-  <div class="grid">${fixes.map(f => fixCard(f, 1)).join("")}</div></section>${bookCard()}`
+  <div class="grid">${fixes.map(f => fixCard(f, 1)).join("")}</div></section>${reviewCard("", 1)}`
 }));
 
 // one page per fix
@@ -173,7 +174,7 @@ for (const f of fixes) {
   ${f.affiliate ? `<aside class="affiliate"><p>${esc(f.affiliate.text)}</p><a href="${esc(f.affiliate.url)}" target="_blank" rel="sponsored noopener">See options →</a></aside>` : ""}
   ${related.length ? `<h2>Related fixes</h2><div class="grid">${related.map(r => fixCard(r, 2)).join("")}</div>` : ""}
 </article>
-${bookCard()}`
+${reviewCard("", 2)}`
   }));
 }
 

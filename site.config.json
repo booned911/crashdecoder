@@ -1,10 +1,11 @@
-{
-  "name": "DecodeMyCrash",
-  "tagline": "Paste your crash or error. Get a plain-English fix.",
-  "url": "https://decodemycrash.com",
-  "bookingUrl": "https://cal.com/doug-boone-chnzbu/30min",
-  "bookingPrice": "$25",
-  "author": "Doug, Old Wolf Development",
-  "authorBlurb": "Built by Old Wolf Development. Former 911 dispatcher turned IT troubleshooter. Every written fix here has been tested on a real PC.",
-  "web3formsKey": "23e65752-4d3e-4c49-a716-e8a8f1027222"
-}
+   {
+     "name": "DecodeMyCrash",
+     "tagline": "Paste your crash or error. Get a plain-English fix.",
+     "url": "https://decodemycrash.com",
+     "author": "Doug, Old Wolf Development",
+     "authorBlurb": "Built by Old Wolf Development. Former 911 dispatcher turned IT troubleshooter. Every written fix here has been tested on a real PC.",
+     "web3formsKey": "23e65752-4d3e-4c49-a716-e8a8f1027222",
+     "reviewUrl": "https://buy.stripe.com/00wdR8dv30k8h0DaM74Ja00",
+     "reviewPrice": "$10",
+     "reviewTime": "48 hours"
+   }
