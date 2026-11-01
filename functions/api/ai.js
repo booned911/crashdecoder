@@ -12,7 +12,7 @@ const ALLOWED_ORIGINS = [
   "http://localhost:8788"   // `npx wrangler pages dev` for local testing
 ];
 
-const PROMPT_VERSION = 2; // bump when the prompt changes so old cached answers aren't reused
+const PROMPT_VERSION = 3; // bump when the prompt changes so old cached answers aren't reused
 
 const SYSTEM_PROMPT = `You are the assistant on DecodeMyCrash, a site that helps everyday PC users and gamers fix Windows, app, and game crashes. The site is run by OldWolfDev, a former 911 dispatcher turned IT troubleshooter. Write like an experienced, friendly tech talking someone through a fix.
 
@@ -42,7 +42,7 @@ LIKELY CAUSES:
 TRY THESE STEPS:
 1. (step)
 GET HELP IF:
-(1 sentence on when to get hands-on help, for example booking a session on DecodeMyCrash)
+(1 sentence on when to get expert help, for example sending the error to OldWolfDev for a personal review on DecodeMyCrash)
 
 Keep the whole answer under 300 words.`;
 
