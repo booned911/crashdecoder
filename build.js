@@ -63,7 +63,7 @@ ${jsonld}
 </header>
 <main>${body}</main>
 <footer class="site-footer">
-  <p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}</p>
+  <div class="maker"><img src="${up}oldwolf-crest.png" alt="The Old Wolf crest" width="48" height="48" loading="lazy"><p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}</p></div>
   <p class="fine">Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested; written fixes are. Some links are affiliate links; they cost you nothing extra.</p>
 </footer>
 </body>
@@ -97,7 +97,7 @@ function write(rel, content) {
 // ---------- build ----------
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
-for (const f of ["styles.css", "extra.css", "app.js", "codes.json", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "og-image.png"]) {
+for (const f of ["styles.css", "extra.css", "app.js", "codes.json", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "og-image.png", "oldwolf-crest.png"]) {
   fs.copyFileSync(path.join(ROOT, "src", f), path.join(OUT, f));
 }
 
