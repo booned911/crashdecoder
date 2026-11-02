@@ -18,8 +18,8 @@
   async function load() {
     if (!fixesIndex || !codes) {
       const [f, c] = await Promise.all([
-        fetch("fixes.json").then(r => r.json()),
-        fetch("codes.json").then(r => r.json()).catch(() => ({}))
+        fetch("fixes.json?v=" + (window.ASSET_V || "")).then(r => r.json()),
+        fetch("codes.json?v=" + (window.ASSET_V || "")).then(r => r.json()).catch(() => ({}))
       ]);
       fixesIndex = f;
       codes = c || {};
