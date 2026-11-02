@@ -219,17 +219,17 @@
     <div id="review-slot"></div>`;
   }
 
-  function reviewForm(raw) {
+  function reviewForm(raw, direct = false) {
     if (!window.FORM_KEY || !window.REVIEW_URL) return "";
     const price = window.REVIEW_PRICE || "$10";
     const time = window.REVIEW_TIME || "48 hours";
-    return `<div class="nomatch-send" id="review-panel">
-      <h4>Didn't solve it? Get a personal review</h4>
+    return `<div class="nomatch-send${direct ? " direct-review" : ""}" id="review-panel">
+      <h4>${direct ? "Get a personal review" : "Didn't solve it? Get a personal review"}</h4>
       <p>For ${esc(price)}, OldWolfDev will research your error and email you a fix within ${esc(time)}. If I can't find one, you get a full refund.</p>
       <p class="send-privacy">Only what's in the box below and your email are sent. Personal details we could spot are already removed; check for anything else you'd rather not share.</p>
       <form id="send-error" class="decoder nomatch-form" autocomplete="off">
         <label for="send-text" class="sr-only">Error to send</label>
-        <textarea id="send-text" rows="6" maxlength="5000">${esc(redact(raw).slice(0, 5000))}</textarea>
+        <textarea id="send-text" rows="6" maxlength="5000"${direct ? ' placeholder="Paste your error message, blue screen code or crash log here. Add a line about what you were doing when it happened."' : ""}>${esc(redact(raw).slice(0, 5000))}</textarea>
         <label for="send-email" class="sr-only">Your email</label>
         <input id="send-email" type="email" placeholder="Your email (where I'll send the fix)" maxlength="200" required autocomplete="email">
         <input type="checkbox" id="send-botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -248,6 +248,7 @@
     if (!slot || slot.dataset.shown) return;
     const html = reviewForm(raw);
     if (!html) return;
+    closeDirect(); // only one review form on the page at a time
     slot.dataset.shown = "1";
     slot.innerHTML = html;
     const sf = document.getElementById("send-error");
@@ -363,12 +364,34 @@
 
   // ---------- send to OldWolfDev ----------
 
+  // "Get help" / "Skip ahead" links open the review form straight away,
+  // under the Still stuck? card, with an empty box for the visitor's error.
+  const directSlot = document.getElementById("get-review");
+  function closeDirect() { if (directSlot) directSlot.innerHTML = ""; }
+  function openDirect() {
+    if (!directSlot) return;
+    if (!document.querySelector("#get-review #review-panel")) {
+      const html = reviewForm("", true);
+      if (!html) { location.hash = "decoder"; return; } // review not set up: fall back to the paste box
+      const old = document.getElementById("review-slot"); // drop an AI-revealed form to avoid duplicates
+      if (old) { old.innerHTML = ""; delete old.dataset.shown; }
+      directSlot.innerHTML = html;
+      const sf = document.getElementById("send-error");
+      sf.addEventListener("submit", e => sendError(e, "", { found: [] }, true));
+      const t = document.getElementById("send-text");
+      if (box.value.trim()) t.value = redact(box.value.trim()).slice(0, 5000);
+    }
+    directSlot.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("send-text").focus({ preventScroll: true });
+  }
+
   const newRef = () => "DMC-" + Array.from(crypto.getRandomValues(new Uint8Array(4)), n => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[n % 32]).join("");
 
-  async function sendError(e, raw, dec) {
+  async function sendError(e, raw, dec, direct = false) {
     e.preventDefault();
     const status = document.getElementById("send-status");
     const text = document.getElementById("send-text").value.trim();
+    if (direct) { await load().catch(() => {}); raw = text; dec = decode(text); }
     const emailEl = document.getElementById("send-email");
     const email = emailEl.value.trim();
     if (document.getElementById("send-botcheck").checked) return;
@@ -386,6 +409,7 @@
       subject: `REVIEW ${ref}: awaiting ${window.REVIEW_PRICE || "$10"} payment — DecodeMyCrash`,
       from_name: "DecodeMyCrash",
       type: `Paid review request (only review once the Stripe payment from ${email} arrives)`,
+      route: direct ? "Skipped ahead (did not try the AI first)" : "Tried the AI first",
       reference: ref,
       error: text,
       game: game || "none detected",
@@ -458,6 +482,15 @@
     });
   });
   if (location.hash === "#decoder") setTimeout(goToBox, 50);
+
+  document.querySelectorAll('a[href$="#get-review"]').forEach(a => {
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      if (location.hash !== "#get-review") history.pushState(null, "", "#get-review");
+      openDirect();
+    });
+  });
+  if (location.hash === "#get-review") setTimeout(openDirect, 50);
 
   // exposed for testing only
   window.__dmc = { decode, redact, keyLine, formatAI, load };

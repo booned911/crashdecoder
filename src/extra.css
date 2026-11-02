@@ -95,3 +95,12 @@
 @keyframes dmc-flash { 0%, 100% { box-shadow: 0 0 0 0 rgba(61, 220, 151, 0); } 30% { box-shadow: 0 0 0 4px rgba(61, 220, 151, 0.55); } }
 .decoder textarea.flash { animation: dmc-flash 1.2s ease-out 2; }
 @media (prefers-reduced-motion: reduce) { .decoder textarea.flash { animation: none; } }
+
+/* ---- Still stuck? card: main button plus a "skip ahead" link ---- */
+.book-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.skip-link { color: #f0a830; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.skip-link:hover { color: #ffc560; }
+#get-review { scroll-margin-top: 16px; }
+.direct-review { margin-top: 16px; background: #161b22; border: 1px solid rgba(139, 148, 158, 0.25); border-radius: 12px; padding: 22px; }
+.direct-review h4 { margin-top: 0; }
+.direct-review .nomatch-form { background: none; border: 0; padding: 0; box-shadow: none; }
