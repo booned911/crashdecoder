@@ -59,7 +59,7 @@ ${jsonld}
 <body>
 <header class="site-header">
   <a class="logo" href="${up}"><img src="${up}logo.svg" alt="${esc(cfg.name)}" width="352" height="64"></a>
-  <nav><a href="${up}fixes/">All fixes</a><a href="${up}#review" class="nav-cta">Get help</a></nav>
+  <nav><a href="${up}fixes/">All fixes</a><a href="${up}#get-review" class="nav-cta">Get help</a></nav>
 </header>
 <main>${body}</main>
 <footer class="site-footer">
@@ -75,10 +75,13 @@ function reviewCard(id = "", depth = 0) {
   return `<section class="book-card"${id ? ` id="${id}"` : ""}>
   <div>
     <h2>Still stuck?</h2>
-    <p>Paste your error on the home page. If nothing there solves it, send it to OldWolfDev for a ${esc(cfg.reviewPrice)} personal review, answered by email within ${esc(cfg.reviewTime)}. If I can't find a fix, you get a refund.</p>
+    <p>Paste your error in the box at the top and click <strong>Decode my crash</strong>. If no fix comes up, click <strong>AI suggestions</strong>. If that doesn't solve it either, a ${esc(cfg.reviewPrice)} personal review from OldWolfDev appears, answered by email within ${esc(cfg.reviewTime)}. No fix, full refund.</p>
   </div>
-  <a class="btn" href="${up}#decoder">Decode my crash</a>
-</section>`;
+  <div class="book-actions">
+    <a class="btn" href="${up}#decoder">Decode my crash</a>
+    <a class="skip-link" href="${up}#get-review">Skip ahead: get a personal review now</a>
+  </div>
+</section>${depth === 0 ? `\n<div id="get-review"></div>` : ""}`;
 }
 
 const fixCard = (f, depth) => `<a class="fix-card" href="${"../".repeat(depth)}fix/${f.slug}/">
