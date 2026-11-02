@@ -440,6 +440,25 @@
     box.value = ""; out.innerHTML = ""; box.focus();
   });
 
+  // "Decode my crash" links (Still stuck? card, fix pages) point at #decoder.
+  // On a tall screen the box is already visible, so a plain jump looks like
+  // nothing happened. Scroll smoothly, put the cursor in the box and flash it.
+  function goToBox() {
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+    box.focus({ preventScroll: true });
+    box.classList.remove("flash");
+    void box.offsetWidth; // restart the animation if clicked twice
+    box.classList.add("flash");
+  }
+  document.querySelectorAll('a[href$="#decoder"]').forEach(a => {
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      if (location.hash !== "#decoder") history.pushState(null, "", "#decoder");
+      goToBox();
+    });
+  });
+  if (location.hash === "#decoder") setTimeout(goToBox, 50);
+
   // exposed for testing only
   window.__dmc = { decode, redact, keyLine, formatAI, load };
 })();
