@@ -18,7 +18,7 @@
     ],
     "ifStillBroken": "If it crashes on every server with no mods installed and a clean cache, reinstall FiveM from fivem.net (your GTA V install isn't affected). Or send the crash report to OldWolfDev for a personal review.",
     "related": ["fivem-cmoveanimatedbuilding-pool-overflow", "fivem-corrupt-collision-ybn", "fivem-couldnt-load-resource"],
-    "affiliate": null
+    "affiliate": { "text": "If your PC has 16 GB of RAM or less, a 32 GB kit (2 × 16 GB) helps on servers with lots of custom content. Check whether your PC uses DDR4 or DDR5 before buying.", "url": "https://www.amazon.com/s?k=32gb+ram+kit+2x16gb&tag=oldwolfdev-20" }
   },
   {
     "slug": "fivem-couldnt-load-resource",

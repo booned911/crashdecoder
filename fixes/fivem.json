@@ -55,7 +55,7 @@
     ],
     "ifStillBroken": "If it only happens on one server, their file host may be overloaded — try again later or tell their staff.",
     "related": ["fivem-stuck-loading-add-on-data-files"],
-    "affiliate": null
+    "affiliate": { "text": "A Cat 6 Ethernet cable is the easiest way to test a wired connection. Pick a length that reaches from your PC to your router.", "url": "https://www.amazon.com/s?k=cat+6+ethernet+cable&tag=oldwolfdev-20" }
   },
   {
     "slug": "fivem-cmoveanimatedbuilding-pool-overflow",

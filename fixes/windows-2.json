@@ -17,7 +17,7 @@
     ],
     "ifStillBroken": "Run Windows Memory Diagnostic or MemTest86 to rule out RAM. If the crashes continue on a clean driver with everything at stock, the GPU or power supply may be failing. Or send your minidump details to OldWolfDev for a personal review.",
     "related": ["display-driver-stopped-responding-recovered", "dxgi-error-device-removed-hung", "xmp-expo-memory-instability-game-crashes"],
-    "affiliate": null
+    "affiliate": { "text": "An electric air duster clears dust from your graphics card and case fans without buying cans of compressed air. Hold each fan still with a finger while you blow it out so it doesn't overspin.", "url": "https://www.amazon.com/s?k=electric+air+duster+for+computer&tag=oldwolfdev-20" }
   },
   {
     "slug": "display-driver-stopped-responding-recovered",
@@ -37,7 +37,7 @@
     ],
     "ifStillBroken": "Open Event Viewer > Windows Logs > System and look for errors around the time of the crash (Event ID 4101 or nvlddmkm entries). If it keeps happening at stock settings with a clean driver, the card or power supply may be failing.",
     "related": ["bsod-0x116-video-tdr-failure", "dxgi-error-device-removed-hung"],
-    "affiliate": null
+    "affiliate": { "text": "If testing points to a failing power supply, replace it with a quality ATX 3.1 unit that meets your graphics card maker's recommended wattage.", "url": "https://www.amazon.com/s?k=atx+3.1+power+supply+80+plus+gold&tag=oldwolfdev-20" }
   },
   {
     "slug": "dxgi-error-device-removed-hung",
@@ -58,7 +58,7 @@
     ],
     "ifStillBroken": "If it only happens in one game, check that game's known issues and try a different graphics API in its settings (DirectX 11, DirectX 12, or Vulkan). If it happens in every game at stock settings, test the GPU in another system, or send your error to OldWolfDev for a personal review.",
     "related": ["bsod-0x116-video-tdr-failure", "display-driver-stopped-responding-recovered", "xmp-expo-memory-instability-game-crashes"],
-    "affiliate": null
+    "affiliate": { "text": "An electric air duster clears dust from your graphics card and case fans without buying cans of compressed air. Hold each fan still with a finger while you blow it out so it doesn't overspin.", "url": "https://www.amazon.com/s?k=electric+air+duster+for+computer&tag=oldwolfdev-20" }
   },
   {
     "slug": "xmp-expo-memory-instability-game-crashes",
@@ -79,7 +79,7 @@
     ],
     "ifStillBroken": "If you still crash with XMP/EXPO fully off, the RAM isn't the cause. Look at your GPU driver, temperatures, and power instead. Or send your crash details to OldWolfDev for a personal review.",
     "related": ["bsod-0x139-kernel-security-check-failure", "bsod-0x116-video-tdr-failure"],
-    "affiliate": { "text": "Matched RAM kits run more stable than mixed sticks", "url": "https://www.amazon.com/s?k=ddr5+32gb+kit&tag=oldwolfdev-20" }
+    "affiliate": { "text": "Matched RAM kits run more stable than mixed sticks. Check whether your PC uses DDR4 or DDR5 before buying.", "url": "https://www.amazon.com/s?k=32gb+ram+kit+2x16gb&tag=oldwolfdev-20" }
   },
   {
     "slug": "high-dpc-latency-stutter",
