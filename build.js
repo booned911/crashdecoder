@@ -22,6 +22,14 @@ for (const file of fs.readdirSync(path.join(ROOT, "fixes")).filter(f => f.endsWi
 fixes.sort((a, b) => a.title.localeCompare(b.title));
 const bySlug = Object.fromEntries(fixes.map(f => [f.slug, f]));
 
+// Version tag added to script, style and data links (app.js?v=...). It changes
+// whenever those files change, so browsers fetch the new copy instead of using
+// one cached from an earlier visit.
+const VER = require("crypto").createHash("sha1")
+  .update(["styles.css", "extra.css", "app.js", "codes.json"].map(f => fs.readFileSync(path.join(ROOT, "src", f), "utf8")).join("\n"))
+  .update(JSON.stringify(fixes))
+  .digest("hex").slice(0, 10);
+
 // ---------- helpers ----------
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const sideBadge = side => side === "server"
@@ -52,8 +60,8 @@ function layout({ title, description, canonical, body, jsonld = "", depth = 0 })
 <link rel="icon" href="${up}icon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="${up}icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${up}apple-touch-icon.png">
-<link rel="stylesheet" href="${up}styles.css">
-<link rel="stylesheet" href="${up}extra.css">
+<link rel="stylesheet" href="${up}styles.css?v=${VER}">
+<link rel="stylesheet" href="${up}extra.css?v=${VER}">
 ${jsonld}
 </head>
 <body>
@@ -64,7 +72,7 @@ ${jsonld}
 <main>${body}</main>
 <footer class="site-footer">
   <div class="maker"><img src="${up}oldwolf-crest.png" alt="The Old Wolf crest" width="48" height="48" loading="lazy"><p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}</p></div>
-  <p class="fine">Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested; written fixes are. Some links are affiliate links; they cost you nothing extra.</p>
+  <p class="fine">Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested; written fixes are. Some links are affiliate links; they cost you nothing extra. As an Amazon Associate, I earn from qualifying purchases.</p>
 </footer>
 </body>
 </html>`;
@@ -135,8 +143,8 @@ write("index.html", layout({
   <p><a href="fixes/">Browse all ${fixes.length} fixes →</a></p>
 </section>
 ${reviewCard("review")}
-<script>window.FORM_KEY=${JSON.stringify(cfg.web3formsKey || "")};window.REVIEW_URL=${JSON.stringify(cfg.reviewUrl || "")};window.REVIEW_PRICE=${JSON.stringify(cfg.reviewPrice || "")};window.REVIEW_TIME=${JSON.stringify(cfg.reviewTime || "")};</script>
-<script src="app.js"></script>`
+<script>window.FORM_KEY=${JSON.stringify(cfg.web3formsKey || "")};window.REVIEW_URL=${JSON.stringify(cfg.reviewUrl || "")};window.REVIEW_PRICE=${JSON.stringify(cfg.reviewPrice || "")};window.REVIEW_TIME=${JSON.stringify(cfg.reviewTime || "")};window.ASSET_V=${JSON.stringify(VER)};</script>
+<script src="app.js?v=${VER}"></script>`
 }));
 
 // all fixes
@@ -174,7 +182,7 @@ for (const f of fixes) {
   <h2>How to fix it</h2>
   <ol class="steps">${f.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
   ${f.ifStillBroken ? `<h2>Still broken?</h2><p>${esc(f.ifStillBroken)}</p>` : ""}
-  ${f.affiliate ? `<aside class="affiliate"><p>${esc(f.affiliate.text)}</p><a href="${esc(f.affiliate.url)}" target="_blank" rel="sponsored noopener">See options →</a></aside>` : ""}
+  ${f.affiliate ? `<aside class="affiliate"><p>${esc(f.affiliate.text)}</p><a href="${esc(f.affiliate.url)}" target="_blank" rel="sponsored noopener">See options on Amazon →</a><p class="aff-note">Affiliate link: I may earn a small commission at no extra cost to you.</p></aside>` : ""}
   ${related.length ? `<h2>Related fixes</h2><div class="grid">${related.map(r => fixCard(r, 2)).join("")}</div>` : ""}
 </article>
 ${reviewCard("", 2)}`
