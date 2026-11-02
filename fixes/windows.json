@@ -17,6 +17,6 @@
     ],
            "ifStillBroken": "Open the minidump (C:\\Windows\\Minidump) with WinDbg or BlueScreenView to see which driver is named, or send it to OldWolfDev for a personal review.",
     "related": [],
-    "affiliate": { "text": "Matched RAM kits run more stable than mixed sticks", "url": "https://www.amazon.com/s?k=ddr5+32gb+kit&tag=YOUR-AFFILIATE-TAG" }
+    "affiliate": { "text": "Matched RAM kits run more stable than mixed sticks", "url": "https://www.amazon.com/s?k=ddr5+32gb+kit&tag=oldwolfdev-20" }
   }
 ]
