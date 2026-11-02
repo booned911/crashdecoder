@@ -104,3 +104,6 @@
 .direct-review { margin-top: 16px; background: #161b22; border: 1px solid rgba(139, 148, 158, 0.25); border-radius: 12px; padding: 22px; }
 .direct-review h4 { margin-top: 0; }
 .direct-review .nomatch-form { background: none; border: 0; padding: 0; box-shadow: none; }
+
+/* ---- Amazon affiliate box: small disclosure under the link ---- */
+.affiliate .aff-note { margin: 6px 0 0; font-size: 12px; color: #8b949e; }
