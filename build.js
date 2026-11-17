@@ -26,7 +26,7 @@ const bySlug = Object.fromEntries(fixes.map(f => [f.slug, f]));
 // whenever those files change, so browsers fetch the new copy instead of using
 // one cached from an earlier visit.
 const VER = require("crypto").createHash("sha1")
-  .update(["styles.css", "extra.css", "app.js", "codes.json"].map(f => fs.readFileSync(path.join(ROOT, "src", f), "utf8")).join("\n"))
+  .update(["styles.css", "extra.css", "design.css", "app.js", "codes.json"].map(f => fs.readFileSync(path.join(ROOT, "src", f), "utf8")).join("\n"))
   .update(JSON.stringify(fixes))
   .digest("hex").slice(0, 10);
 
@@ -62,11 +62,12 @@ function layout({ title, description, canonical, body, jsonld = "", depth = 0 })
 <link rel="apple-touch-icon" href="${up}apple-touch-icon.png">
 <link rel="stylesheet" href="${up}styles.css?v=${VER}">
 <link rel="stylesheet" href="${up}extra.css?v=${VER}">
+<link rel="stylesheet" href="${up}design.css?v=${VER}">
 ${jsonld}
 </head>
 <body>
 <header class="site-header">
-  <a class="logo" href="${up}"><img src="${up}logo.svg" alt="${esc(cfg.name)}" width="352" height="64"></a>
+  <a class="logo" href="${up}" aria-label="${esc(cfg.name)} home"><img src="${up}icon.svg" alt="" width="38" height="38"><span class="logo-word">Decode<span>My</span>Crash</span></a>
   <nav><a href="${up}fixes/">All fixes</a><a href="${up}#get-review" class="nav-cta">Get help</a></nav>
 </header>
 <main>${body}</main>
@@ -92,7 +93,19 @@ function reviewCard(id = "", depth = 0) {
 </section>${depth === 0 ? `\n<div id="get-review"></div>` : ""}`;
 }
 
-const fixCard = (f, depth) => `<a class="fix-card" href="${"../".repeat(depth)}fix/${f.slug}/">
+// Group each fix under the games people pick from. "Any game" and "Windows" fixes share one group.
+const GAME_KEYS = { "fivem": "fivem", "redm": "redm", "red dead redemption 2": "rdr2", "gta v": "gtav", "any game": "windows", "windows": "windows" };
+const gameKeys = f => [...new Set(f.games.map(g => GAME_KEYS[g.toLowerCase()]).filter(Boolean))];
+const GAME_TILES = [
+  { key: "fivem", name: "FiveM" },
+  { key: "redm", name: "RedM" },
+  { key: "rdr2", name: "Red Dead Redemption 2" },
+  { key: "gtav", name: "GTA V" },
+  { key: "windows", name: "Windows and any game" }
+];
+const countFor = key => fixes.filter(f => gameKeys(f).includes(key)).length;
+
+const fixCard = (f, depth) => `<a class="fix-card" data-games="${gameKeys(f).join(" ")}" href="${"../".repeat(depth)}fix/${f.slug}/">
   <span class="fix-games">${esc(f.games.join(" · "))}</span>
   <h3>${esc(f.title)}</h3>
   <p>${esc(f.summary)}</p>
@@ -108,8 +121,13 @@ function write(rel, content) {
 // ---------- build ----------
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
-for (const f of ["styles.css", "extra.css", "app.js", "codes.json", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "og-image.png", "oldwolf-crest.png"]) {
+for (const f of ["styles.css", "extra.css", "design.css", "app.js", "codes.json", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "og-image.png", "oldwolf-crest.png"]) {
   fs.copyFileSync(path.join(ROOT, "src", f), path.join(OUT, f));
+}
+
+fs.mkdirSync(path.join(OUT, "fonts"), { recursive: true });
+for (const f of fs.readdirSync(path.join(ROOT, "src", "fonts"))) {
+  fs.copyFileSync(path.join(ROOT, "src", "fonts", f), path.join(OUT, "fonts", f));
 }
 
 // search index used by the paste-box matcher
@@ -125,8 +143,17 @@ write("index.html", layout({
   canonical: cfg.url + "/",
   body: `
 <section class="hero">
-  <h1>${esc(cfg.tagline)}</h1>
-  <p class="lede">Free fixes for Windows, app and game crashes: blue screens, missing DLLs, update errors, and games like FiveM, RedM, RDR2 and GTA V. Nothing to download. Your log never leaves your browser unless you choose to send it.</p>
+  <h1><span>Paste the crash.</span> <span>Get a plain-English fix.</span></h1>
+  <p class="lede">Free fixes for Windows, app and game crashes: blue screens, missing DLLs, update errors, and games like FiveM, RedM, RDR2 and GTA V. Nothing to download.</p>
+  <div class="trace" aria-hidden="true">
+    <svg viewBox="0 0 960 90" preserveAspectRatio="none">
+      <path class="t-crash" pathLength="1" d="M0 56 H300 L318 56 L334 18 L356 78 L376 8 L398 70 L414 40 L430 56 H470"/>
+      <path class="t-glow" pathLength="1" d="M470 56 L498 74 L560 22 H960"/>
+      <path class="t-fixed" pathLength="1" d="M470 56 L498 74 L560 22 H960"/>
+      <path class="t-core" pathLength="1" d="M470 56 L498 74 L560 22 H960"/>
+      <path class="t-spark" pathLength="1" d="M0 56 H300 L318 56 L334 18 L356 78 L376 8 L398 70 L414 40 L430 56 H470 L498 74 L560 22 H960"/>
+    </svg>
+  </div>
   <form id="decoder" class="decoder" autocomplete="off">
     <label for="log" class="sr-only">Crash log or error message</label>
     <textarea id="log" rows="7" placeholder="Paste your error message, blue screen code or crash log here…&#10;&#10;Examples: 0x0000007E · VCRUNTIME140.dll was not found · 0xc0000005 · ERR_GFX_D3D_DEFERRED_MEM"></textarea>
@@ -136,6 +163,15 @@ write("index.html", layout({
     </div>
   </form>
   <div id="results" aria-live="polite"></div>
+  <ul class="facts">
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span><strong>${fixes.length} fixes, each tested on a real PC.</strong> No guessing, no copy-paste from forums.</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><span><strong>Your log stays in your browser</strong> unless you choose to send it.</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 018-8 8 8 0 017.3 4.7M20 12a8 8 0 01-8 8 8 8 0 01-7.3-4.7"/><path d="M19.5 4v4.5H15M4.5 20v-4.5H9"/></svg><span><strong>Can't find it? Get a personal review for ${esc(cfg.reviewPrice)}.</strong> Refund if there's no fix.</span></li>
+  </ul>
+</section>
+<section class="section" id="games">
+  <h2>Browse by game</h2>
+  <div class="games">${GAME_TILES.map(g => `<a class="game-tile t-${g.key}" href="fixes/#${g.key}"><strong>${esc(g.name)}</strong><span>${countFor(g.key)} fixes</span></a>`).join("")}</div>
 </section>
 <section class="section">
   <h2>Common fixes</h2>
@@ -154,7 +190,23 @@ write("fixes/index.html", layout({
   canonical: cfg.url + "/fixes/",
   depth: 1,
   body: `<section class="section"><h1>All crash fixes</h1>
-  <div class="grid">${fixes.map(f => fixCard(f, 1)).join("")}</div></section>${reviewCard("", 1)}`
+  <nav class="filters" aria-label="Filter fixes by game">
+    <a class="chip" href="#all" data-filter="all">All ${fixes.length}</a>${GAME_TILES.map(g => `<a class="chip" href="#${g.key}" data-filter="${g.key}">${esc(g.name)} ${countFor(g.key)}</a>`).join("")}
+  </nav>
+  <div class="grid" id="fix-grid">${fixes.map(f => fixCard(f, 1)).join("")}</div></section>${reviewCard("", 1)}
+<script>
+(function () {
+  var chips = document.querySelectorAll(".chip"), cards = document.querySelectorAll("#fix-grid .fix-card");
+  function apply() {
+    var key = (location.hash || "#all").slice(1);
+    if (!document.querySelector('.chip[data-filter="' + key + '"]')) key = "all";
+    chips.forEach(function (c) { c.setAttribute("aria-current", c.dataset.filter === key ? "true" : "false"); });
+    cards.forEach(function (c) { c.hidden = key !== "all" && (" " + c.dataset.games + " ").indexOf(" " + key + " ") === -1; });
+  }
+  window.addEventListener("hashchange", apply);
+  apply();
+})();
+</script>`
 }));
 
 // one page per fix
@@ -181,6 +233,7 @@ for (const f of fixes) {
   ${f.cause ? `<h2>Why it happens</h2><p>${esc(f.cause)}</p>` : ""}
   <h2>How to fix it</h2>
   <ol class="steps">${f.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
+  ${Array.isArray(f.links) && f.links.length ? `<h2>Tools and downloads</h2><ul class="tool-links">${f.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.text)}</a>${l.note ? `<span>${esc(l.note)}</span>` : ""}</li>`).join("")}</ul>` : ""}
   ${f.ifStillBroken ? `<h2>Still broken?</h2><p>${esc(f.ifStillBroken)}</p>` : ""}
   ${f.affiliate ? `<aside class="affiliate"><p>${esc(f.affiliate.text)}</p><a href="${esc(f.affiliate.url)}" target="_blank" rel="sponsored noopener">See options on Amazon →</a><p class="aff-note">Affiliate link: I may earn a small commission at no extra cost to you.</p></aside>` : ""}
   ${related.length ? `<h2>Related fixes</h2><div class="grid">${related.map(r => fixCard(r, 2)).join("")}</div>` : ""}
