@@ -72,7 +72,7 @@ ${jsonld}
 <main>${body}</main>
 <footer class="site-footer">
   <div class="maker"><img src="${up}oldwolf-crest.png" alt="The Old Wolf crest" width="48" height="48" loading="lazy"><p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}${cfg.discordUrl ? ` <a class="discord-link" href="${esc(cfg.discordUrl)}" target="_blank" rel="noopener">Join The Old Wolf Development Discord</a>` : ""}</p></div>
-  <p class="fine"><a href="${up}disclaimer/">Disclaimer and terms of use</a>. Use these fixes at your own risk. Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested. Fixes marked "Standard fix" follow published steps and were not reproduced on our own PC. Some links are affiliate links; they cost you nothing extra. As an Amazon Associate, I earn from qualifying purchases.</p>
+  <p class="fine"><a href="${up}disclaimer/">Disclaimer and terms of use</a> · <a href="${up}privacy/">Privacy and refund policy</a>. Use these fixes at your own risk. Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested. Fixes marked "Standard fix" follow published steps and were not reproduced on our own PC. Some links are affiliate links; they cost you nothing extra. As an Amazon Associate, I earn from qualifying purchases.</p>
 </footer>
 </body>
 </html>`;
@@ -275,10 +275,10 @@ write("disclaimer/index.html", layout({
   <p>To the fullest extent permitted by law, OldWolfDev and its owner, contributors and affiliates will not be liable for any loss or damage of any kind that comes from using, or being unable to use, this site or its fixes. That includes direct, indirect, incidental, consequential or special loss, loss of data, saves, mods, profits or account access, and damage to any computer, console, game or server, even if we were told it was possible. Where the law doesn't allow a particular exclusion, our liability is limited to the smallest amount the law allows, and for paid reviews it will not exceed the amount you paid for that review. Nothing in these terms limits any right you have that the law doesn't allow to be limited.</p>
 
   <h2>7. Paid reviews</h2>
-  <p>A paid review is a personal look at the details you send. We will answer by email within the time shown on the site and, as stated on the site, refund you if we can't find a fix. A review is the same kind of general help as the rest of the site. It does not guarantee a result and the limits above still apply. Payments are handled by Stripe, and we don't see or store your card details.</p>
+  <p>A paid review is a personal look at the details you send. We will answer by email within the time shown on the site and, as stated on the site, refund you if we can't find a fix. A review is the same kind of general help as the rest of the site. It does not guarantee a result and the limits above still apply. Payments are handled by Stripe, and we don't see or store your card details. Refund details are in our <a href="../privacy/#refunds">Privacy and refund policy</a>.</p>
 
   <h2>8. What you send us</h2>
-  <p>The paste-box decoder compares your error text to our fixes in your browser. If you use AI suggestions, the text you pasted is sent to our AI service to produce a reply. If you request a review, what you enter is sent to us through a form service. Please don't paste passwords, payment details, personal data or anything private into the site. We use Cloudflare's analytics to count visits. We use what you send only to answer your request and to improve the site, and we don't sell it. By sending us information you confirm you're allowed to share it.</p>
+  <p>The paste-box decoder compares your error text to our fixes in your browser. If you use AI suggestions, the text you pasted is sent to our AI service to produce a reply. If you request a review, what you enter is sent to us through a form service. Please don't paste passwords, payment details, personal data or anything private into the site. We use Cloudflare's analytics to count visits. We use what you send only to answer your request and to improve the site, and we don't sell it. By sending us information you confirm you're allowed to share it. The full details are in our <a href="../privacy/">Privacy and refund policy</a>.</p>
 
   <h2>9. Other companies, links and affiliate disclosure</h2>
   <p>${esc(cfg.name)} is an independent site. We are not affiliated with, endorsed by or sponsored by Microsoft, Rockstar Games, Take-Two Interactive, Cfx.re (FiveM and RedM), Valve, Riot Games, Epic Games, NVIDIA, AMD, or any other company named here. All product names, game titles and trademarks belong to their owners and are used only to say what a fix is about.</p>
@@ -295,10 +295,67 @@ write("disclaimer/index.html", layout({
 </article>`
 }));
 
+write("privacy/index.html", layout({
+  title: `Privacy and refund policy | ${cfg.name}`,
+  description: "What DecodeMyCrash collects, where it goes, how long it's kept, and how the $10 review refund works.",
+  canonical: `${cfg.url}/privacy/`,
+  depth: 1,
+  body: `
+<article class="fix">
+  <h1>Privacy and refund policy</h1>
+  <p class="lede">The short version: you can use the fixes and the decoder without giving us anything. If you send us an error or pay for a review, we use it to help you, and we don't sell it.</p>
+  <p><em>Last updated: November 2026.</em> ${esc(cfg.name)} is run by Doug of Old Wolf Development ("OldWolfDev", "we", "us"). This page covers privacy and refunds. Our <a href="../disclaimer/">disclaimer and terms of use</a> cover everything else.</p>
+
+  <h2>1. If you only browse and paste</h2>
+  <p>Reading fix pages and using the paste-box decoder needs no account and no personal details. The decoder matches your pasted text against our fixes inside your own browser, so that text stays on your device unless you choose to use AI suggestions or request a review. Before text leaves your browser, we remove common personal details such as your Windows username in file paths, email addresses, IP addresses and PC names. This cleanup is automatic and isn't perfect, so please check what you paste.</p>
+  <p>We don't ask you to sign up, and we don't run ads or advertising trackers on this site.</p>
+
+  <h2>2. Visit counts</h2>
+  <p>We use Cloudflare Web Analytics, which counts visits, pages viewed, countries and where visitors came from. It is built to count visits without tracking you across websites, and it doesn't use advertising cookies. The site is hosted on Cloudflare, which also keeps ordinary server logs to run and protect the service. Google Search Console shows us how the site appears in Google search; it doesn't put anything on your device from this site.</p>
+
+  <h2>3. AI suggestions</h2>
+  <p>If you press the AI suggestions button, your pasted text (after the cleanup above, and cut to a maximum length) is sent to our server function, which asks Cloudflare's Workers AI service to write a reply. We don't save what you pasted. To keep repeat questions fast and cheap, the AI's reply is cached for up to 7 days under a scrambled code made from the question, and then it expires. AI replies are automated and untested, as explained in the disclaimer.</p>
+
+  <h2>4. Sending us an error or requesting a review</h2>
+  <p>If you use the "Send to OldWolfDev" form or ask for a paid review, we collect what you enter: the error text, your email address, the game we detected (if any), what the decoder found, which page you were on, and a reference code. The form is delivered to us by Web3Forms, which emails it to our inbox. We use this only to answer you, handle payment and refunds, and improve the site (for example, by writing a new fix for an error many people hit). If we publish a fix based on an error you sent, we won't use your name or email.</p>
+  <p>We keep review emails for as long as we need to answer you, deal with any refund and keep basic records. You can ask us to delete your request at any time (see section 8).</p>
+  <p>Please don't paste passwords, payment details or other private information into the site.</p>
+
+  <h2>5. Payments</h2>
+  <p>Paid reviews are paid through Stripe. You enter your card details on Stripe's page, and we never see or store them. Stripe tells us the amount, your email and the reference code so we can match your payment to your request. Stripe's own privacy policy explains how it handles your data.</p>
+
+  <h2 id="refunds">6. Refunds for paid reviews</h2>
+  <p>A paid review costs ${esc(cfg.reviewPrice || "$10")}. Here is how it works:</p>
+  <ul>
+    <li>We reply by email within ${esc(cfg.reviewTime || "48 hours")} of your payment arriving.</li>
+    <li>We only review requests that have been paid. If you send the form but don't pay, we won't review it, and you won't be charged.</li>
+    <li>If we can't find a fix for your problem, you get a full refund. You don't have to argue your case.</li>
+    <li>We send the refund to the card you paid with, through Stripe. How long it takes to show up depends on your bank, and is commonly 5 to 10 business days.</li>
+    <li>A review gives you our best advice, but we can't promise a particular result. If we send you a fix and it doesn't work on your PC, email us and we'll look at it.</li>
+  </ul>
+  <p>To ask about a refund, email <a href="mailto:oldwolfdev@gmail.com">oldwolfdev@gmail.com</a> and include your reference code (it looks like DMC-XXXX) or the email you paid with.</p>
+
+  <h2>7. Who we share data with</h2>
+  <p>We don't sell your information and we don't share it for advertising. It passes through the companies that run the site: Cloudflare (hosting, analytics and AI), Web3Forms (the contact and review form) and Stripe (payments). We may also disclose information if the law requires it. Our Discord server is run on Discord, which has its own privacy policy, and anything you post there is visible to other members.</p>
+
+  <h2>8. Your choices</h2>
+  <p>You can ask us what we hold about you, ask us to correct it, or ask us to delete it by emailing <a href="mailto:oldwolfdev@gmail.com">oldwolfdev@gmail.com</a> from the address you used. We'll answer within a reasonable time. Stripe may need to keep payment records longer than we do for its own legal reasons.</p>
+
+  <h2>9. Children</h2>
+  <p>This site is for general audiences, but it isn't aimed at children under 13, and we don't knowingly collect their information. If you think a child has sent us personal details, email us and we'll delete them.</p>
+
+  <h2>10. Changes</h2>
+  <p>We may update this page as the site changes. The date at the top shows the last update.</p>
+
+  <h2>11. Contact</h2>
+  <p>Questions about privacy or refunds? Email <a href="mailto:oldwolfdev@gmail.com">oldwolfdev@gmail.com</a>.</p>
+</article>`
+}));
+
 // SEO files
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${["/", "/fixes/", "/disclaimer/", ...fixes.map(f => `/fix/${f.slug}/`)].map(u => `  <url><loc>${cfg.url}${u}</loc></url>`).join("\n")}
+${["/", "/fixes/", "/disclaimer/", "/privacy/", ...fixes.map(f => `/fix/${f.slug}/`)].map(u => `  <url><loc>${cfg.url}${u}</loc></url>`).join("\n")}
 </urlset>`);
 write("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${cfg.url}/sitemap.xml\n`);
 
