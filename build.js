@@ -58,7 +58,6 @@ function layout({ title, description, canonical, body, jsonld = "", depth = 0 })
 <meta name="theme-color" content="#0d1117">
 <link rel="icon" href="${up}favicon.ico" sizes="any">
 <link rel="icon" href="${up}icon-192.png" type="image/png" sizes="192x192">
-<link rel="icon" href="${up}icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${up}apple-touch-icon.png">
 <link rel="stylesheet" href="${up}styles.css?v=${VER}">
 <link rel="stylesheet" href="${up}extra.css?v=${VER}">
@@ -67,7 +66,7 @@ ${jsonld}
 </head>
 <body>
 <header class="site-header">
-  <a class="logo" href="${up}" aria-label="${esc(cfg.name)} home"><img src="${up}icon.svg" alt="" width="38" height="38"><span class="logo-word">Decode<span>My</span>Crash</span></a>
+  <a class="logo" href="${up}" aria-label="${esc(cfg.name)} home"><img src="${up}logo-mark.png" alt="" width="38" height="38"><span class="logo-word">Decode<span>My</span>Crash</span></a>
   <nav><a href="${up}fixes/">All fixes</a>${cfg.discordUrl ? `<a href="${esc(cfg.discordUrl)}" target="_blank" rel="noopener">Discord</a>` : ""}<a href="${up}#get-review" class="nav-cta">Get help</a></nav>
 </header>
 <main>${body}</main>
@@ -121,7 +120,7 @@ function write(rel, content) {
 // ---------- build ----------
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
-for (const f of ["styles.css", "extra.css", "design.css", "app.js", "codes.json", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "og-image.png", "oldwolf-crest.png"]) {
+for (const f of ["styles.css", "extra.css", "design.css", "app.js", "codes.json", "logo.svg", "icon.svg", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "logo-mark.png", "og-image.png", "oldwolf-crest.png"]) {
   fs.copyFileSync(path.join(ROOT, "src", f), path.join(OUT, f));
 }
 
