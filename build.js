@@ -73,7 +73,7 @@ ${jsonld}
 <main>${body}</main>
 <footer class="site-footer">
   <div class="maker"><img src="${up}oldwolf-crest.png" alt="The Old Wolf crest" width="48" height="48" loading="lazy"><p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}</p></div>
-  <p class="fine">Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested; written fixes are. Some links are affiliate links; they cost you nothing extra. As an Amazon Associate, I earn from qualifying purchases.</p>
+  <p class="fine"><a href="${up}disclaimer/">Disclaimer and terms of use</a>. Use these fixes at your own risk. Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested. Fixes marked "Standard fix" follow published steps and were not reproduced on our own PC. Some links are affiliate links; they cost you nothing extra. As an Amazon Associate, I earn from qualifying purchases.</p>
 </footer>
 </body>
 </html>`;
@@ -232,7 +232,9 @@ for (const f of fixes) {
   <p class="lede">${esc(f.summary)}</p>
   ${f.cause ? `<h2>Why it happens</h2><p>${esc(f.cause)}</p>` : ""}
   <h2>How to fix it</h2>
+  ${f.basis === "standard" ? `<p class="note"><strong>Standard fix.</strong> These are the commonly published steps for this problem, checked against the sources listed on this page. We haven't reproduced this exact error on our own PC.</p>` : ""}
   <ol class="steps">${f.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
+  <p class="note risk">Back up anything important before you start. You follow these steps at your own risk. <a href="../../disclaimer/">Read the disclaimer</a>.</p>
   ${Array.isArray(f.links) && f.links.length ? `<h2>Tools and downloads</h2><ul class="tool-links">${f.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.text)}</a>${l.note ? `<span>${esc(l.note)}</span>` : ""}</li>`).join("")}</ul>` : ""}
   ${f.ifStillBroken ? `<h2>Still broken?</h2><p>${esc(f.ifStillBroken)}</p>` : ""}
   ${f.affiliate ? `<aside class="affiliate"><p>${esc(f.affiliate.text)}</p><a href="${esc(f.affiliate.url)}" target="_blank" rel="sponsored noopener">See options on Amazon →</a><p class="aff-note">Affiliate link: I may earn a small commission at no extra cost to you.</p></aside>` : ""}
@@ -242,10 +244,61 @@ ${reviewCard("", 2)}`
   }));
 }
 
+write("disclaimer/index.html", layout({
+  title: `Disclaimer and terms of use | ${cfg.name}`,
+  description: "Terms of use and disclaimer for DecodeMyCrash: how to use the fixes safely, and what we can and can't promise.",
+  canonical: `${cfg.url}/disclaimer/`,
+  depth: 1,
+  body: `
+<article class="fix">
+  <h1>Disclaimer and terms of use</h1>
+  <p class="lede">The short version: the fixes here are general help, not a guarantee. Back up your files and use them at your own risk.</p>
+  <p><em>Last updated: November 2026.</em> This site, ${esc(cfg.name)}, is run by Doug of Old Wolf Development ("OldWolfDev", "we", "us"). By using the site you agree to these terms. If you don't agree, please don't use the site.</p>
+
+  <h2>1. General information only</h2>
+  <p>The fixes, explanations and error decoder on this site are published in good faith for general information. They are not professional IT, engineering, legal or financial advice, and they are not a substitute for a qualified technician who can look at your PC in person. Every computer, game version, mod setup and server is different, so a step that works for one person may not work for you.</p>
+
+  <h2>2. You use the fixes at your own risk</h2>
+  <p>Many fixes ask you to change settings, run system commands, install or remove drivers, edit game or server files, change BIOS settings or reinstall software. Doing these things carries risk, including loss of data, loss of game progress or saves, loss of mods or server configuration, account problems, voided warranties, and a PC or game that won't start. You are responsible for deciding whether a step is right for you.</p>
+  <p>Before you start, back up anything you can't afford to lose. Stop if a step doesn't match what you see on screen. If you aren't comfortable with a step, ask a qualified technician. Do not follow a fix if you believe it could damage your hardware or breach your game's, server's or platform's rules.</p>
+
+  <h2>3. "Standard fix" labels and tested fixes</h2>
+  <p>Fixes marked "Standard fix" follow commonly published steps and the sources listed on the page. We have not reproduced that exact error on our own PC. Other fixes were tested on a real PC, but that doesn't mean they will work on yours. We don't promise that any fix will resolve your problem.</p>
+
+  <h2>4. AI suggestions</h2>
+  <p>The AI helper produces automated suggestions. They have not been tested or reviewed by a person, and they can be wrong. Treat them as ideas to check, not instructions to follow blindly.</p>
+
+  <h2>5. No warranty</h2>
+  <p>To the fullest extent permitted by law, this site and everything on it are provided "as is" and "as available", without warranties of any kind, express or implied, including any warranty of accuracy, completeness, reliability, availability, fitness for a particular purpose or non-infringement. Software, games and websites change often, and information here may be out of date.</p>
+
+  <h2>6. Limit of liability</h2>
+  <p>To the fullest extent permitted by law, OldWolfDev and its owner, contributors and affiliates will not be liable for any loss or damage of any kind that comes from using, or being unable to use, this site or its fixes. That includes direct, indirect, incidental, consequential or special loss, loss of data, saves, mods, profits or account access, and damage to any computer, console, game or server, even if we were told it was possible. Where the law doesn't allow a particular exclusion, our liability is limited to the smallest amount the law allows, and for paid reviews it will not exceed the amount you paid for that review. Nothing in these terms limits any right you have that the law doesn't allow to be limited.</p>
+
+  <h2>7. Paid reviews</h2>
+  <p>A paid review is a personal look at the details you send. We will answer by email within the time shown on the site and, as stated on the site, refund you if we can't find a fix. A review is the same kind of general help as the rest of the site. It does not guarantee a result and the limits above still apply. Payments are handled by Stripe, and we don't see or store your card details.</p>
+
+  <h2>8. What you send us</h2>
+  <p>The paste-box decoder compares your error text to our fixes in your browser. If you use AI suggestions, the text you pasted is sent to our AI service to produce a reply. If you request a review, what you enter is sent to us through a form service. Please don't paste passwords, payment details, personal data or anything private into the site. We use Cloudflare's analytics to count visits. We use what you send only to answer your request and to improve the site, and we don't sell it. By sending us information you confirm you're allowed to share it.</p>
+
+  <h2>9. Other companies, links and affiliate disclosure</h2>
+  <p>${esc(cfg.name)} is an independent site. We are not affiliated with, endorsed by or sponsored by Microsoft, Rockstar Games, Take-Two Interactive, Cfx.re (FiveM and RedM), Valve, Riot Games, Epic Games, NVIDIA, AMD, or any other company named here. All product names, game titles and trademarks belong to their owners and are used only to say what a fix is about.</p>
+  <p>Links to other sites and downloads are for convenience. We don't control them and can't promise they are accurate or safe, so use your own judgment and download software only from the official source. Some links are affiliate links. If you buy through one we may earn a commission at no extra cost to you. As an Amazon Associate we earn from qualifying purchases.</p>
+
+  <h2>10. Our content</h2>
+  <p>The text, design and code on this site belong to OldWolfDev unless stated otherwise. You may link to us and share short excerpts with a link back. Please don't copy whole pages or the fix library without asking.</p>
+
+  <h2>11. Changes</h2>
+  <p>We may change the site, the fixes and these terms at any time. The date at the top shows the last update, and continuing to use the site means you accept the current version.</p>
+
+  <h2>12. Contact</h2>
+  <p>Questions about these terms? Email <a href="mailto:oldwolfdev@gmail.com">oldwolfdev@gmail.com</a>.</p>
+</article>`
+}));
+
 // SEO files
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${["/", "/fixes/", ...fixes.map(f => `/fix/${f.slug}/`)].map(u => `  <url><loc>${cfg.url}${u}</loc></url>`).join("\n")}
+${["/", "/fixes/", "/disclaimer/", ...fixes.map(f => `/fix/${f.slug}/`)].map(u => `  <url><loc>${cfg.url}${u}</loc></url>`).join("\n")}
 </urlset>`);
 write("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${cfg.url}/sitemap.xml\n`);
 
