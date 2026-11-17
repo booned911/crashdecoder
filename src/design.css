@@ -147,3 +147,17 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; }
 .note { margin: 14px 0; padding: 10px 14px; border-left: 3px solid #35b8ff; background: rgba(53,184,255,.08); border-radius: 0 6px 6px 0; font-size: .95rem; }
 .note.risk { border-left-color: #f0a830; background: rgba(240,168,48,.08); font-size: .9rem; }
 .site-footer .fine a { color: inherit; text-decoration: underline; }
+
+/* Old Wolf crest: slow amber glow that swells and a brief bright shimmer */
+.maker img {
+  width: 56px; height: 56px;
+  animation: wolf-glow 4.5s ease-in-out infinite;
+}
+@keyframes wolf-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(240,168,48,.35)) drop-shadow(0 0 10px rgba(240,168,48,.15)) brightness(1); }
+  45%      { filter: drop-shadow(0 0 8px rgba(255,196,84,.85)) drop-shadow(0 0 22px rgba(240,168,48,.5)) brightness(1.08); }
+  55%      { filter: drop-shadow(0 0 10px rgba(255,226,150,1)) drop-shadow(0 0 26px rgba(240,168,48,.65)) brightness(1.2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .maker img { animation: none; filter: drop-shadow(0 0 8px rgba(240,168,48,.5)); }
+}
