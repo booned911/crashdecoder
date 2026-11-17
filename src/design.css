@@ -143,3 +143,7 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; }
   .site-header .nav-cta { padding: 7px 12px; }
   .logo-word { font-size: 1.2rem; }
 }
+
+.note { margin: 14px 0; padding: 10px 14px; border-left: 3px solid #35b8ff; background: rgba(53,184,255,.08); border-radius: 0 6px 6px 0; font-size: .95rem; }
+.note.risk { border-left-color: #f0a830; background: rgba(240,168,48,.08); font-size: .9rem; }
+.site-footer .fine a { color: inherit; text-decoration: underline; }
