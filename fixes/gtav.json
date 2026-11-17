@@ -19,6 +19,11 @@
     ],
     "ifStillBroken": "If it only crashes after a few minutes of play rather than at launch, run a GPU stress test to rule out the card or its power cables. Still stuck? Send your error to OldWolfDev for a personal review.",
     "related": ["gtav-crash-on-startup-no-error", "gtav-err-mem-embeddedalloc-alloc"],
+    "links": [
+      {"text": "Display Driver Uninstaller (DDU)", "url": "https://www.guru3d.com/download/display-driver-uninstaller-download/", "note": "Free. Removes the old graphics driver completely. Run it in Safe Mode."},
+      {"text": "NVIDIA drivers", "url": "https://www.nvidia.com/en-us/drivers/", "note": "Official GeForce driver downloads."},
+      {"text": "AMD drivers", "url": "https://www.amd.com/en/support/download/drivers.html", "note": "Official Radeon driver downloads."}
+    ],
     "affiliate": null
   },
   {
@@ -40,6 +45,11 @@
     ],
     "ifStillBroken": "Run 'sfc /scannow' in an admin Command Prompt to repair Windows system files. If you've never modded and it still happens, send your error to OldWolfDev for a personal review.",
     "related": ["gtav-err-gfx-d3d-init", "gtav-crash-on-startup-no-error"],
+    "links": [
+      {"text": "Display Driver Uninstaller (DDU)", "url": "https://www.guru3d.com/download/display-driver-uninstaller-download/", "note": "Free. Removes the old graphics driver completely. Run it in Safe Mode."},
+      {"text": "NVIDIA drivers", "url": "https://www.nvidia.com/en-us/drivers/", "note": "Official GeForce driver downloads."},
+      {"text": "AMD drivers", "url": "https://www.amd.com/en/support/download/drivers.html", "note": "Official Radeon driver downloads."}
+    ],
     "affiliate": null
   },
   {
@@ -61,6 +71,9 @@
     ],
     "ifStillBroken": "Make sure Windows is fully updated, since older Windows builds can stop the launcher from starting. If it still fails, contact Rockstar Support with your launcher log, or send your error to OldWolfDev for a personal review.",
     "related": ["gtav-err-no-launcher", "redm-stuck-loading-after-launch"],
+    "links": [
+      {"text": "Rockstar Games Launcher download", "url": "https://socialclub.rockstargames.com/rockstar-games-launcher", "note": "Official download."}
+    ],
     "affiliate": null
   },
   {
@@ -102,6 +115,11 @@
     ],
     "ifStillBroken": "Open the launcher log (Documents\\Rockstar Games\\Launcher\\launcher.log) and paste it into the decoder on the home page, or send it to OldWolfDev for a personal review.",
     "related": ["gtav-err-gfx-d3d-init", "gtav-err-no-launcher", "rockstar-games-launcher-failed-to-initialize"],
+    "links": [
+      {"text": "Display Driver Uninstaller (DDU)", "url": "https://www.guru3d.com/download/display-driver-uninstaller-download/", "note": "Free. Removes the old graphics driver completely. Run it in Safe Mode."},
+      {"text": "NVIDIA drivers", "url": "https://www.nvidia.com/en-us/drivers/", "note": "Official GeForce driver downloads."},
+      {"text": "AMD drivers", "url": "https://www.amd.com/en/support/download/drivers.html", "note": "Official Radeon driver downloads."}
+    ],
     "affiliate": null
   }
 ]

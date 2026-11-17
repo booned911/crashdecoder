@@ -18,6 +18,11 @@
     ],
     "ifStillBroken": "Do a clean driver install with DDU in Safe Mode. If it still crashes on both APIs, run a GPU stress test to rule out hardware, or send your error to OldWolfDev for a personal review.",
     "related": ["rdr2-err-gfx-d3d-deferred-mem", "rdr2-vulkan-failed-to-allocate-memory"],
+    "links": [
+      {"text": "Display Driver Uninstaller (DDU)", "url": "https://www.guru3d.com/download/display-driver-uninstaller-download/", "note": "Free. Removes the old graphics driver completely. Run it in Safe Mode."},
+      {"text": "NVIDIA drivers", "url": "https://www.nvidia.com/en-us/drivers/", "note": "Official GeForce driver downloads."},
+      {"text": "AMD drivers", "url": "https://www.amd.com/en/support/download/drivers.html", "note": "Official Radeon driver downloads."}
+    ],
     "affiliate": null
   },
   {
@@ -38,6 +43,10 @@
     ],
     "ifStillBroken": "If the launcher itself won't stay open, do a clean reinstall of the Rockstar Games Launcher (see the related fix below).",
     "related": ["rockstar-games-launcher-failed-to-initialize", "rdr2-unable-to-launch-verify-game-data"],
+    "links": [
+      {"text": "NVIDIA drivers", "url": "https://www.nvidia.com/en-us/drivers/", "note": "Official GeForce driver downloads."},
+      {"text": "AMD drivers", "url": "https://www.amd.com/en/support/download/drivers.html", "note": "Official Radeon driver downloads."}
+    ],
     "affiliate": null
   },
   {

@@ -17,6 +17,11 @@
     ],
     "ifStillBroken": "Verify game files in your launcher. If it still fails on both DX12 and Vulkan, see the Vulkan memory error fix below.",
     "related": ["rdr2-vulkan-failed-to-allocate-memory", "redm-stuck-loading-after-launch"],
+    "links": [
+      {"text": "Display Driver Uninstaller (DDU)", "url": "https://www.guru3d.com/download/display-driver-uninstaller-download/", "note": "Free. Removes the old graphics driver completely. Run it in Safe Mode."},
+      {"text": "NVIDIA drivers", "url": "https://www.nvidia.com/en-us/drivers/", "note": "Official GeForce driver downloads."},
+      {"text": "AMD drivers", "url": "https://www.amd.com/en/support/download/drivers.html", "note": "Official Radeon driver downloads."}
+    ],
     "affiliate": null
   },
   {
@@ -37,6 +42,9 @@
     ],
     "ifStillBroken": "Try DirectX 12 instead. If both APIs fail, run a GPU memory stress test (e.g. OCCT VRAM test) to rule out hardware.",
     "related": ["rdr2-err-gfx-d3d-deferred-mem"],
+    "links": [
+      {"text": "OCCT", "url": "https://www.ocbase.com/download", "note": "Free edition. Stress-tests your GPU, CPU, RAM and power supply."}
+    ],
     "affiliate": null
   },
   {
