@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "wifi-connected-no-internet",
+    "title": "Wi-Fi says Connected but there's no internet",
+    "games": [
+      "Windows"
+    ],
+    "errorCodes": [],
+    "patterns": [
+      "no internet, secured",
+      "connected, no internet",
+      "dns_probe_finished_no_internet",
+      "err_internet_disconnected"
+    ],
+    "side": "client",
+    "summary": "Your PC joined the Wi-Fi network but websites and apps won't load. Resetting Windows' network settings fixes most cases.",
+    "cause": "Either the router or modem has stalled, or Windows' network settings (its address, DNS cache or network stack) got stuck.",
+    "steps": [
+      "Check another device on the same Wi-Fi. If it has no internet either, unplug your modem and router for 30 seconds, plug them back in, and wait two minutes.",
+      "Restart your PC. Turn off any VPN while testing.",
+      "Run the built-in fixer: Settings > System > Troubleshoot > Other troubleshooters > Internet Connections > Run.",
+      "Open Terminal (Admin) and run these one at a time: ipconfig /release, ipconfig /renew, ipconfig /flushdns, netsh winsock reset, netsh int ip reset. Restart afterward.",
+      "Reinstall the adapter driver: Device Manager > Network adapters > right-click your Wi-Fi adapter > Uninstall device, then restart. Windows reinstalls it."
+    ],
+    "ifStillBroken": "As a last step, use Settings > Network & internet > Advanced network settings > Network reset. It removes saved Wi-Fi networks, so keep your Wi-Fi password handy.",
+    "related": [],
+    "affiliate": null,
+    "links": [
+      {
+        "text": "Microsoft: Fix Wi-Fi connection issues in Windows",
+        "url": "https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues",
+        "note": "Source for the command steps and Network reset. Microsoft says Network reset should be the last step."
+      }
+    ],
+    "basis": "standard"
+  }
+]

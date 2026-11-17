@@ -1,0 +1,29 @@
+[
+  {
+    "slug": "steam-disk-write-error",
+    "title": "Steam: \"An error occurred while updating (disk write error)\"",
+    "games": [
+      "Any game"
+    ],
+    "errorCodes": [],
+    "patterns": [
+      "disk write error",
+      "an error occurred while updating"
+    ],
+    "side": "client",
+    "summary": "Steam can't save game files to your drive. A stuck file, a full or unhealthy drive, or antivirus is usually the cause.",
+    "cause": "Steam writes the update to your drive and Windows said no. A damaged partial file, low free space, antivirus locking the folder, or a failing drive can all cause that.",
+    "steps": [
+      "Restart Steam, then try the update again.",
+      "Check free space on the drive where the game is installed. Free up room if it is nearly full.",
+      "Verify the game's files: right-click the game in Steam > Properties > Installed Files > Verify integrity of game files.",
+      "Clear the download cache: Steam > Settings > Downloads > Clear Download Cache. You'll need to sign in again.",
+      "In File Explorer, open steamapps\\common\\ and the game's folder. Delete any files that show 0 KB, then verify the files again.",
+      "Add your Steam folder to your antivirus exclusions, and right-click Steam > Run as administrator to test."
+    ],
+    "ifStillBroken": "Check the drive's health with its maker's tool or CrystalDiskInfo. A failing drive causes repeat write errors, so back up your files first.",
+    "related": [],
+    "affiliate": null,
+    "basis": "standard"
+  }
+]

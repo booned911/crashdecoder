@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "microsoft-store-wont-open-or-download",
+    "title": "Microsoft Store won't open, or downloads and installs fail",
+    "games": [
+      "Windows"
+    ],
+    "errorCodes": [
+      "0x80131500"
+    ],
+    "patterns": [
+      "0x80131500",
+      "0x80073cf9",
+      "microsoft store won't",
+      "microsoft store not"
+    ],
+    "side": "client",
+    "summary": "The Store closes right away, shows a blank page, or stalls on downloads. Resetting the Store fixes most cases.",
+    "cause": "The Store's cache or app files are damaged, or the PC's date and time are wrong.",
+    "steps": [
+      "Press Win+R, type wsreset.exe and press Enter. A blank window opens, then the Store launches by itself.",
+      "Check that your date and time are correct: Settings > Time & language > Date & time > turn on 'Set time automatically'.",
+      "Repair then reset the app: Settings > Apps > Installed apps > the three dots next to Microsoft Store > Advanced options > Repair. If that doesn't help, click Reset. Reset is stronger and clears the Store's saved settings and sign-in.",
+      "Install pending updates: Settings > Windows Update > Check for updates."
+    ],
+    "ifStillBroken": "Open Terminal (Admin): right-click Start and choose Terminal (Admin). Type DISM /Online /Cleanup-Image /RestoreHealth and press Enter. When it finishes, type sfc /scannow and press Enter. Restart when both are done.",
+    "related": [],
+    "affiliate": null,
+    "links": [
+      {
+        "text": "Microsoft: Microsoft Store won't launch, reset the cache",
+        "url": "https://support.microsoft.com/en-au/windows/microsoft-store-doesn-t-launch-reset-the-cache-df2aea11-6338-418a-9515-434c5e910adb",
+        "note": "Source for the wsreset.exe step."
+      }
+    ],
+    "basis": "standard"
+  }
+]

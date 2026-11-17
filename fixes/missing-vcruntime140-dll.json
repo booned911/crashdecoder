@@ -1,0 +1,40 @@
+[
+  {
+    "slug": "missing-vcruntime140-dll",
+    "title": "Error: \"VCRUNTIME140.dll was not found\" or \"MSVCP140.dll is missing\"",
+    "games": [
+      "Windows",
+      "Any game"
+    ],
+    "errorCodes": [],
+    "patterns": [
+      "vcruntime140.dll",
+      "vcruntime140_1.dll",
+      "msvcp140.dll",
+      "msvcp140_1.dll"
+    ],
+    "side": "client",
+    "summary": "An app or game needs Microsoft's Visual C++ runtime files, and they're missing or damaged. Installing Microsoft's runtime fixes it.",
+    "cause": "Many apps and games rely on shared Microsoft runtime files (the Visual C++ Redistributable). If they were never installed, or an update or cleanup tool removed them, the app can't start.",
+    "steps": [
+      "Open the Microsoft page 'Latest supported Visual C++ Redistributable downloads' (link below).",
+      "Download and install both the X64 and the X86 versions. Many games need the 32-bit (X86) one even on 64-bit Windows.",
+      "If the installer offers Repair, choose Repair.",
+      "Restart your PC and open the app or game again.",
+      "Do not download the single DLL file from a 'DLL download' website. Those files are often outdated or unsafe."
+    ],
+    "ifStillBroken": "Uninstall and reinstall the app or game. If it still fails, Open Terminal (Admin): right-click Start and choose Terminal (Admin). Type DISM /Online /Cleanup-Image /RestoreHealth and press Enter. When it finishes, type sfc /scannow and press Enter. Restart when both are done.",
+    "related": [
+      "high-dpc-latency-stutter"
+    ],
+    "links": [
+      {
+        "text": "Latest supported Visual C++ Redistributable downloads",
+        "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+        "note": "Official Microsoft page."
+      }
+    ],
+    "affiliate": null,
+    "basis": "standard"
+  }
+]

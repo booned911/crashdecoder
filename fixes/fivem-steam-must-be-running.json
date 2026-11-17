@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "fivem-steam-must-be-running",
+    "title": "FiveM: \"Steam must be running\" or \"Unable to find SteamID\"",
+    "games": [
+      "FiveM"
+    ],
+    "errorCodes": [],
+    "patterns": [
+      "steam must be running",
+      "unable to find steamid",
+      "steam is required to play"
+    ],
+    "side": "client",
+    "summary": "The server wants to see your Steam account and FiveM can't find it. Starting Steam first, signed in, fixes it most of the time.",
+    "cause": "Some FiveM servers check your Steam account before letting you in. If Steam isn't open, isn't signed in, or FiveM started before it, the check fails.",
+    "steps": [
+      "Close FiveM and Steam completely. Right-click the Steam icon in the system tray (bottom right) and choose Exit.",
+      "Open Steam and sign in. Make sure it isn't in Offline Mode (Steam menu at the top left).",
+      "Wait until Steam is fully loaded, then open FiveM and join the server again.",
+      "Open Steam and FiveM the same way: if you run one as administrator, run the other as administrator too.",
+      "If a server keeps failing, try another. Not every server requires Steam, and some servers set theirs up wrong."
+    ],
+    "ifStillBroken": "If other Steam-checking servers work and only one fails, tell that server's staff. Their Steam setup may be the problem.",
+    "related": [
+      "fivem-connection-rejected-by-server",
+      "fivem-crash-on-joining-server"
+    ],
+    "affiliate": null,
+    "basis": "standard"
+  }
+]

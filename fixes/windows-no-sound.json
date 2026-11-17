@@ -1,0 +1,36 @@
+[
+  {
+    "slug": "windows-no-sound",
+    "title": "No sound from speakers or headphones in Windows",
+    "games": [
+      "Windows",
+      "Any game"
+    ],
+    "errorCodes": [],
+    "patterns": [
+      "no audio output device is installed",
+      "audio services not responding"
+    ],
+    "side": "client",
+    "summary": "Windows plays audio but you hear nothing. Usually the wrong output device is selected, or the audio service or driver needs a reset.",
+    "cause": "Windows can send sound to the wrong device (for example a monitor or an unplugged headset). A stalled audio service or damaged driver can also stop all sound.",
+    "steps": [
+      "Click the speaker icon in the taskbar and make sure volume isn't muted. Then click the arrow next to the volume slider and pick the correct speakers or headphones.",
+      "Run the built-in fixer: Settings > System > Sound > Troubleshoot common sound problems.",
+      "Turn off audio enhancements: Settings > System > Sound, click your device, and set Enhance audio to Off. Test again.",
+      "Check that the device is enabled: Sound settings > More sound settings > Playback, right-click your device and choose Enable if it shows as disabled.",
+      "Reinstall the driver: Device Manager > Sound, video and game controllers > right-click your audio device > Uninstall device, then restart. If that fails, install the audio driver from your motherboard or laptop maker."
+    ],
+    "ifStillBroken": "Try a different port or device, such as a USB headset, to see if the problem is the speakers or Windows.",
+    "related": [],
+    "affiliate": null,
+    "links": [
+      {
+        "text": "Microsoft: Fix sound or audio problems in Windows",
+        "url": "https://support.microsoft.com/help/4026994",
+        "note": "Source for these steps."
+      }
+    ],
+    "basis": "standard"
+  }
+]

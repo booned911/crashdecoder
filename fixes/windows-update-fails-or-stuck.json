@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "windows-update-fails-or-stuck",
+    "title": "Windows Update fails or gets stuck (0x80070002, 0x800f0922, 0x80073712)",
+    "games": [
+      "Windows"
+    ],
+    "errorCodes": [
+      "0x80070002",
+      "0x800f0922",
+      "0x80073712"
+    ],
+    "patterns": [
+      "0x80070002",
+      "0x800f0922",
+      "0x80073712",
+      "windows update failed",
+      "couldn't complete the updates"
+    ],
+    "side": "client",
+    "summary": "An update keeps failing, restarts and rolls back, or sits at the same percentage for hours. Repairing Windows' update files fixes most cases.",
+    "cause": "The update cache or Windows' own system files are damaged, or there isn't enough free space to install.",
+    "steps": [
+      "Free up space. Aim for at least 10 GB free on your C: drive, and unplug USB drives and other extras you don't need.",
+      "Run the built-in fixer: Settings > System > Troubleshoot > Other troubleshooters > Windows Update > Run. Restart afterward.",
+      "Open Terminal (Admin): right-click Start and choose Terminal (Admin). Type DISM /Online /Cleanup-Image /RestoreHealth and press Enter. When it finishes, type sfc /scannow and press Enter. Restart when both are done.",
+      "Reset the update cache. Open Terminal (Admin) and run these one at a time, pressing Enter after each: net stop wuauserv, net stop cryptSvc, net stop bits, net stop msiserver, ren C:\\Windows\\SoftwareDistribution SoftwareDistribution.old, ren C:\\Windows\\System32\\catroot2 catroot2.old, net start wuauserv, net start cryptSvc, net start bits, net start msiserver. If Windows says a .old folder already exists, delete that old folder first (or end the name with .old2) and run the line again.",
+      "Restart, then go to Settings > Windows Update and click Check for updates."
+    ],
+    "ifStillBroken": "Look up the failing update's KB number in Settings > Windows Update > Update history and install it by hand from the Microsoft Update Catalog (link below). Or send your error to OldWolfDev for a personal review.",
+    "related": [],
+    "links": [
+      {
+        "text": "Microsoft Update Catalog",
+        "url": "https://www.catalog.update.microsoft.com/",
+        "note": "Search the KB number to download an update manually."
+      },
+      {
+        "text": "Microsoft: Windows Update resources and manual reset",
+        "url": "https://learn.microsoft.com/en-us/windows/deployment/update/windows-update-resources",
+        "note": "Source for the update-reset steps. Microsoft says to try the troubleshooter first."
+      }
+    ],
+    "affiliate": null,
+    "basis": "standard"
+  }
+]

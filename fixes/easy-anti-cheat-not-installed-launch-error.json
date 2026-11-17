@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "easy-anti-cheat-not-installed-launch-error",
+    "title": "Easy Anti-Cheat launch error: \"Easy Anti-Cheat is not installed\" or the service failed to start",
+    "games": [
+      "Any game"
+    ],
+    "errorCodes": [],
+    "patterns": [
+      "easy anti-cheat is not installed",
+      "easyanticheat",
+      "easy anti-cheat launch error",
+      "start_protected_game"
+    ],
+    "side": "client",
+    "summary": "A game with Easy Anti-Cheat won't start. Repairing Easy Anti-Cheat from the game's folder fixes most cases.",
+    "cause": "Easy Anti-Cheat runs as a Windows service. If its files are damaged or its service is disabled or blocked, the game refuses to launch.",
+    "steps": [
+      "Open the game's install folder, then the EasyAntiCheat folder. Right-click EasyAntiCheat_Setup.exe (or EasyAntiCheat_EOS_Setup.exe) and choose Run as administrator.",
+      "Pick the game from the list and click Repair Service. Click Finish and restart your PC.",
+      "If it still fails, run the same file again, click Uninstall, then run it once more and click Install Easy Anti-Cheat.",
+      "Press Win+R, type services.msc, find Easy Anti-Cheat and make sure it is not set to Disabled.",
+      "Add the game's folder to your antivirus exclusions, then verify the game files in Steam or the Epic Games Launcher."
+    ],
+    "ifStillBroken": "Run the game's launcher as administrator. If it still fails, send the exact error text to OldWolfDev for a personal review.",
+    "related": [],
+    "affiliate": null,
+    "basis": "standard"
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "slug": "valorant-van-9003-secure-boot-tpm",
+    "title": "VALORANT: VAN 9003 / VAN 9001 (Secure Boot or TPM 2.0 required)",
+    "games": [
+      "Windows",
+      "Any game"
+    ],
+    "errorCodes": [
+      "VAN 9003",
+      "VAN 9001"
+    ],
+    "patterns": [
+      "van 9003",
+      "van9003",
+      "van 9001",
+      "van9001"
+    ],
+    "side": "client",
+    "summary": "VALORANT's anti-cheat won't start because Secure Boot or TPM 2.0 is off. Both are turned on in your BIOS. Riot's guide for this error is written for Windows 11.",
+    "cause": "The game's anti-cheat checks that Windows started with Secure Boot and that TPM 2.0 is on. Many motherboards ship with one or both turned off.",
+    "steps": [
+      "Check your status: press Win+R, type msinfo32 and press Enter. Look at 'BIOS Mode' (it should say UEFI) and 'Secure Boot State' (it should say On).",
+      "Check TPM: press Win+R, type tpm.msc and press Enter. It should say 'The TPM is ready for use' with Specification Version 2.0.",
+      "If either is off, restart and open your BIOS (usually by tapping Delete or F2 at startup). Look for Secure Boot and for TPM, which is often named fTPM (AMD) or PTT (Intel).",
+      "Turn those on. Save and exit, then check msinfo32 again. Follow your motherboard maker's guide for the exact menu names (the links below have several).",
+      "If BIOS Mode says Legacy, your Windows install uses an older disk layout. Don't change this without a full backup. Ask for help first."
+    ],
+    "ifStillBroken": "Every motherboard's BIOS menu looks different. Search for your motherboard model plus 'enable Secure Boot' or send the model to OldWolfDev for a personal review.",
+    "related": [],
+    "affiliate": null,
+    "links": [
+      {
+        "text": "Riot Games: Troubleshooting VAN 9001, 9003 or 9090 on Windows 11",
+        "url": "https://support-valorant.riotgames.com/hc/articles/10088435639571",
+        "note": "Riot's official guide. It lists motherboard maker guides for Secure Boot and TPM."
+      },
+      {
+        "text": "Microsoft: Windows 11 and Secure Boot",
+        "url": "https://support.microsoft.com/en-us/windows/windows-11-and-secure-boot-a8ff1202-c0d9-42f5-940f-843abef64fad",
+        "note": "Microsoft's overview."
+      }
+    ],
+    "basis": "standard"
+  }
+]
