@@ -1,7 +1,7 @@
 [
   {
     "slug": "fivem-stuck-loading-add-on-data-files",
-    "title": "FiveM stuck on \"Loading add-on data files\"",
+    "title": "FiveM stuck on \"Loading add-on data files\" (how to fix it)",
     "games": ["FiveM"],
     "errorCodes": [],
     "patterns": ["loading add-on data files", "add-on data files", "loading addon data"],
@@ -16,7 +16,7 @@
       "Relaunch and reconnect. The first load will be slower while the cache rebuilds."
     ],
     "ifStillBroken": "Try a different server. If only one server hangs, the problem is likely on their end — report it to their staff.",
-    "related": ["fivem-window-watchdog-antivirus-hang", "fivem-curl-error-18"],
+    "related": ["fivem-window-watchdog-antivirus-hang", "fivem-curl-error-18", "fivem-couldnt-load-resource"],
     "affiliate": null
   },
   {

@@ -23,7 +23,7 @@
   },
   {
     "slug": "gtav-err-mem-embeddedalloc-alloc",
-    "title": "GTA V crash: ERR_MEM_EMBEDDEDALLOC_ALLOC \"Out of game memory\"",
+    "title": "GTA 5 \"out of memory\" crash: ERR_MEM_EMBEDDEDALLOC_ALLOC (how to fix it)",
     "games": ["GTA V"],
     "errorCodes": ["ERR_MEM_EMBEDDEDALLOC_ALLOC"],
     "patterns": ["err_mem_embeddedalloc_alloc", "embeddedalloc", "out of game memory"],
