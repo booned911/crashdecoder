@@ -87,7 +87,7 @@
 
 /* ---- Old Wolf maker's mark in the footer ---- */
 .maker { display: flex; align-items: center; gap: 0.85rem; }
-.maker img { flex: 0 0 auto; width: 48px; height: 48px; filter: drop-shadow(0 0 6px rgba(240, 168, 48, 0.25)); }
+.maker img { flex: 0 0 auto; width: 48px; height: 48px; filter: drop-shadow(0 0 6px rgba(53, 184, 255, 0.3)); }
 .maker p { margin: 0; }
 
 /* ---- "Decode my crash" links: flash the paste box so the jump is obvious ---- */

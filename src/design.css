@@ -148,18 +148,18 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; }
 .note.risk { border-left-color: #f0a830; background: rgba(240,168,48,.08); font-size: .9rem; }
 .site-footer .fine a { color: inherit; text-decoration: underline; }
 
-/* Old Wolf crest: slow amber glow that swells and a brief bright shimmer */
+/* Old Wolf crest: slow blue glow that swells and a brief bright shimmer */
 .maker img {
   width: 56px; height: 56px;
   animation: wolf-glow 4.5s ease-in-out infinite;
 }
 @keyframes wolf-glow {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(240,168,48,.35)) drop-shadow(0 0 10px rgba(240,168,48,.15)) brightness(1); }
-  45%      { filter: drop-shadow(0 0 8px rgba(255,196,84,.85)) drop-shadow(0 0 22px rgba(240,168,48,.5)) brightness(1.08); }
-  55%      { filter: drop-shadow(0 0 10px rgba(255,226,150,1)) drop-shadow(0 0 26px rgba(240,168,48,.65)) brightness(1.2); }
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(53,184,255,.35)) drop-shadow(0 0 10px rgba(53,184,255,.15)) brightness(1); }
+  45%      { filter: drop-shadow(0 0 8px rgba(120,210,255,.85)) drop-shadow(0 0 22px rgba(53,184,255,.5)) brightness(1.08); }
+  55%      { filter: drop-shadow(0 0 10px rgba(190,235,255,1)) drop-shadow(0 0 26px rgba(53,184,255,.65)) brightness(1.2); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .maker img { animation: none; filter: drop-shadow(0 0 8px rgba(240,168,48,.5)); }
+  .maker img { animation: none; filter: drop-shadow(0 0 8px rgba(53,184,255,.5)); }
 }
 
 .discord-link { color: #7fd3ff; text-decoration: underline; white-space: nowrap; }
