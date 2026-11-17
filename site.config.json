@@ -1,11 +1,12 @@
-   {
-     "name": "DecodeMyCrash",
-     "tagline": "Paste your crash or error. Get a plain-English fix.",
-     "url": "https://decodemycrash.com",
-     "author": "Doug, Old Wolf Development",
-     "authorBlurb": "Built by Old Wolf Development. Former 911 dispatcher turned IT troubleshooter. Most fixes here were tested on a real PC. Fixes marked \"Standard fix\" follow published steps.",
-     "web3formsKey": "23e65752-4d3e-4c49-a716-e8a8f1027222",
-     "reviewUrl": "https://buy.stripe.com/00wdR8dv30k8h0DaM74Ja00",
-     "reviewPrice": "$10",
-     "reviewTime": "48 hours"
-   }
+{
+  "name": "DecodeMyCrash",
+  "tagline": "Paste your crash or error. Get a plain-English fix.",
+  "url": "https://decodemycrash.com",
+  "author": "Doug, Old Wolf Development",
+  "authorBlurb": "Built by Old Wolf Development. Former 911 dispatcher turned IT troubleshooter. Most fixes here were tested on a real PC. Fixes marked \"Standard fix\" follow published steps.",
+  "web3formsKey": "23e65752-4d3e-4c49-a716-e8a8f1027222",
+  "reviewUrl": "https://buy.stripe.com/00wdR8dv30k8h0DaM74Ja00",
+  "reviewPrice": "$10",
+  "reviewTime": "48 hours",
+  "discordUrl": "https://discord.gg/9v6nYGfEVz"
+}

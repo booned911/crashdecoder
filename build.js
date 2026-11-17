@@ -68,11 +68,11 @@ ${jsonld}
 <body>
 <header class="site-header">
   <a class="logo" href="${up}" aria-label="${esc(cfg.name)} home"><img src="${up}icon.svg" alt="" width="38" height="38"><span class="logo-word">Decode<span>My</span>Crash</span></a>
-  <nav><a href="${up}fixes/">All fixes</a><a href="${up}#get-review" class="nav-cta">Get help</a></nav>
+  <nav><a href="${up}fixes/">All fixes</a>${cfg.discordUrl ? `<a href="${esc(cfg.discordUrl)}" target="_blank" rel="noopener">Discord</a>` : ""}<a href="${up}#get-review" class="nav-cta">Get help</a></nav>
 </header>
 <main>${body}</main>
 <footer class="site-footer">
-  <div class="maker"><img src="${up}oldwolf-crest.png" alt="The Old Wolf crest" width="48" height="48" loading="lazy"><p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}</p></div>
+  <div class="maker"><img src="${up}oldwolf-crest.png" alt="The Old Wolf crest" width="48" height="48" loading="lazy"><p>${esc(cfg.name)} — ${esc(cfg.authorBlurb)}${cfg.discordUrl ? ` <a class="discord-link" href="${esc(cfg.discordUrl)}" target="_blank" rel="noopener">Join The Old Wolf Development Discord</a>` : ""}</p></div>
   <p class="fine"><a href="${up}disclaimer/">Disclaimer and terms of use</a>. Use these fixes at your own risk. Not affiliated with Microsoft, Rockstar Games, Take-Two, or Cfx.re. AI suggestions are automated and not tested. Fixes marked "Standard fix" follow published steps and were not reproduced on our own PC. Some links are affiliate links; they cost you nothing extra. As an Amazon Associate, I earn from qualifying purchases.</p>
 </footer>
 </body>
@@ -237,6 +237,7 @@ for (const f of fixes) {
   <p class="note risk">Back up anything important before you start. You follow these steps at your own risk. <a href="../../disclaimer/">Read the disclaimer</a>.</p>
   ${Array.isArray(f.links) && f.links.length ? `<h2>Tools and downloads</h2><ul class="tool-links">${f.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.text)}</a>${l.note ? `<span>${esc(l.note)}</span>` : ""}</li>`).join("")}</ul>` : ""}
   ${f.ifStillBroken ? `<h2>Still broken?</h2><p>${esc(f.ifStillBroken)}</p>` : ""}
+  ${cfg.discordUrl ? `<p class="note discord-note">Not fixed? Ask in the <a href="${esc(cfg.discordUrl)}" target="_blank" rel="noopener">Old Wolf Development Discord</a> and tell us what worked. Never post passwords or private information.</p>` : ""}
   ${f.affiliate ? `<aside class="affiliate"><p>${esc(f.affiliate.text)}</p><a href="${esc(f.affiliate.url)}" target="_blank" rel="sponsored noopener">See options on Amazon →</a><p class="aff-note">Affiliate link: I may earn a small commission at no extra cost to you.</p></aside>` : ""}
   ${related.length ? `<h2>Related fixes</h2><div class="grid">${related.map(r => fixCard(r, 2)).join("")}</div>` : ""}
 </article>
